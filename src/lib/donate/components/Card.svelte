@@ -7,7 +7,7 @@
 </script>
 
 <button class="root" class:selected on:click={() => onClick(item)}>
-  <div class=".item__img-container">
+  <div class="item__img-container">
     <img src={item.image} alt="card-item" />
   </div>
   <div class="item__description">
