@@ -218,15 +218,15 @@ body {
   pointer-events: none;
 }
 
-path {
+path:not(.pie) {
   fill: var(--heading-color);
   transition: fill var(--transition-default);
 }
 
-.error-icon > path {
+.error-icon > path:not(.pie) {
   fill: var(--error-color);
 }
 
-.icon-focused path {
+.icon-focused path:not(.pie) {
   fill: var(--brand-primary-color);
 }
