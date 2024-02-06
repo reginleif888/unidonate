@@ -1,11 +1,13 @@
 <script lang="ts">
   import { WarningCircle } from "phosphor-svelte";
+  import { number } from "../actions/number";
 
   export let value: string | undefined = "";
   export let error: boolean | string = false;
   export let label: string | undefined = undefined;
   export let placeholder: string | undefined = undefined;
   export let disabled: boolean | undefined = undefined;
+  export let type: "text" | "password" | "email" | "number" = "text";
 
   let focused: boolean;
 
@@ -55,6 +57,13 @@
         {disabled}
         {placeholder}
         {value}
+        {type}
+        use:number={{
+          active: true,
+          value: value,
+          maxDecimalPlaces: 8,
+          max: 10,
+        }}
         on:focus={handleFocus}
         on:blur={handleBlur}
       />

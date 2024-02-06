@@ -20,6 +20,7 @@
   .root {
     display: flex;
     flex-direction: column;
+    height: 200px;
 
     gap: 0.5rem;
     border: 1px solid var(--divider-color);
@@ -27,6 +28,7 @@
 
     cursor: pointer;
     transition: var(--transition-default);
+    padding: 0;
 
     &:hover {
       background-color: var(--secondary-button-hover-bg);
@@ -41,17 +43,26 @@
 
   .item__img-container {
     width: 100%;
-    height: 50px;
+    height: 100px;
+    position: relative;
+    border-bottom: 1px solid var(--divider-color);
   }
 
   img {
     width: 100%;
     object-fit: cover;
+    position: absolute;
+    height: 100px;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    border-bottom: 1px solid var(--divider-color);
   }
 
   .item__description {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     padding: 8px;
     gap: 8px;
   }

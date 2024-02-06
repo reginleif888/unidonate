@@ -48,6 +48,11 @@
       color var(--transition-default);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
   }
 
   .button:not(.disabled) {
@@ -97,6 +102,10 @@
       background-color: var(--primary-button-contained-hover-bg);
       color: var(--primary-button-contained-hover-color);
     }
+  }
+
+  :global(.primary-button.contained-button path) {
+    fill: var(--opposite-text);
   }
 
   .primary-button.contained-button.disabled {

@@ -4,9 +4,12 @@
 
   export let value: string | null = null;
   export let items: Array<GridItem> = [];
+  export let onSelect: (id: string) => void = () => null;
 
   const handleSelect = (item: GridItem) => {
     value = item.id;
+
+    onSelect(item.id);
   };
 </script>
 
