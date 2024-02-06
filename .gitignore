@@ -1,0 +1,6 @@
+.dfx
+node_modules
+.svelte-kit
+.mops
+src/declarations
+deps
