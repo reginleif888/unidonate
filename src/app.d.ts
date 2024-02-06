@@ -11,12 +11,14 @@ declare global {
     // interface PageData {}
     // interface PageState {}
     // interface Platform {}
+  }
+}
 
-    export interface HTMLAttributes<T> {
-      "on:clickoutside"?: (event: CustomEvent<T>) => void;
-      "on:copysuccess"?: (event: CustomEvent<T>) => void;
-      "on:copyerror"?: (event: CustomEvent<T>) => void;
-    }
+declare module "svelte/elements" {
+  export interface HTMLAttributes<T> {
+    "on:clickoutside"?: (event: CustomEvent<T>) => void;
+    "on:copysuccess"?: (event: CustomEvent<T>) => void;
+    "on:copyerror"?: (event: CustomEvent<T>) => void;
   }
 }
 
