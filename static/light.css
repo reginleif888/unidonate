@@ -1,0 +1,62 @@
+:root {
+  --brand-primary-color: #e6007a;
+  --brand-secondary-color: #8e44ad;
+
+  --primary-bg: #f5f5f5;
+  --secondary-bg: #ffffff;
+
+  --heading-color: #333333;
+  --description-color: #666666;
+  --opposite-text: #ffffff;
+
+  --divider-color: #000000;
+
+  --success-bg: #27ae5f39;
+  --success-color: #27ae60;
+  --error-bg: #c03a2b39;
+  --error-color: #ff0000;
+  --warning-bg: #f39d123d;
+  --warning-color: #f39c12;
+  --info-color: #3498db;
+  --info-bg: #297fb93a;
+
+  --disabled-bg: rgba(0, 0, 0, 0.05);
+  --input-text-disabled-color: #6b6b6b;
+  --input-placeholder-disabled-color: #979797;
+
+  --button-disabled-bg: rgba(0, 0, 0, 0.05);
+  --button-disabled-color: #8c8b8b;
+
+  --primary-button-hover-bg: #e6007b1e;
+  --primary-button-hover-color: #ef0180;
+
+  --primary-button-contained-hover-bg: rgba(186, 32, 114, 0.702);
+  --primary-button-contained-hover-color: #ffffff;
+
+  --secondary-button-hover-bg: #8d44ad36;
+  --secondary-button-hover-color: #8e44ad;
+
+  --secondary-button-contained-hover-bg: #af67ce;
+  --secondary-button-contained-hover-color: #ffffff;
+
+  --shadow-popover: 0px 7px 12px 3px hsla(var(--divider-color));
+  --focus-shadow: 0 0 0 2px rgba(230, 0, 122, 0.5);
+  --shadow-mini: 0px 1px 0px 1px rgba(0, 0, 0, 0.05);
+  --shadow-button: 0px 1px 0px 1px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0px 2px 0px 1px rgba(0, 0, 0, 0.05);
+
+  --heading-font: "Roboto Mono", sans-serif;
+  --description-font: "Roboto Mono", sans-serif;
+
+  --input-border-radius: 0px;
+  --input-spacing: 12px;
+
+  --button-border-radius: 0px;
+  --input-height: 52px;
+  --button-height: 52px;
+
+  --input-height-small: 42px;
+  --button-height-small: 42px;
+
+  --transition-default: 0.15s ease-in-out;
+}
