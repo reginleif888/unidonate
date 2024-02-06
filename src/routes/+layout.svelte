@@ -2,4 +2,12 @@
   //   import "../media.scss";
 </script>
 
-<slot />
+<div class="root">
+  <slot />
+</div>
+
+<style>
+  .root {
+    padding: 0 8px;
+  }
+</style>

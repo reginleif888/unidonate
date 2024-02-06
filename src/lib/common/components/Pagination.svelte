@@ -9,6 +9,7 @@
   bind:page={currentPage}
   count={100}
   perPage={10}
+  siblingCount={0}
   let:pages
   let:range
   class="pagination-root"

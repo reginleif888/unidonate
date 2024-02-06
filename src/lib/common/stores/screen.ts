@@ -1,4 +1,4 @@
-import { onDestroy } from "svelte";
+// import { onDestroy } from "svelte";
 import { writable } from "svelte/store";
 import { Screen } from "../constant";
 
@@ -27,15 +27,18 @@ function createScreenWidthStore() {
     set(getScreenWidthCategory(window.innerWidth));
   }
 
-  window.addEventListener("resize", updateWidth);
+  window?.addEventListener("resize", updateWidth);
 
-  onDestroy(() => {
-    window.removeEventListener("resize", updateWidth);
-  });
+  // onDestroy(() => {
+  //   window.removeEventListener("resize", updateWidth);
+  // });
 
   return {
     subscribe,
   };
 }
 
-export const screenWidth = createScreenWidthStore();
+export const screenWidth =
+  typeof window === "undefined"
+    ? writable(Screen.md)
+    : createScreenWidthStore();

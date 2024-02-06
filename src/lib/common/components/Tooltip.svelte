@@ -27,6 +27,7 @@
     border: none;
     background: transparent;
     margin: 0;
+    width: 100%;
   }
   :global(.tooltip-arrow-wrapper) {
     background-color: var(--secondary-bg);

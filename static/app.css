@@ -230,3 +230,7 @@ path:not(.pie) {
 .icon-focused path:not(.pie) {
   fill: var(--brand-primary-color);
 }
+
+* {
+  scroll-behavior: smooth;
+}
