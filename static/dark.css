@@ -1,0 +1,57 @@
+:root {
+  --brand-primary-color: #e6007a;
+  --brand-secondary-color: #8e44ad;
+  --primary-bg: #000000;
+  --secondary-bg: #1a1a1a;
+  --heading-color: #ffffff;
+  --description-color: #cccccc;
+  --opposite-text: #000000;
+  --divider-color: #95a5a6;
+  --success-bg: #27ae5f39;
+  --success-color: #27ae60;
+  --error-bg: #c03a2b39;
+  --error-color: #ff0000;
+  --warning-bg: #f39d123d;
+  --warning-color: #f39c12;
+  --info-color: #3498db;
+  --info-bg: #297fb93a;
+  --disabled-bg: rgba(255, 255, 255, 0.2);
+  --input-text-disabled-color: #bdc3c7;
+  --input-placeholder-disabled-color: #95a5a6;
+
+  --button-disabled-bg: rgba(255, 255, 255, 0.2);
+  --button-disabled-color: #bdc3c76c;
+
+  --primary-button-hover-bg: #e6007b1e;
+  --primary-button-hover-color: #ef0180;
+
+  --primary-button-contained-hover-bg: rgba(255, 58, 163, 0.702);
+  --primary-button-contained-hover-color: #000000;
+
+  --secondary-button-hover-bg: #8d44ad36;
+  --secondary-button-hover-color: #8e44ad;
+
+  --secondary-button-contained-hover-bg: #af67ce;
+  --secondary-button-contained-hover-color: #000000;
+
+  --focus-shadow: 0 0 0 2px rgba(230, 0, 122, 0.5);
+  --shadow-mini: 0px 1px 0px 1px rgba(0, 0, 0, 0.1);
+
+  --shadow-button: 0px 1px 0px 1px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0px 2px 0px 1px rgba(0, 0, 0, 0.1);
+
+  --heading-font: "Roboto Mono", sans-serif;
+  --description-font: "Roboto Mono", sans-serif;
+
+  --input-border-radius: 0px;
+  --input-spacing: 12px;
+
+  --button-border-radius: 0px;
+  --input-height: 52px;
+  --button-height: 52px;
+
+  --input-height-small: 42px;
+  --button-height-small: 42px;
+
+  --transition-default: 0.15s ease-in-out;
+}
