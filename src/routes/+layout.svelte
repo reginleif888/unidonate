@@ -1,5 +1,5 @@
 <script>
-  // import '../app.pcss';
+  //   import "../media.scss";
 </script>
 
 <slot />
