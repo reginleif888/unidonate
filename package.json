@@ -48,5 +48,9 @@
     "vite-plugin-environment": "^1.1.3",
     "vitest": "^1.2.0"
   },
+  "dependencies": {
+    "bits-ui": "^0.17.0",
+    "phosphor-svelte": "^1.4.2"
+  },
   "type": "module"
 }
