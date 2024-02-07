@@ -93,8 +93,8 @@ actor class Main() {
 
     let filteredSize = filteredDonationsList.size();
 
-    let startIndex = Nat.min(filteredSize - 1, page * perPage);
-    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
+    let startIndex = Nat.max(Nat.min(filteredSize - 1, page * perPage), 0);
+    let endIndex = Nat.max(Nat.min(filteredSize - 1, (page + 1) * perPage), 0);
 
     let paginatedDonations = Vector.Vector<Donation>();
 
@@ -129,8 +129,8 @@ actor class Main() {
 
     let filteredSize = filteredSchoolsList.size();
 
-    let startIndex = Nat.min(filteredSize - 1, page * perPage);
-    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
+    let startIndex = Nat.max(Nat.min(filteredSize - 1, page * perPage), 0);
+    let endIndex = Nat.max(Nat.min(filteredSize - 1, (page + 1) * perPage), 0);
 
     let paginatedSchools = Vector.Vector<School>();
 
