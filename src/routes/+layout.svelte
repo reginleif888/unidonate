@@ -5,6 +5,7 @@
   import { Screen } from "$lib/common/constant";
   import { showHeader } from "$lib/common/stores/showHeader";
   import { burgerOpened } from "$lib/common/stores/burgerOpened";
+  import ErrorModal from "$lib/common/components/ErrorModal.svelte";
 
   if (typeof window !== "undefined") {
     let lastScrollY = window.scrollY;
@@ -32,6 +33,8 @@
   {#if $screenWidth <= Screen.md}
     <BurgerMenu />
   {/if}
+
+  <ErrorModal />
 </main>
 
 <style>

@@ -5,10 +5,19 @@
 
   import UniGrid from "../components/UniGrid.svelte";
   import ThemeSwitch from "$lib/common/components/ThemeSwitch.svelte";
+  import Button from "$lib/common/components/Button.svelte";
+  import { errorModal } from "$lib/common/stores/errorModal";
 </script>
 
 <div class="container">
   <ThemeSwitch />
+
+  <Button
+    label="open error modal"
+    onClick={() => {
+      errorModal.set({ isOpen: true, message: "This is an error message" });
+    }}
+  />
 
   <InlineNotification
     type="info"
