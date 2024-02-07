@@ -25,3 +25,13 @@ export interface GridItem {
   image: string;
   description: string;
 }
+
+export interface FormCategory {
+  categoryId: string;
+  amount: number;
+}
+
+export interface DonationFormValues {
+  totalAmount: number;
+  categories: FormCategory[];
+}

@@ -6,6 +6,7 @@
   export let contained: boolean = false;
   export let disabled: boolean = false;
   export let className: string = "";
+  export let type: "button" | "submit" | "reset" = "button";
   export let onClick: () => void = () => null;
 
   const ripple = rippleCreator({
@@ -27,6 +28,7 @@
   class:contained-button={contained}
   class:disabled
   {disabled}
+  {type}
   use:ripple
   on:click={onClick}
 >

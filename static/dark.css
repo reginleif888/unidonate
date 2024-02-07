@@ -40,6 +40,8 @@
   --shadow-button: 0px 1px 0px 1px rgba(0, 0, 0, 0.15);
   --shadow-card: 0px 2px 0px 1px rgba(0, 0, 0, 0.1);
 
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+
   --heading-font: "Roboto Mono", sans-serif;
   --description-font: "Roboto Mono", sans-serif;
 

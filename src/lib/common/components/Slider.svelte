@@ -2,13 +2,24 @@
   import { Slider } from "bits-ui";
   import TextInput from "./TextInput.svelte";
 
-  let value = [25];
+  export let value: Array<number> = [25];
+  export let onChange: (value: Array<number>) => void = () => null;
+
+  function handleChange(value: Array<number>) {
+    onChange(value);
+  }
 </script>
 
 <div class="slider-container">
   <div class="slider-label subtitle1">Label</div>
   <div class="inner">
-    <Slider.Root step={1} bind:value let:thumbs class="slider-root">
+    <Slider.Root
+      step={1}
+      value={[70]}
+      onValueChange={handleChange}
+      let:thumbs
+      class="slider-root"
+    >
       <span class="slider-track">
         <Slider.Range class="slider-range" />
       </span>
@@ -16,7 +27,16 @@
         <Slider.Thumb {thumb} class="slider-thumb" />
       {/each}
     </Slider.Root>
-    <div class="input-wrapper"><TextInput type="number" /></div>
+    <div class="input-wrapper">
+      <TextInput
+        label="Percent"
+        onChange={(value) => {
+          handleChange([Number(value)]);
+        }}
+        value={String(value[0])}
+        isPercent
+      />
+    </div>
   </div>
 </div>
 

@@ -35,7 +35,7 @@
 <style>
   :global(.dialog__overlay) {
     opacity: 0.5;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--overlay-bg);
     backdrop-filter: blur(3.5px);
     filter: blur(3.5px);
     inset: 0;

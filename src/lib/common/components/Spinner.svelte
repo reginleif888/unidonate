@@ -10,7 +10,7 @@
 <style>
   .overlay {
     opacity: 0.5;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--overlay-bg);
     backdrop-filter: blur(3.5px);
     inset: 0;
     position: absolute;
@@ -26,7 +26,7 @@
     border-top: 4px solid var(--brand-primary-color);
     width: 80px;
     height: 80px;
-    animation: spin 2s linear infinite;
+    animation: spin 0.5s linear infinite;
   }
 
   @keyframes spin {

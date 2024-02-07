@@ -1,13 +1,17 @@
 <script lang="ts">
   import { WarningCircle } from "phosphor-svelte";
   import { number } from "../actions/number";
+  import { percentInput } from "../actions/percentInput";
+  import { btcInput } from "../actions/btcInput";
 
   export let value: string | undefined = "";
   export let error: boolean | string = false;
   export let label: string | undefined = undefined;
   export let placeholder: string | undefined = undefined;
   export let disabled: boolean | undefined = undefined;
-  export let type: "text" | "password" | "email" | "number" = "text";
+  export let isBtc: boolean = false;
+  export let isPercent: boolean = false;
+  export let onChange: (value: string) => void = () => null;
 
   let focused: boolean;
 
@@ -20,6 +24,12 @@
 
   function handleBlur() {
     focused = false;
+  }
+
+  function handleChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    onChange(target.value);
   }
 
   $: {
@@ -57,15 +67,11 @@
         {disabled}
         {placeholder}
         {value}
-        {type}
-        use:number={{
-          active: true,
-          value: value,
-          maxDecimalPlaces: 8,
-          max: 10,
-        }}
+        use:btcInput={{ active: isBtc }}
+        use:percentInput={{ active: isPercent }}
         on:focus={handleFocus}
         on:blur={handleBlur}
+        on:change={handleChange}
       />
       {#if invalid}
         <div class="text-input-root__error-icon-container">
