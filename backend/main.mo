@@ -19,6 +19,8 @@ import Nat32 "mo:base/Nat32";
 import Option "mo:base/Option";
 import Int64 "mo:base/Int64";
 import Blob "mo:base/Blob";
+import Random "mo:base/Random";
+import Nat8 "mo:base/Nat8";
 
 import BitcoinIntegration "bitcoin-integration";
 
@@ -160,7 +162,7 @@ actor class Main() {
     return response;
   };
 
-  public func addSchool(payload : AddSchoolPayload) : async () {
+  private func _addSchool(payload : AddSchoolPayload) : async* () {
     let schoolId = UUID.toText(await g.new());
 
     let imageId : ?Text = switch (payload.imageBlob) {
@@ -185,12 +187,16 @@ actor class Main() {
     studentsMap.put(newSchool.id, null);
   };
 
+  public func addSchool(payload : AddSchoolPayload) : async () {
+    ignore _addSchool(payload);
+  };
+
   public query func getStudents(schoolId : Text) : async Result.Result<[Student], Text> {
     let ?studentsList = studentsMap.get(schoolId) else return #err("School is not found by provided ID.");
     return #ok(List.toArray<Student>(studentsList));
   };
 
-  public func addStudent(schoolId : Text, payload : AddStudentPayload) : async Result.Result<(), Text> {
+  private func _addStudent(schoolId : Text, payload : AddStudentPayload) : async* Result.Result<(), Text> {
     let ?studentsList = studentsMap.get(schoolId) else return #err("School is not found by provided ID.");
 
     let imageId : ?Text = switch (payload.imageBlob) {
@@ -214,6 +220,10 @@ actor class Main() {
     studentsMap.put(schoolId, List.push(newStudent, studentsList));
 
     return #ok();
+  };
+
+  public func addStudent(schoolId : Text, payload : AddStudentPayload) : async () {
+    ignore _addStudent(schoolId, payload);
   };
 
   public func createDonation(payload : CreateDonationPayload) : async Result.Result<CreateDonationResponse, Text> {
@@ -326,6 +336,77 @@ actor class Main() {
     };
 
     return Utils.http404(?"Path not found");
+  };
+
+  /// -------------------------------------
+
+  private func reset() : async* () {
+    schools.clear();
+    donations.clear();
+
+    for ((id, value) in studentsMap.entries()) {
+      ignore studentsMap.remove(id);
+    };
+    for ((id, value) in donationsMap.entries()) {
+      ignore donationsMap.remove(id);
+    };
+    for ((id, value) in imgOffset.entries()) {
+      ignore imgOffset.remove(id);
+    };
+  };
+
+  public func mockData() : async () {
+    await* reset();
+    // Add schools
+    await* _addSchool({
+      name = "Kyiv International School";
+      location = "Ukraine, Kyiv";
+      website = "https://kyiv.qsi.org/";
+      imageBlob = null;
+    });
+    await* _addSchool({
+      name = "Kharkiv Specialized School №156";
+      location = "Ukraine, Kharkiv";
+      website = "http://school156.edu.kh.ua/";
+      imageBlob = null;
+    });
+    await* _addSchool({
+      name = "Kharkivsʹka Himnaziya No 116";
+      location = "Ukraine, Kharkiv";
+      website = "http://gymnasium116.edu.kh.ua/";
+      imageBlob = null;
+    });
+    await* _addSchool({
+      name = "Odessa High School";
+      location = "Ukraine, Odessa";
+      website = "https://www.odessahs.org/";
+      imageBlob = null;
+    });
+
+    let names = ["John", "Alex", "James", "Mike", "Justin", "Bob", "Kevin", "Luka"];
+    let surNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis"];
+    let dateOfBirthdays = ["2001-01-01", "2002-02-02", "2003-03-03", "2004-04-04", "2005-05-05", "2006-06-06", "2007-07-07", "2008-08-08"];
+    let grades = ["1a", "2b", "3c", "4d", "5b", "6a", "7d", "8c"];
+
+    let schoolIds = Array.map<School, Text>(Vector.toArray(schools), func school = school.id);
+
+    var counter = 0;
+
+    for (index in Iter.range(0, schoolIds.size() - 1)) {
+      for (_ in Iter.range(0, 7)) {
+        let studentObj : AddStudentPayload = {
+          firstName = names[counter % names.size()];
+          lastName = surNames[counter % surNames.size()];
+          grade = grades[counter % grades.size()];
+          dateOfBirth = dateOfBirthdays[counter % dateOfBirthdays.size()];
+          imageBlob = null;
+        };
+
+        counter := counter + 1;
+
+        ignore await* _addStudent(schoolIds[index], studentObj);
+      };
+    };
   };
 
   // --------------------------------------
