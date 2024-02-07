@@ -35,4 +35,4 @@
   <title>Vite + SvelteKit + Motoko</title>
 </svelte:head>
 
-<div>Hello World!</div>
+<div class="h1">Home</div>

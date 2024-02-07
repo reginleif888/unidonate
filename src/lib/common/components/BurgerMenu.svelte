@@ -6,16 +6,22 @@
   }
 </script>
 
-<div class="menu-content" class:open={$burgerOpened}>
-  <button class="menu-item subtitle1" on:click={toggleMenu}>Home</button>
-  <button class="menu-item subtitle1" on:click={toggleMenu}>Donate</button>
-  <button class="menu-item subtitle1" on:click={toggleMenu}
-    >Donation explorer</button
-  >
-  <button class="menu-item subtitle1" on:click={toggleMenu}
-    >Confirm donate</button
-  >
-</div>
+<nav class="menu-content" class:open={$burgerOpened}>
+  <ul>
+    <li class="menu-item subtitle1">
+      <a href="/" on:click={toggleMenu}>Home</a>
+    </li>
+    <li class="menu-item subtitle1">
+      <a href="/donate" on:click={toggleMenu}>Donate</a>
+    </li>
+    <li class="menu-item subtitle1">
+      <a href="/explorer" on:click={toggleMenu}>Donation explorer</a>
+    </li>
+    <li class="menu-item subtitle1">
+      <a href="/confirm-donate" on:click={toggleMenu}>Confirm donate</a>
+    </li>
+  </ul>
+</nav>
 
 <style>
   .menu-content {
@@ -42,7 +48,20 @@
     border: unset;
     border-bottom: 1px solid var(--divider-color);
     background-color: var(--primary-bg);
+    color: var(--brand-primary-color);
     cursor: pointer;
     position: relative;
+  }
+
+  .menu-item a {
+    color: var(--brand-primary-color);
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .menu-item:hover {
+    background-color: var(--secondary-bg);
+    color: var(--brand-primary-color);
   }
 </style>

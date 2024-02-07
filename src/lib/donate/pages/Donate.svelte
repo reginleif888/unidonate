@@ -4,20 +4,19 @@
   import InlineNotification from "$lib/common/components/InlineNotification.svelte";
 
   import UniGrid from "../components/UniGrid.svelte";
-  import ThemeSwitch from "$lib/common/components/ThemeSwitch.svelte";
   import Button from "$lib/common/components/Button.svelte";
   import { errorModal } from "$lib/common/stores/errorModal";
 </script>
 
 <div class="container">
-  <ThemeSwitch />
-
   <Button
     label="open error modal"
     onClick={() => {
       errorModal.set({ isOpen: true, message: "This is an error message" });
     }}
   />
+
+  <h1 class="h1">Donate</h1>
 
   <InlineNotification
     type="info"
@@ -26,7 +25,7 @@
     Then you can allocate the budget for each category separately. Note that sum of all categories should be equal to the total amount."
   />
 
-  <h1 class="h1 title-margin">Select your university</h1>
+  <h1 class="h2 title-margin">Select your university</h1>
   <UniGrid />
 
   <h1 id="student-select" class="h1">Select your student</h1>
