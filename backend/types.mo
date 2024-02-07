@@ -70,6 +70,7 @@ module {
 
   public type Donation = {
     donationId : Text;
+    paymentAddress: Text;
     schoolId : Text;
     studentId : ?Text;
     transactionId : ?Text;
@@ -79,6 +80,8 @@ module {
   };
 
   public type DonationsList = Vector.Vector<Donation>;
+
+  public type DonationsMap = RBTree.RBTree<Text, Nat>;
 
   public type CreateDonationPayload = {
     schoolId : Text;

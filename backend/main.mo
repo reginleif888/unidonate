@@ -32,8 +32,10 @@ actor class Main() {
 
   type Donation = Types.Donation;
   type DonationsList = Types.DonationsList;
+  type DonationsMap = Types.DonationsMap;
   type CreateDonationPayload = Types.CreateDonationPayload;
   type CreateDonationResponse = Types.CreateDonationResponse;
+  type VerifyDonationPayload = Types.VerifyDonationPayload;
 
   let g = Source.Source();
 
@@ -47,6 +49,9 @@ actor class Main() {
 
   let donations : DonationsList = Vector.Vector<Donation>();
   stable var stableDonations = donations.share();
+
+  let donationsMap : DonationsMap = RBTree.RBTree<Text, Nat>(Text.compare);
+  stable var stableDonationsMap = donationsMap.share();
 
   // Fot testing
   private stable let ownerExtendedPublicKeyBase58Check : Text = "tpubDD9S94RYo2MraS7QbRhA64Nr56BzCYN2orJUkk2LE4RkB2npb9SFyiCuofbapC9wNW2hLJqkWwSpGoaE9pZC6fLBQdms5HYS9dsvw79nSWy";
@@ -135,7 +140,7 @@ actor class Main() {
         return #err("Error occured when generating payment address.");
       };
       case (#ok(paymentAddress)) {
-        let donationId = Int.toText(Time.now());
+        let donationId = UUID.toText(await g.new());
 
         let newDonation : Donation = {
           donationId;
@@ -148,12 +153,39 @@ actor class Main() {
           transactionId = null;
         };
 
+        donationsMap.put(donationId, donations.size());
         donations.add(newDonation);
 
         return #ok({ donationId; paymentAddress });
       };
     };
 
+  };
+
+  public func verifyDonation(payload : VerifyDonationPayload) : async Result.Result<(), Text> {
+    let ?donationIndex = donationsMap.get(payload.donationId) else return #err("Donation is not found by provided ID.");
+
+    let currentDonation = donations.get(donationIndex);
+
+    let isTransactionConfirmed = await BitcoinIntegration.checkIfTransactionIsConfirmed(currentDonation.paymentAddress, payload.transactionId, currentDonation.amount);
+
+    if (isTransactionConfirmed == false) return #err("Transaction is not verified.");
+
+    donations.put(
+      donationIndex,
+      {
+        donationId = currentDonation.donationId;
+        transactionId = ?payload.transactionId;
+        paymentAddress = currentDonation.paymentAddress;
+        schoolId = currentDonation.schoolId;
+        studentId = currentDonation.studentId;
+        amount = currentDonation.amount;
+        status = #Verified;
+        allocations = currentDonation.allocations;
+      },
+    );
+
+    return #ok();
   };
 
   // --------------------------------------
@@ -164,11 +196,13 @@ actor class Main() {
     stableSchools := schools.share();
     stableStudentsMap := studentsMap.share();
     stableDonations := donations.share();
+    stableDonationsMap := donationsMap.share();
   };
 
   system func postupgrade() {
     schools.unshare(stableSchools);
     studentsMap.unshare(stableStudentsMap);
     donations.unshare(stableDonations);
+    donationsMap.unshare(stableDonationsMap);
   };
 };
