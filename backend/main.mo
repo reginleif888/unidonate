@@ -13,6 +13,12 @@ import Time "mo:base/Time";
 import Int "mo:base/Int";
 import UUID "mo:uuid/UUID";
 import Source "mo:uuid/async/SourceV4";
+import HashMap "mo:base/HashMap";
+import StableMemory "mo:base/ExperimentalStableMemory";
+import Nat32 "mo:base/Nat32";
+import Option "mo:base/Option";
+import Int64 "mo:base/Int64";
+import Blob "mo:base/Blob";
 
 import BitcoinIntegration "bitcoin-integration";
 
@@ -29,7 +35,10 @@ actor class Main() {
   type AddStudentPayload = Types.AddStudentPayload;
   type GetSchoolsPayload = Types.GetSchoolsPayload;
   type GetSchoolsResponse = Types.GetSchoolsResponse;
-
+  type GetDonationsPayload = Types.GetDonationsPayload;
+  type GetDonationsResponse = Types.GetDonationsResponse;
+  type HttpRequest = Types.HttpRequest;
+  type HttpResponse = Types.HttpResponse;
   type Donation = Types.Donation;
   type DonationsList = Types.DonationsList;
   type DonationsMap = Types.DonationsMap;
@@ -57,7 +66,49 @@ actor class Main() {
   private stable let ownerExtendedPublicKeyBase58Check : Text = "tpubDD9S94RYo2MraS7QbRhA64Nr56BzCYN2orJUkk2LE4RkB2npb9SFyiCuofbapC9wNW2hLJqkWwSpGoaE9pZC6fLBQdms5HYS9dsvw79nSWy";
   private stable var currentChildKeyIndex : Nat = 0;
 
+  private stable var currentMemoryOffset : Nat64 = 2;
+  var imgOffset : RBTree.RBTree<Text, Nat64> = RBTree.RBTree<Text, Nat64>(Text.compare);
+  stable var stableImgOffset = imgOffset.share();
+  var imgSize : RBTree.RBTree<Text, Nat> = RBTree.RBTree<Text, Nat>(Text.compare);
+  stable var stableImgSize = imgSize.share();
+
   // --------------------------------------
+
+  public query func getDonations({ filters; page; perPage } : GetDonationsPayload) : async GetDonationsResponse {
+    let total = donations.size();
+
+    var filteredDonationsList = donations;
+
+    if (Text.size(filters.donationId) > 0) {
+      filteredDonationsList := Vector.Vector<Donation>();
+
+      for (index in Iter.range(0, total)) {
+        let donation = donations.get(index);
+
+        if (donation.donationId == filters.donationId and donation.status == #Verified) {
+          filteredDonationsList.add(donations.get(index));
+        };
+      };
+    };
+
+    let filteredSize = filteredDonationsList.size();
+
+    let startIndex = Nat.min(filteredSize - 1, page * perPage);
+    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
+
+    let paginatedDonations = Vector.Vector<Donation>();
+
+    for (index in Iter.range(startIndex, endIndex)) {
+      paginatedDonations.add(filteredDonationsList.get(index));
+    };
+
+    let response : GetDonationsResponse = {
+      donations = Vector.toArray(paginatedDonations);
+      total;
+    };
+
+    return response;
+  };
 
   public query func getSchools({ filters; page; perPage } : GetSchoolsPayload) : async GetSchoolsResponse {
     let total = schools.size();
@@ -91,11 +142,21 @@ actor class Main() {
       schools = Vector.toArray(paginatedSchools);
       total;
     };
+
     return response;
   };
 
   public func addSchool(payload : AddSchoolPayload) : async () {
     let schoolId = UUID.toText(await g.new());
+
+    let imageId : ?Text = switch (payload.imageBlob) {
+      case null { null };
+      case (?blob) {
+        let uniqueId = UUID.toText(await g.new());
+        storeBlobImg(uniqueId, blob);
+        ?uniqueId;
+      };
+    };
 
     let newSchool : School = {
       id = schoolId;
@@ -103,6 +164,7 @@ actor class Main() {
       location = payload.location;
       website = payload.website;
       numberOfStudents = 0;
+      imageId;
     };
 
     schools.add(newSchool);
@@ -117,12 +179,22 @@ actor class Main() {
   public func addStudent(schoolId : Text, payload : AddStudentPayload) : async Result.Result<(), Text> {
     let ?studentsList = studentsMap.get(schoolId) else return #err("School is not found by provided ID.");
 
+    let imageId : ?Text = switch (payload.imageBlob) {
+      case null { null };
+      case (?blob) {
+        let uniqueId = UUID.toText(await g.new());
+        storeBlobImg(uniqueId, blob);
+        ?uniqueId;
+      };
+    };
+
     let newStudent : Student = {
       id = UUID.toText(await g.new());
       firstName = payload.firstName;
       lastName = payload.lastName;
       grade = payload.grade;
       dateOfBirth = payload.dateOfBirth;
+      imageId;
     };
 
     studentsMap.put(schoolId, List.push(newStudent, studentsList));
@@ -134,6 +206,8 @@ actor class Main() {
     if (Nat64.less(payload.amount, 1) == true) return #err("Amount must be more than 0 satoshi.");
 
     let paymentAddress = await BitcoinIntegration.generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check, currentChildKeyIndex);
+
+    currentChildKeyIndex := currentChildKeyIndex + 1;
 
     switch (paymentAddress) {
       case (#err(msg)) {
@@ -188,6 +262,58 @@ actor class Main() {
     return #ok();
   };
 
+  // -------------------------------------
+
+  private func storeBlobImg(imgId : Text, value : Blob) {
+    var size : Nat = Nat32.toNat(Nat32.fromIntWrap(value.size()));
+    // Each page is 64KiB (65536 bytes)
+    var growBy : Nat = size / 65536 + 1;
+    let a = StableMemory.grow(Nat64.fromNat(growBy));
+    StableMemory.storeBlob(currentMemoryOffset, value);
+    imgOffset.put(imgId, currentMemoryOffset);
+    imgSize.put(imgId, size);
+    size := size + 4;
+    currentMemoryOffset += Nat64.fromNat(size);
+  };
+
+  private func loadBlobImg(imgId : Text) : ?Blob {
+    let offset = imgOffset.get(imgId);
+    switch (offset) {
+      case (null) {
+        return null;
+      };
+      case (?offset) {
+        let size = imgSize.get(imgId);
+        switch (size) {
+          case (null) {
+            return null;
+          };
+          case (?size) {
+            return ?StableMemory.loadBlob(offset, size);
+          };
+        };
+      };
+    };
+  };
+
+  public query func httpRequest(request : HttpRequest) : async HttpResponse {
+    if (Text.contains(request.url, #text("imgid"))) {
+      let imageId = Iter.toArray(Text.tokens(request.url, #text("imgid=")))[1];
+      var picture = loadBlobImg(imageId);
+
+      switch (picture) {
+        case (null) {
+          return Utils.http404(?"No picture available");
+        };
+        case (?pic) {
+          return Utils.picture(pic);
+        };
+      };
+    };
+
+    return Utils.http404(?"Path not found");
+  };
+
   // --------------------------------------
   // --------------------------------------
   // --------------------------------------
@@ -197,6 +323,7 @@ actor class Main() {
     stableStudentsMap := studentsMap.share();
     stableDonations := donations.share();
     stableDonationsMap := donationsMap.share();
+    stableImgOffset := imgOffset.share();
   };
 
   system func postupgrade() {
@@ -204,5 +331,6 @@ actor class Main() {
     studentsMap.unshare(stableStudentsMap);
     donations.unshare(stableDonations);
     donationsMap.unshare(stableDonationsMap);
+    imgOffset.unshare(stableImgOffset);
   };
 };

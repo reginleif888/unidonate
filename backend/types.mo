@@ -14,6 +14,7 @@ module {
     location : Text;
     website : Text;
     numberOfStudents : Nat;
+    imageId : ?Text;
   };
 
   public type Student = {
@@ -22,6 +23,7 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
+    imageId : ?Text;
   };
 
   public type SchoolsList = Vector.Vector<School>;
@@ -32,6 +34,7 @@ module {
     name : Text;
     location : Text;
     website : Text;
+    imageBlob : ?Blob;
   };
 
   public type AddStudentPayload = {
@@ -39,6 +42,7 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
+    imageBlob : ?Blob;
   };
 
   public type SchoolsFilters = {
@@ -56,6 +60,21 @@ module {
     total : Nat;
   };
 
+  public type DonationsFilters = {
+    donationId : Text;
+  };
+
+  public type GetDonationsPayload = {
+    filters : DonationsFilters;
+    page : Nat;
+    perPage : Nat;
+  };
+
+  public type GetDonationsResponse = {
+    donations : [Donation];
+    total : Nat;
+  };
+
   public type DonationStatus = {
     #Pending;
     #Verified;
@@ -70,13 +89,13 @@ module {
 
   public type Donation = {
     donationId : Text;
-    paymentAddress: Text;
+    paymentAddress : Text;
     schoolId : Text;
     studentId : ?Text;
     transactionId : ?Text;
     amount : Satoshi;
     status : DonationStatus;
-    allocations : List.List<AllocationCategory>;
+    allocations : [AllocationCategory];
   };
 
   public type DonationsList = Vector.Vector<Donation>;
@@ -87,7 +106,7 @@ module {
     schoolId : Text;
     studentId : ?Text;
     amount : Satoshi;
-    allocations : List.List<AllocationCategory>;
+    allocations : [AllocationCategory];
   };
 
   public type CreateDonationResponse = {
@@ -100,4 +119,39 @@ module {
     transactionId : Text;
   };
 
+  public type HeaderField = (Text, Text);
+
+  public type StreamingStrategy = {
+    #Callback : {
+      callback : StreamingCallback;
+      token : StreamingCallbackToken;
+    };
+  };
+
+  public type StreamingCallback = query (StreamingCallbackToken) -> async (StreamingCallbackResponse);
+
+  public type StreamingCallbackToken = {
+    content_encoding : Text;
+    index : Nat;
+    key : Text;
+  };
+
+  public type StreamingCallbackResponse = {
+    body : Blob;
+    token : ?StreamingCallbackToken;
+  };
+
+  public type HttpRequest = {
+    body : Blob;
+    headers : [HeaderField];
+    method : Text;
+    url : Text;
+  };
+
+  public type HttpResponse = {
+    body : Blob;
+    headers : [HeaderField];
+    streaming_strategy : ?StreamingStrategy;
+    status_code : Nat16;
+  };
 };
