@@ -75,7 +75,7 @@
     display: block;
     width: 27px;
     height: 27px;
-    cursor: pointer;
+    cursor: grab;
     border-radius: 9999px;
     border: 1px solid var(--divider-color);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
