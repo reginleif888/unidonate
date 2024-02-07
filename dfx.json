@@ -12,8 +12,18 @@
     }
   },
   "defaults": {
+    "bitcoin": {
+      "enabled": true,
+      "nodes": ["127.0.0.1:18444"],
+      "log_level": "info"
+    },
     "build": {
       "packtool": "npm run --silent sources"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4942"
     }
   },
   "output_env_file": ".env",

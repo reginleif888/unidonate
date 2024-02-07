@@ -4,3 +4,4 @@ node_modules
 .mops
 src/declarations
 deps
+build
