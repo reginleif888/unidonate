@@ -50,32 +50,17 @@ module {
     };
   };
 
-  public func checkIfTransactionIsConfirmed(address : BitcoinAddress, transactionIdToCheck : Text) : async Bool {
+  public func checkIfTransactionIsConfirmed(address : BitcoinAddress, transactionIdToCheck : Text, amount : Satoshi) : async Bool {
     let utxoResponse = await* getUtxos(address);
 
     for (utxo in utxoResponse.utxos.vals()) {
       let transactionId = parseTransactionId(utxo.outpoint.txid);
 
-      if (transactionId == transactionIdToCheck) {
+      if (transactionId == transactionIdToCheck and utxo.value == amount) {
         return true;
       };
     };
 
     return false;
-  };
-
-  public func getTransactionBalance(address : BitcoinAddress, transactionIdToCheck : Text) : async Satoshi {
-    let utxoResponse = await* getUtxos(address);
-
-    for (utxo in utxoResponse.utxos.vals()) {
-      let transactionId = parseTransactionId(utxo.outpoint.txid);
-
-      if (transactionId == transactionIdToCheck) {
-
-        return utxo.value;
-      };
-    };
-
-    return 0;
   };
 };
