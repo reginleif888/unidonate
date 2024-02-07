@@ -7,6 +7,7 @@
   import { burgerOpened } from "$lib/common/stores/burgerOpened";
   import ErrorModal from "$lib/common/components/ErrorModal.svelte";
   import ThemeSwitch from "$lib/common/components/ThemeSwitch.svelte";
+  import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
 
   if (typeof window !== "undefined") {
     let lastScrollY = window.scrollY;
@@ -25,21 +26,25 @@
       lastScrollY = currentScrollY;
     });
   }
+
+  const queryClient = new QueryClient();
 </script>
 
-<MobileHeader />
-<main class="root">
-  <div class="theme-switch-mobile">
-    <ThemeSwitch />
-  </div>
-  <slot />
+<QueryClientProvider>
+  <MobileHeader />
+  <main class="root">
+    <div class="theme-switch-mobile">
+      <ThemeSwitch />
+    </div>
+    <slot />
 
-  {#if $screenWidth <= Screen.md}
-    <BurgerMenu />
-  {/if}
+    {#if $screenWidth <= Screen.md}
+      <BurgerMenu />
+    {/if}
 
-  <ErrorModal />
-</main>
+    <ErrorModal />
+  </main>
+</QueryClientProvider>
 
 <style>
   .root {

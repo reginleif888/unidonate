@@ -8,7 +8,7 @@
 
 <button class="root" class:selected on:click={() => onClick(item)}>
   <div class="item__img-container">
-    <img src={item.image} alt="card-item" />
+    <img src={item.image || "/images/no-image.jpg"} alt="card-item" />
   </div>
   <div class="item__description">
     <div class="item__name subtitle2">{item.name}</div>

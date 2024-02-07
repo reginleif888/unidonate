@@ -7,6 +7,12 @@
   export let onSelect: (id: string) => void = () => null;
 
   const handleSelect = (item: GridItem) => {
+    if (item.id === value) {
+      value = "";
+      onSelect("");
+      return;
+    }
+
     value = item.id;
 
     onSelect(item.id);

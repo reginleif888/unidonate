@@ -11,6 +11,7 @@
   export let isBtc: boolean = false;
   export let isPercent: boolean = false;
   export let onChange: (value: string) => void = () => null;
+  export let onInput: (value: string) => void = () => null;
 
   let focused: boolean;
 
@@ -29,6 +30,12 @@
     const target = event.target as HTMLInputElement;
 
     onChange(target.value);
+  }
+
+  function handleInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    onInput(target.value);
   }
 
   $: {
@@ -70,6 +77,7 @@
         use:percentInput={{ active: isPercent }}
         on:focus={handleFocus}
         on:blur={handleBlur}
+        on:input={handleInput}
         on:change={handleChange}
       />
       {#if invalid}

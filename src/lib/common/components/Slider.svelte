@@ -4,6 +4,8 @@
 
   export let value: Array<number> = [25];
 
+  export let label: string = "Label";
+
   export let onChange: (value: Array<number>) => void = () => null;
 
   function handleChange(newValue: Array<number>) {
@@ -22,7 +24,7 @@
 </script>
 
 <div class="slider-container">
-  <div class="slider-label subtitle1">Label</div>
+  <div class="slider-label subtitle1">{label}</div>
   <div class="inner">
     <Slider.Root
       step={1}

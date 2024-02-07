@@ -1,22 +1,23 @@
+import { AllocationCategory } from "$lib/common/types";
 import type { DonationFormValues } from "./types";
 
 export const DONATE_INITIAL_VALUES: DonationFormValues = {
   totalAmount: 0,
   categories: [
     {
-      categoryId: "1",
+      categoryId: AllocationCategory.DesignAndDevelopment,
       percent: 25,
     },
     {
-      categoryId: "2",
+      categoryId: AllocationCategory.LunchAndSnacks,
       percent: 25,
     },
     {
-      categoryId: "3",
+      categoryId: AllocationCategory.SchoolSupplies,
       percent: 25,
     },
     {
-      categoryId: "4",
+      categoryId: AllocationCategory.TeacherSupport,
       percent: 25,
     },
   ],

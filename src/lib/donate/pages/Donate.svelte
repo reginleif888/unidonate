@@ -1,21 +1,17 @@
-<script>
+<script lang="ts">
   import DonationForm from "../components/DonationForm.svelte";
 
   import InlineNotification from "$lib/common/components/InlineNotification.svelte";
 
   import UniGrid from "../components/UniGrid.svelte";
-  import Button from "$lib/common/components/Button.svelte";
-  import { errorModal } from "$lib/common/stores/errorModal";
+  import StudentGrid from "../components/StudentGrid.svelte";
+
+  export let uniId: string = "";
+
+  export let studentId: string = "";
 </script>
 
 <div class="container">
-  <Button
-    label="open error modal"
-    onClick={() => {
-      errorModal.set({ isOpen: true, message: "This is an error message" });
-    }}
-  />
-
   <h1 class="h1">Donate</h1>
 
   <InlineNotification
@@ -26,27 +22,29 @@
   />
 
   <h1 class="h2 title-margin">Select your university</h1>
-  <UniGrid />
+  <UniGrid bind:uniId />
 
-  <h1 id="student-select" class="h1">Select your student</h1>
-  <h1 class="h3 title-margin">
-    Select student you want to donate to or <a
-      href="#donation-form"
-      class="go-to-donation-form">go to donation form</a
-    >
-  </h1>
-  <UniGrid />
+  {#if uniId}
+    <h1 id="student-select" class="h1">Select your student</h1>
+    <h1 class="h3 title-margin">
+      Select student you want to donate to or <a
+        href="#donation-form"
+        class="go-to-donation-form">go to donation form</a
+      >
+    </h1>
+    <StudentGrid {uniId} bind:studentId />
 
-  <div id="donation-form" class="title-margin">
-    <h1 class="h1 matin-title">Donate to</h1>
-    <p class="subtitle2">University: <span class="subtitle1">Nure</span></p>
-    .
-    <p class="subtitle2">
-      Student: <span class="subtitle1">Sasha Lysenko</span>
-    </p>
-  </div>
+    <div id="donation-form" class="title-margin">
+      <h1 class="h1 matin-title">Donate to</h1>
+      <p class="subtitle2">University: <span class="subtitle1">Nure</span></p>
+      .
+      <p class="subtitle2">
+        Student: <span class="subtitle1">Sasha Lysenko</span>
+      </p>
+    </div>
 
-  <DonationForm />
+    <DonationForm {studentId} {uniId} />
+  {/if}
 </div>
 
 <style>

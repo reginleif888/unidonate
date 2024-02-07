@@ -1,9 +1,19 @@
 <script>
   import { screenWidth } from "$lib/common/stores/screen";
   import { Screen } from "$lib/common/constant";
+  import { goto } from "$app/navigation";
 </script>
 
-<div class="container">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-interactive-supports-focus -->
+<div
+  class="container"
+  on:click={() => {
+    goto("/");
+  }}
+  role="link"
+>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1920">
     <style>
       .st0 {
@@ -73,6 +83,7 @@
   .container {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 
   svg {
