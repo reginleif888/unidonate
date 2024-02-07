@@ -90,8 +90,8 @@ actor class Main() {
       for (index in Iter.range(0, total - 1)) {
         let donation = donations.get(index);
 
-        if (donation.donationId == filters.donationId and donation.status == #Verified) {
-          filteredDonationsList.add(donations.get(index));
+        if (donation.donationId == filters.donationId) {
+          filteredDonationsList.add(donation);
         };
       };
     };
@@ -106,7 +106,7 @@ actor class Main() {
     };
 
     let startIndex = Nat.min(filteredSize - 1, page * perPage);
-    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
+    let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
 
     let paginatedDonations = Vector.Vector<Donation>();
 
