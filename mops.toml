@@ -2,6 +2,7 @@
 base = "0.10.4"
 motoko-bitcoin = "https://github.com/tgalal/motoko-bitcoin#master@8615a5f1b699d60b64833622cb128c20a2c8cb6b"
 uuid = "1.0.0"
+vector = "0.2.0"
 
 [toolchain]
 moc = "0.10.3"
