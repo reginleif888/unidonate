@@ -108,6 +108,10 @@
     fill: var(--opposite-text);
   }
 
+  :global(.secondary-button.contained-button path) {
+    fill: var(--opposite-text);
+  }
+
   .primary-button.contained-button.disabled {
     background-color: var(--button-disabled-bg);
     color: var(--button-disabled-color);

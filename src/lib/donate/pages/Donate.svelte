@@ -4,9 +4,12 @@
   import InlineNotification from "$lib/common/components/InlineNotification.svelte";
 
   import UniGrid from "../components/UniGrid.svelte";
+  import ThemeSwitch from "$lib/common/components/ThemeSwitch.svelte";
 </script>
 
 <div class="container">
+  <ThemeSwitch />
+
   <InlineNotification
     type="info"
     title="Donation process"
