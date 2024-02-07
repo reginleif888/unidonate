@@ -63,7 +63,7 @@ actor class Main() {
   stable var stableDonationsMap = donationsMap.share();
 
   // Fot testing
-  private stable let ownerExtendedPublicKeyBase58Check : Text = "tpubDD9S94RYo2MraS7QbRhA64Nr56BzCYN2orJUkk2LE4RkB2npb9SFyiCuofbapC9wNW2hLJqkWwSpGoaE9pZC6fLBQdms5HYS9dsvw79nSWy";
+  private stable let ownerExtendedPublicKeyBase58Check : Text = "tprv8ZgxMBicQKsPd7Uf69XL1XwhmjHopUGep8GuEiJDZmbQz6o58LninorQAfcKZWARbtRtfnLcJ5MQ2AtHcQJCCRUcMRvmDUjyEmNUWwx8UbK";
   private stable var currentChildKeyIndex : Nat = 0;
 
   private stable var currentMemoryOffset : Nat64 = 2;
