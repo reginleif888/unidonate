@@ -6,6 +6,7 @@
   import { showHeader } from "$lib/common/stores/showHeader";
   import { burgerOpened } from "$lib/common/stores/burgerOpened";
   import ErrorModal from "$lib/common/components/ErrorModal.svelte";
+  import ThemeSwitch from "$lib/common/components/ThemeSwitch.svelte";
 
   if (typeof window !== "undefined") {
     let lastScrollY = window.scrollY;
@@ -28,6 +29,9 @@
 
 <MobileHeader />
 <main class="root">
+  <div class="theme-switch-mobile">
+    <ThemeSwitch />
+  </div>
   <slot />
 
   {#if $screenWidth <= Screen.md}
@@ -41,5 +45,9 @@
   .root {
     padding: 0 8px;
     padding-top: 116px;
+  }
+
+  .theme-switch-mobile {
+    margin-bottom: 8px;
   }
 </style>

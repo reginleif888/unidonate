@@ -2,13 +2,35 @@
   import { Slider } from "bits-ui";
   import TextInput from "./TextInput.svelte";
 
-  let value = [25];
+  export let value: Array<number> = [25];
+
+  export let onChange: (value: Array<number>) => void = () => null;
+
+  function handleChange(newValue: Array<number>) {
+    if (isNaN(newValue[0])) {
+      onChange([0]);
+
+      return;
+    }
+
+    if (value[0] === newValue[0]) {
+      return;
+    }
+
+    onChange(newValue);
+  }
 </script>
 
 <div class="slider-container">
   <div class="slider-label subtitle1">Label</div>
   <div class="inner">
-    <Slider.Root step={1} bind:value let:thumbs class="slider-root">
+    <Slider.Root
+      step={1}
+      {value}
+      onValueChange={handleChange}
+      let:thumbs
+      class="slider-root"
+    >
       <span class="slider-track">
         <Slider.Range class="slider-range" />
       </span>
@@ -16,7 +38,18 @@
         <Slider.Thumb {thumb} class="slider-thumb" />
       {/each}
     </Slider.Root>
-    <div class="input-wrapper"><TextInput type="number" /></div>
+    <div class="input-wrapper">
+      <TextInput
+        label="Percent"
+        onChange={(value) => {
+          handleChange([Number(String(value).replace("%", ""))]);
+        }}
+        value={String(value[0]).includes("%")
+          ? String(value[0])
+          : String(value[0]) + "%"}
+        isPercent
+      />
+    </div>
   </div>
 </div>
 
@@ -75,7 +108,7 @@
     display: block;
     width: 27px;
     height: 27px;
-    cursor: pointer;
+    cursor: grab;
     border-radius: 9999px;
     border: 1px solid var(--divider-color);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
