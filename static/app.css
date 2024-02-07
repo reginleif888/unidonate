@@ -234,3 +234,11 @@ path:not(.pie):not(.st0):not(.st1) {
 * {
   scroll-behavior: smooth;
 }
+
+[role="tooltip"] {
+  z-index: 60;
+}
+
+section {
+  padding: 0 8px;
+}

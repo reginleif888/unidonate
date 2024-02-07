@@ -78,10 +78,17 @@
   </Button>
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/styles/media.scss";
   .button_switch {
     display: flex;
-    width: fit-content;
+    width: 100%;
+  }
+
+  @media (min-width: --md) {
+    .button_switch {
+      width: fit-content;
+    }
   }
 
   :global(.button_switch__button.button_switch__button:not(:first-child)) {

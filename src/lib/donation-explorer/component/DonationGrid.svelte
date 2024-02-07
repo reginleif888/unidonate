@@ -2,42 +2,28 @@
   import Pagination from "$lib/common/components/Pagination.svelte";
   import TextInput from "$lib/common/components/TextInput.svelte";
   import { MagnifyingGlass } from "phosphor-svelte";
-  import { schools } from "../mocks";
-  import { mapSchoolsToGridItems } from "../utils";
 
-  import CardGrid from "./CardGrid.svelte";
-  import { useUnis } from "../queries/useUnis";
   import Spinner from "$lib/common/components/Spinner.svelte";
   import { debounce } from "$lib/common/utils";
-
-  const handleSelect = () => {
-    setTimeout(() => {
-      const specialElement = document.getElementById("student-select");
-
-      if (specialElement) {
-        specialElement.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    }, 300);
-  };
+  import { useDonations } from "../queries/useDonations";
+  import CardGrid from "$lib/donation-explorer/component/CardGrid.svelte";
+  import { number } from "$lib/common/actions/number";
 
   export let uniId: string = "";
 
   let search = "";
 
-  let perPage = 10;
+  let perPage = 100;
 
   let currentPage = 1;
 
-  $: unisQueryResults = useUnis({
+  $: donationsQueryResults = useDonations({
     // @ts-ignore
     page: currentPage - 1,
     // @ts-ignore
     perPage: perPage,
     filters: {
-      schoolName: search,
+      donationId: search,
     },
   });
 
@@ -52,7 +38,7 @@
       value={search}
       onInput={debounceSearch}
       placeholder="Search..."
-      label="Search for university"
+      label="Search donation id"
     >
       <svelte:fragment slot="end-icon">
         <MagnifyingGlass size={24} />
@@ -61,20 +47,19 @@
   </div>
   <div class="grid-wrapper">
     <CardGrid
-      items={mapSchoolsToGridItems($unisQueryResults.data?.schools ?? [])}
+      donations={$donationsQueryResults.data?.donations ?? []}
       bind:value={uniId}
-      onSelect={handleSelect}
     />
-    {#if $unisQueryResults.isLoading}
+    {#if $donationsQueryResults.isLoading}
       <Spinner />
     {/if}
   </div>
 
-  {#if $unisQueryResults.data?.total && $unisQueryResults.data?.total > 10}
+  <!-- {#if $donationsQueryResults.data?.total && $donationsQueryResults.data?.total > 10}
     <div class="pagination-wrapper">
       <Pagination bind:currentPage {perPage} />
     </div>
-  {/if}
+  {/if} -->
 </div>
 
 <style>

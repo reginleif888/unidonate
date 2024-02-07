@@ -13,54 +13,61 @@
   import { DONATE_INITIAL_VALUES } from "../constant";
   import type { DonationFormValues } from "../types";
   import Spinner from "$lib/common/components/Spinner.svelte";
-
-  // mock async request
-  const makeRequest = () => new Promise((resolve) => setTimeout(resolve, 1000));
+  import { validateDonationForm } from "../utils";
+  import { MAP_ALLOCATION_CATEGORY } from "$lib/common/constant";
+  import DonateModal from "./DonateModal.svelte";
+  import { useCreateDonation } from "../queries/useCreateDonation";
+  import { errorModal } from "$lib/common/stores/errorModal";
 
   let submitting: boolean = false;
 
-  const {
-    // observables state
-    form,
-    errors,
-    state,
-    touched,
-    isValid,
-    isSubmitting,
-    isValidating,
-    // handlers
-    updateField,
-    handleReset,
-    handleChange,
-    handleSubmit,
-  } = createForm<DonationFormValues>({
+  export let studentId: string;
+
+  export let uniId: string;
+
+  let donationId: string;
+
+  let paymentAddress: string;
+
+  $: createDonation = useCreateDonation();
+
+  const { form, updateField, handleSubmit } = createForm<DonationFormValues>({
     initialValues: DONATE_INITIAL_VALUES,
     onSubmit: (values) => {
+      // @ts-ignore
+      if (Object.keys(errors).some((key) => errors[key])) {
+        return;
+      }
+
       submitting = true;
-      console.log("values", values);
 
-      return makeRequest().then(() => {
-        alert(JSON.stringify(values, null, 2));
-
-        submitting = false;
-      });
+      return $createDonation
+        .mutateAsync({
+          studentId: studentId ? [studentId] : [],
+          schoolId: uniId,
+          // @ts-ignore
+          allocations: values.categories.map((category) => ({
+            [category.categoryId]: Number(category.percent),
+          })),
+          // @ts-ignore
+          amount: Number(values.totalAmount * 100000000),
+        })
+        .then((res) => {
+          donationId = res.donationId;
+          paymentAddress = res.paymentAddress;
+        })
+        .finally(() => {
+          submitting = false;
+        });
     },
   });
 
-  function handleTotalAmountChange(value: string) {
-    const field = "totalAmount" as keyof DonationFormValues;
-
-    updateField(field, value);
-  }
+  $: errors = validateDonationForm($form);
 
   function handleCategoryValueChange(index: number, value: string) {
     const field = `categories[${index}].percent` as keyof DonationFormValues;
 
     updateField(field, value);
-  }
-
-  $: {
-    console.log("form=====", $form.categories);
   }
 </script>
 
@@ -70,8 +77,9 @@
       label="Amount in BTC"
       isBtc
       value={String($form.totalAmount)}
-      on:change={() => {
-        handleTotalAmountChange("0");
+      onChange={(value) => {
+        $form.budgetError = Number(value) <= 0 ? true : undefined;
+        $form.totalAmount = Number(value);
       }}
     >
       <svelte:fragment slot="start-icon">
@@ -83,6 +91,7 @@
   {#each $form.categories as category, index}
     <div class="slider-container">
       <Slider
+        label={MAP_ALLOCATION_CATEGORY[category.categoryId].label}
         value={[Number($form.categories[index].percent)]}
         onChange={(value) => {
           handleCategoryValueChange(index, String(value[0]));
@@ -91,20 +100,40 @@
     </div>
   {/each}
 
-  <div class="inline-notification">
-    <InlineNotification
-      type="error"
-      title="Ooops...💥"
-      message="Seems like allocated budget is wrong. Please check it again."
-    />
-  </div>
+  {#if errors.categoryAllocation}
+    <div class="inline-notification">
+      <InlineNotification
+        type="error"
+        title="Ooops...💥"
+        message="Seems like allocated budget is wrong. Please check it again."
+      />
+    </div>
+  {/if}
+
+  {#if errors.budgetError}
+    <div class="inline-notification">
+      <InlineNotification
+        type="error"
+        title="Ooops...💥"
+        message="Pls feel the budget which you want to allocate. Budget supposed to be positive value."
+      />
+    </div>
+  {/if}
 
   <div class="controls">
     <Tooltip>
       <slot slot="trigger">
         <Button
           label="Reset allocation"
-          type="reset"
+          onClick={() => {
+            $form = {
+              ...$form,
+              categories: $form.categories.map((category) => ({
+                ...category,
+                percent: 25,
+              })),
+            };
+          }}
           variant="secondary"
           contained
         >
@@ -126,6 +155,13 @@
   {#if submitting}
     <Spinner />
   {/if}
+
+  <DonateModal
+    open={Boolean(donationId && paymentAddress)}
+    donateTransactionId={donationId}
+    address={paymentAddress}
+    amount={Number($form.totalAmount).toFixed(8)}
+  />
 </form>
 
 <style>

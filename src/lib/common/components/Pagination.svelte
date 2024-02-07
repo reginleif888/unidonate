@@ -3,12 +3,14 @@
   import { CaretLeft, CaretRight } from "phosphor-svelte";
 
   export let currentPage: number = 1;
+  export let perPage: number = 10;
+  export let count: number = 0;
 </script>
 
 <Pagination.Root
   bind:page={currentPage}
-  count={100}
-  perPage={10}
+  {count}
+  {perPage}
   siblingCount={0}
   let:pages
   let:range

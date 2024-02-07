@@ -13,14 +13,18 @@ import Time "mo:base/Time";
 import Int "mo:base/Int";
 import UUID "mo:uuid/UUID";
 import Source "mo:uuid/async/SourceV4";
+import Uuid "mo:uuid/UUID";
 import HashMap "mo:base/HashMap";
 import StableMemory "mo:base/ExperimentalStableMemory";
 import Nat32 "mo:base/Nat32";
 import Option "mo:base/Option";
 import Int64 "mo:base/Int64";
 import Blob "mo:base/Blob";
+import Random "mo:base/Random";
+import Nat8 "mo:base/Nat8";
 
 import BitcoinIntegration "bitcoin-integration";
+import BitcoinIntegrationUtils "bitcoin-integration/utils";
 
 import Types "./types";
 import Utils "utils";
@@ -45,6 +49,7 @@ actor class Main() {
   type CreateDonationPayload = Types.CreateDonationPayload;
   type CreateDonationResponse = Types.CreateDonationResponse;
   type VerifyDonationPayload = Types.VerifyDonationPayload;
+  type DonationStatus = Types.DonationStatus;
 
   let g = Source.Source();
 
@@ -82,29 +87,36 @@ actor class Main() {
     if (Text.size(filters.donationId) > 0) {
       filteredDonationsList := Vector.Vector<Donation>();
 
-      for (index in Iter.range(0, total)) {
+      for (index in Iter.range(0, total - 1)) {
         let donation = donations.get(index);
 
-        if (donation.donationId == filters.donationId and donation.status == #Verified) {
-          filteredDonationsList.add(donations.get(index));
+        if (donation.donationId == filters.donationId) {
+          filteredDonationsList.add(donation);
         };
       };
     };
 
     let filteredSize = filteredDonationsList.size();
 
+    if (filteredSize == 0) {
+      return {
+        donations = [];
+        total = filteredSize;
+      };
+    };
+
     let startIndex = Nat.min(filteredSize - 1, page * perPage);
-    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
+    let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
 
     let paginatedDonations = Vector.Vector<Donation>();
 
-    for (index in Iter.range(startIndex, endIndex)) {
+    for (index in Iter.range(startIndex, endIndex - 1)) {
       paginatedDonations.add(filteredDonationsList.get(index));
     };
 
     let response : GetDonationsResponse = {
       donations = Vector.toArray(paginatedDonations);
-      total;
+      total = paginatedDonations.size();
     };
 
     return response;
@@ -118,7 +130,7 @@ actor class Main() {
     if (Text.size(filters.schoolName) > 0) {
       filteredSchoolsList := Vector.Vector<School>();
 
-      for (index in Iter.range(0, total)) {
+      for (index in Iter.range(0, total - 1)) {
         let school = schools.get(index);
 
         if (Text.contains(school.name, #text(filters.schoolName))) {
@@ -129,24 +141,31 @@ actor class Main() {
 
     let filteredSize = filteredSchoolsList.size();
 
+    if (filteredSize == 0) {
+      return {
+        schools = [];
+        total = filteredSize;
+      };
+    };
+
     let startIndex = Nat.min(filteredSize - 1, page * perPage);
-    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
+    let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
 
     let paginatedSchools = Vector.Vector<School>();
 
-    for (index in Iter.range(startIndex, endIndex)) {
+    for (index in Iter.range(startIndex, endIndex - 1)) {
       paginatedSchools.add(filteredSchoolsList.get(index));
     };
 
     let response : GetSchoolsResponse = {
       schools = Vector.toArray(paginatedSchools);
-      total;
+      total = paginatedSchools.size();
     };
 
     return response;
   };
 
-  public func addSchool(payload : AddSchoolPayload) : async () {
+  private func _addSchool(payload : AddSchoolPayload) : async* () {
     let schoolId = UUID.toText(await g.new());
 
     let imageId : ?Text = switch (payload.imageBlob) {
@@ -171,12 +190,16 @@ actor class Main() {
     studentsMap.put(newSchool.id, null);
   };
 
+  public func addSchool(payload : AddSchoolPayload) : async () {
+    ignore _addSchool(payload);
+  };
+
   public query func getStudents(schoolId : Text) : async Result.Result<[Student], Text> {
     let ?studentsList = studentsMap.get(schoolId) else return #err("School is not found by provided ID.");
     return #ok(List.toArray<Student>(studentsList));
   };
 
-  public func addStudent(schoolId : Text, payload : AddStudentPayload) : async Result.Result<(), Text> {
+  private func _addStudent(schoolId : Text, payload : AddStudentPayload) : async* Result.Result<(), Text> {
     let ?studentsList = studentsMap.get(schoolId) else return #err("School is not found by provided ID.");
 
     let imageId : ?Text = switch (payload.imageBlob) {
@@ -202,7 +225,11 @@ actor class Main() {
     return #ok();
   };
 
-  public func createDonation(payload : CreateDonationPayload) : async Result.Result<CreateDonationResponse, Text> {
+  public func addStudent(schoolId : Text, payload : AddStudentPayload) : async () {
+    ignore _addStudent(schoolId, payload);
+  };
+
+  private func _createDonation(payload : CreateDonationPayload, status : DonationStatus, transactionId : ?Text) : async* Result.Result<CreateDonationResponse, Text> {
     if (Nat64.less(payload.amount, 1) == true) return #err("Amount must be more than 0 satoshi.");
 
     let paymentAddress = await BitcoinIntegration.generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check, currentChildKeyIndex);
@@ -222,9 +249,9 @@ actor class Main() {
           schoolId = payload.schoolId;
           studentId = payload.studentId;
           amount = payload.amount;
-          status = #Pending;
+          status;
           allocations = payload.allocations;
-          transactionId = null;
+          transactionId;
         };
 
         donationsMap.put(donationId, donations.size());
@@ -233,7 +260,10 @@ actor class Main() {
         return #ok({ donationId; paymentAddress });
       };
     };
+  };
 
+  public func createDonation(payload : CreateDonationPayload) : async Result.Result<CreateDonationResponse, Text> {
+    await* _createDonation(payload, #Pending, null);
   };
 
   public func verifyDonation(payload : VerifyDonationPayload) : async Result.Result<(), Text> {
@@ -312,6 +342,159 @@ actor class Main() {
     };
 
     return Utils.http404(?"Path not found");
+  };
+
+  /// -------------------------------------
+
+  private func reset() : async* () {
+    schools.clear();
+    donations.clear();
+
+    for ((id, value) in studentsMap.entries()) {
+      ignore studentsMap.remove(id);
+    };
+    for ((id, value) in donationsMap.entries()) {
+      ignore donationsMap.remove(id);
+    };
+    for ((id, value) in imgOffset.entries()) {
+      ignore imgOffset.remove(id);
+    };
+  };
+
+  // --------------------------------------
+  // --------------------------------------
+  // --------------------------------------
+  // --------------------------------------
+  // --------------------------------------
+  // --------------------------------------
+
+  public func mockData() : async () {
+    await* reset();
+    // Add schools
+    await* _addSchool({
+      name = "Kyiv International School";
+      location = "Ukraine, Kyiv";
+      website = "https://kyiv.qsi.org/";
+      imageBlob = null;
+    });
+    await* _addSchool({
+      name = "Kharkiv Specialized School №156";
+      location = "Ukraine, Kharkiv";
+      website = "http://school156.edu.kh.ua/";
+      imageBlob = null;
+    });
+    await* _addSchool({
+      name = "Kharkivsʹka Himnaziya No 116";
+      location = "Ukraine, Kharkiv";
+      website = "http://gymnasium116.edu.kh.ua/";
+      imageBlob = null;
+    });
+    await* _addSchool({
+      name = "Odessa High School";
+      location = "Ukraine, Odessa";
+      website = "https://www.odessahs.org/";
+      imageBlob = null;
+    });
+
+    let names = ["John", "Alex", "James", "Mike", "Justin", "Bob", "Kevin", "Luka"];
+    let surNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis"];
+    let dateOfBirthdays = ["2001-01-01", "2002-02-02", "2003-03-03", "2004-04-04", "2005-05-05", "2006-06-06", "2007-07-07", "2008-08-08"];
+    let grades = ["1a", "2b", "3c", "4d", "5b", "6a", "7d", "8c"];
+
+    let schoolIds = Array.map<School, Text>(Vector.toArray(schools), func school = school.id);
+
+    var counter = 0;
+
+    for (index in Iter.range(0, schoolIds.size() - 1)) {
+      for (_ in Iter.range(0, 7)) {
+        let studentObj : AddStudentPayload = {
+          firstName = names[counter % names.size()];
+          lastName = surNames[counter % surNames.size()];
+          grade = grades[counter % grades.size()];
+          dateOfBirth = dateOfBirthdays[counter % dateOfBirthdays.size()];
+          imageBlob = null;
+        };
+
+        counter := counter + 1;
+
+        ignore await* _addStudent(schoolIds[index], studentObj);
+      };
+    };
+
+    await* mockDonationsData();
+
+  };
+
+  private func mockDonationsData() : async* () {
+    let schoolIds = Array.map<School, Text>(Vector.toArray(schools), func school = school.id);
+
+    var counter = 1;
+
+    var amountVariants : [Nat] = [20002001, 240002001, 60400200, 90000000];
+    let allocationAmounts = [25, 38, 30, 17];
+
+    for (index in Iter.range(0, schoolIds.size() - 1)) {
+      let studentList = studentsMap.get(schoolIds.get(index));
+
+      switch (studentList) {
+        case null {};
+        case (?list) {
+          for (idx in Iter.range(0, List.size(list) - 1)) {
+            ignore await* _createDonation(
+              {
+                schoolId = schoolIds[index];
+                amount = Nat64.fromNat(amountVariants[(counter % amountVariants.size())]);
+                studentId = switch (List.get(list, idx)) {
+                  case null { null };
+                  case (?val) { ?val.id };
+                };
+                allocations = [
+                  #DesignAndDevelopment(allocationAmounts[counter % 4]),
+                  #TeacherSupport(allocationAmounts[(counter + 1) % 4]),
+                  #SchoolSupplies(allocationAmounts[(counter + 2) % 4]),
+                  #LunchAndSnacks(allocationAmounts[(counter + 3) % 4]),
+                ];
+              },
+              #Verified,
+              ?BitcoinIntegrationUtils.bytesToText([
+                (Nat8.fromNat(counter * 10 % 255)),
+                (Nat8.fromNat(counter * 20 % 255)),
+                (Nat8.fromNat(counter * 30 % 255)),
+                (Nat8.fromNat(counter * 40 % 255)),
+                (Nat8.fromNat(counter * 50 % 255)),
+              ]),
+            );
+
+            counter := counter + 1;
+          };
+        };
+      };
+
+      ignore await* _createDonation(
+        {
+          schoolId = schoolIds[index];
+          amount = Nat64.fromNat(amountVariants[(counter % amountVariants.size())]);
+          studentId = null;
+          allocations = [
+            #DesignAndDevelopment(allocationAmounts[counter % 4]),
+            #TeacherSupport(allocationAmounts[(counter + 1) % 4]),
+            #SchoolSupplies(allocationAmounts[(counter + 2) % 4]),
+            #LunchAndSnacks(allocationAmounts[(counter + 3) % 4]),
+          ];
+        },
+        #Verified,
+        ?BitcoinIntegrationUtils.bytesToText([
+          (Nat8.fromNat(counter * 10 % 255)),
+          (Nat8.fromNat(counter * 20 % 255)),
+          (Nat8.fromNat(counter * 30 % 255)),
+          (Nat8.fromNat(counter * 40 % 255)),
+          (Nat8.fromNat(counter * 50 % 255)),
+        ]),
+      );
+
+      counter := counter + 1;
+
+    };
   };
 
   // --------------------------------------

@@ -32,6 +32,13 @@ export interface FormCategory {
 }
 
 export interface DonationFormValues {
+  categoryAllocation?: boolean | undefined;
+  budgetError?: boolean | undefined;
   totalAmount: number;
   categories: FormCategory[];
 }
+
+export type DonationFormError = {
+  categoryAllocation?: boolean | undefined;
+  budgetError?: boolean | undefined;
+};
