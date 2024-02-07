@@ -33,6 +33,7 @@
     border-color: var(--primary-bg);
     color: var(--error-color);
     padding: 16px;
+    width: 100%;
   }
 
   .inline-notification-root::before {

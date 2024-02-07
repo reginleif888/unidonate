@@ -15,8 +15,9 @@
   import Spinner from "$lib/common/components/Spinner.svelte";
   import { validateDonationForm } from "../utils";
   import { MAP_ALLOCATION_CATEGORY } from "$lib/common/constant";
-
-  const makeRequest = () => new Promise((resolve) => setTimeout(resolve, 5000));
+  import DonateModal from "./DonateModal.svelte";
+  import { useCreateDonation } from "../queries/useCreateDonation";
+  import { errorModal } from "$lib/common/stores/errorModal";
 
   let submitting: boolean = false;
 
@@ -24,18 +25,44 @@
 
   export let uniId: string;
 
-  const { form, errors, updateField, handleSubmit } =
-    createForm<DonationFormValues>({
-      initialValues: DONATE_INITIAL_VALUES,
-      validate: validateDonationForm,
-      onSubmit: (values) => {
-        submitting = true;
+  let donationId: string;
 
-        return makeRequest().then(() => {
+  let paymentAddress: string;
+
+  $: createDonation = useCreateDonation();
+
+  const { form, updateField, handleSubmit } = createForm<DonationFormValues>({
+    initialValues: DONATE_INITIAL_VALUES,
+    onSubmit: (values) => {
+      // @ts-ignore
+      if (Object.keys(errors).some((key) => errors[key])) {
+        return;
+      }
+
+      submitting = true;
+
+      return $createDonation
+        .mutateAsync({
+          studentId: studentId ? [studentId] : [],
+          schoolId: uniId,
+          // @ts-ignore
+          allocations: values.categories.map((category) => ({
+            [category.categoryId]: Number(category.percent),
+          })),
+          // @ts-ignore
+          amount: Number(values.totalAmount * 100000000),
+        })
+        .then((res) => {
+          donationId = res.donationId;
+          paymentAddress = res.paymentAddress;
+        })
+        .finally(() => {
           submitting = false;
         });
-      },
-    });
+    },
+  });
+
+  $: errors = validateDonationForm($form);
 
   function handleCategoryValueChange(index: number, value: string) {
     const field = `categories[${index}].percent` as keyof DonationFormValues;
@@ -73,7 +100,7 @@
     </div>
   {/each}
 
-  {#if $errors.categoryAllocation}
+  {#if errors.categoryAllocation}
     <div class="inline-notification">
       <InlineNotification
         type="error"
@@ -83,7 +110,7 @@
     </div>
   {/if}
 
-  {#if $errors.budgetError}
+  {#if errors.budgetError}
     <div class="inline-notification">
       <InlineNotification
         type="error"
@@ -128,6 +155,13 @@
   {#if submitting}
     <Spinner />
   {/if}
+
+  <DonateModal
+    open={Boolean(donationId && paymentAddress)}
+    donateTransactionId={donationId}
+    address={paymentAddress}
+    amount={Number($form.totalAmount).toFixed(8)}
+  />
 </form>
 
 <style>

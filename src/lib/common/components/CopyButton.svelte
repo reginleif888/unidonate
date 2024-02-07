@@ -6,7 +6,11 @@
 
   export let value: string = "";
 
-  let copyText = "Copy me";
+  export let onCopySuccess: () => void = () => null;
+
+  export let onCopyFailure: () => void = () => null;
+
+  let copyText = "Copy";
 
   let timer: NodeJS.Timeout | undefined = undefined;
 
@@ -15,8 +19,12 @@
 
     copyText = "Copied 🎉";
 
+    if (onCopySuccess) {
+      onCopySuccess();
+    }
+
     timer = setTimeout(() => {
-      copyText = "Copy me";
+      copyText = "Copy";
     }, 3000);
   }
 
@@ -25,8 +33,12 @@
 
     copyText = "Error 💥";
 
+    if (onCopyFailure) {
+      onCopyFailure();
+    }
+
     timer = setTimeout(() => {
-      copyText = "Copy me";
+      copyText = "Copy";
     }, 3000);
   }
 </script>

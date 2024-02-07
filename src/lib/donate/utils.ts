@@ -26,7 +26,7 @@ export function mapStudentsToGridItems(students: Student[]): GridItem[] {
 export function validateDonationForm(values: DonationFormValues) {
   const errors = {} as DonationFormError;
 
-  errors.budgetError = Number(values.totalAmount) <= 0;
+  errors.budgetError = Number(values.totalAmount) <= 0 ? true : undefined;
 
   const totalPercentage = values.categories.reduce(
     (acc, category) => acc + Number(category.percent),

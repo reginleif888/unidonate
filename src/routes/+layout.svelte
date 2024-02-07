@@ -38,17 +38,17 @@
     </div>
     <slot />
 
-    {#if $screenWidth <= Screen.md}
+    <!-- {#if $screenWidth <= Screen.md}
       <BurgerMenu />
-    {/if}
-
+    {/if} -->
+    <BurgerMenu />
     <ErrorModal />
   </main>
 </QueryClientProvider>
 
 <style>
   .root {
-    padding: 0 8px;
+    padding: 0;
     padding-top: 116px;
   }
 

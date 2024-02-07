@@ -238,3 +238,7 @@ path:not(.pie):not(.st0):not(.st1) {
 [role="tooltip"] {
   z-index: 60;
 }
+
+section {
+  padding: 0 8px;
+}
