@@ -14,7 +14,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 49;
     height: 100px;
     background-color: var(--secondary-bg);
     border-bottom: 1px solid var(--divider-color);
