@@ -93,8 +93,15 @@ actor class Main() {
 
     let filteredSize = filteredDonationsList.size();
 
-    let startIndex = Nat.max(Nat.min(filteredSize - 1, page * perPage), 0);
-    let endIndex = Nat.max(Nat.min(filteredSize - 1, (page + 1) * perPage), 0);
+    if (filteredSize == 0) {
+      return {
+        donations = [];
+        total = filteredSize;
+      };
+    };
+
+    let startIndex = Nat.min(filteredSize - 1, page * perPage);
+    let endIndex = Nat.min(filteredSize - 1, (page + 1) * perPage);
 
     let paginatedDonations = Vector.Vector<Donation>();
 
@@ -104,7 +111,7 @@ actor class Main() {
 
     let response : GetDonationsResponse = {
       donations = Vector.toArray(paginatedDonations);
-      total;
+      total = paginatedDonations.size();
     };
 
     return response;
@@ -129,6 +136,13 @@ actor class Main() {
 
     let filteredSize = filteredSchoolsList.size();
 
+    if (filteredSize == 0) {
+      return {
+        schools = [];
+        total = filteredSize;
+      };
+    };
+
     let startIndex = Nat.max(Nat.min(filteredSize - 1, page * perPage), 0);
     let endIndex = Nat.max(Nat.min(filteredSize - 1, (page + 1) * perPage), 0);
 
@@ -140,7 +154,7 @@ actor class Main() {
 
     let response : GetSchoolsResponse = {
       schools = Vector.toArray(paginatedSchools);
-      total;
+      total = paginatedSchools.size();
     };
 
     return response;
