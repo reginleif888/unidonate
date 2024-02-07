@@ -81,13 +81,6 @@
     display: flex;
     gap: 20px;
     margin-bottom: 40px;
-  }
-
-  .top-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 40px;
     gap: 20px;
   }

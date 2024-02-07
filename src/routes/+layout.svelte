@@ -25,12 +25,6 @@
   }
 </script>
 
-{#if $screenWidth <= Screen.md}
-  <h1 class="label h1">
-    <span class="donut">Uni</span> <span class="donate">Donate</span>
-  </h1>
-{/if}
-
 <MobileHeader />
 <main class="root">
   <slot />
@@ -43,6 +37,6 @@
 <style>
   .root {
     padding: 0 8px;
-    padding-top: 100px;
+    padding-top: 116px;
   }
 </style>
