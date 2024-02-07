@@ -218,7 +218,7 @@ body {
   pointer-events: none;
 }
 
-path:not(.pie) {
+path:not(.pie):not(.st0):not(.st1) {
   fill: var(--heading-color);
   transition: fill var(--transition-default);
 }

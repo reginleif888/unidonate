@@ -1,3 +1,8 @@
+<script>
+  import { screenWidth } from "$lib/common/stores/screen";
+  import { Screen } from "$lib/common/constant";
+</script>
+
 <div class="container">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1920">
     <style>
@@ -57,9 +62,11 @@
     </g>
   </svg>
 
-  <h1 class="label h1">
-    <span class="donut">Donut</span> <span class="donate">Donate</span>
-  </h1>
+  {#if $screenWidth >= Screen.md}
+    <h1 class="label h1">
+      <span class="donut">Uni</span> <span class="donate">Donate</span>
+    </h1>
+  {/if}
 </div>
 
 <style>
