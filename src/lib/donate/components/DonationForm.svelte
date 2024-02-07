@@ -1,7 +1,6 @@
 <script lang="ts">
   import Button from "$lib/common/components/Button.svelte";
   import InlineNotification from "$lib/common/components/InlineNotification.svelte";
-  import PieChart from "$lib/common/components/PieChart.svelte";
   import Slider from "$lib/common/components/Slider.svelte";
   import TextInput from "$lib/common/components/TextInput.svelte";
   import Tooltip from "$lib/common/components/Tooltip.svelte";
@@ -55,7 +54,7 @@
   }
 
   function handleCategoryValueChange(index: number, value: string) {
-    const field = `categories[${index}].amount` as keyof DonationFormValues;
+    const field = `categories[${index}].percent` as keyof DonationFormValues;
 
     updateField(field, value);
   }
@@ -67,14 +66,6 @@
 
 <form on:submit={handleSubmit} class="root">
   <div class="top-section">
-    <div class="inline-notification">
-      <InlineNotification
-        type="error"
-        title="Ooops...💥"
-        message="Seems like allocated budget is wrong. Please check it again."
-      />
-    </div>
-
     <TextInput
       label="Amount in BTC"
       isBtc
@@ -92,13 +83,21 @@
   {#each $form.categories as category, index}
     <div class="slider-container">
       <Slider
-        value={[Number($form.categories[index].amount)]}
+        value={[Number($form.categories[index].percent)]}
         onChange={(value) => {
           handleCategoryValueChange(index, String(value[0]));
         }}
       />
     </div>
   {/each}
+
+  <div class="inline-notification">
+    <InlineNotification
+      type="error"
+      title="Ooops...💥"
+      message="Seems like allocated budget is wrong. Please check it again."
+    />
+  </div>
 
   <div class="controls">
     <Tooltip>
@@ -123,6 +122,7 @@
       </svelte:fragment>
     </Button>
   </div>
+
   {#if submitting}
     <Spinner />
   {/if}

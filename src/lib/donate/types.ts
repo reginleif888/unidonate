@@ -28,7 +28,7 @@ export interface GridItem {
 
 export interface FormCategory {
   categoryId: string;
-  amount: number;
+  percent: number;
 }
 
 export interface DonationFormValues {

@@ -52,7 +52,11 @@ export function percentInput(node: HTMLElement, { active = true }: Options) {
     event.target.setSelectionRange(selectionStart, selectionEnd);
   }
 
-  function initialize() {
+  function formatAndUpdate() {
+    if (!active) {
+      return;
+    }
+
     const formattedValue = format(
       (node as HTMLInputElement).value.replace("%", "")
     );
@@ -60,7 +64,7 @@ export function percentInput(node: HTMLElement, { active = true }: Options) {
   }
 
   onMount(() => {
-    initialize();
+    formatAndUpdate();
   });
 
   node.addEventListener("input", update);

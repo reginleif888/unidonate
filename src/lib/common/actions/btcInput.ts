@@ -48,6 +48,10 @@ export function btcInput(
   }
 
   function initialize() {
+    if (!active) {
+      return;
+    }
+
     const formattedValue = format((node as HTMLInputElement).value);
     (node as HTMLInputElement).value = formattedValue;
   }

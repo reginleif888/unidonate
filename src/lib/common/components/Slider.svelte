@@ -3,10 +3,21 @@
   import TextInput from "./TextInput.svelte";
 
   export let value: Array<number> = [25];
+
   export let onChange: (value: Array<number>) => void = () => null;
 
-  function handleChange(value: Array<number>) {
-    onChange(value);
+  function handleChange(newValue: Array<number>) {
+    if (isNaN(newValue[0])) {
+      onChange([0]);
+
+      return;
+    }
+
+    if (value[0] === newValue[0]) {
+      return;
+    }
+
+    onChange(newValue);
   }
 </script>
 
@@ -15,7 +26,7 @@
   <div class="inner">
     <Slider.Root
       step={1}
-      value={[70]}
+      {value}
       onValueChange={handleChange}
       let:thumbs
       class="slider-root"
@@ -31,9 +42,11 @@
       <TextInput
         label="Percent"
         onChange={(value) => {
-          handleChange([Number(value)]);
+          handleChange([Number(String(value).replace("%", ""))]);
         }}
-        value={String(value[0])}
+        value={String(value[0]).includes("%")
+          ? String(value[0])
+          : String(value[0]) + "%"}
         isPercent
       />
     </div>

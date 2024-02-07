@@ -5,19 +5,19 @@ export const DONATE_INITIAL_VALUES: DonationFormValues = {
   categories: [
     {
       categoryId: "1",
-      amount: 25,
+      percent: 25,
     },
     {
       categoryId: "2",
-      amount: 25,
+      percent: 25,
     },
     {
       categoryId: "3",
-      amount: 25,
+      percent: 25,
     },
     {
       categoryId: "4",
-      amount: 25,
+      percent: 25,
     },
   ],
 };

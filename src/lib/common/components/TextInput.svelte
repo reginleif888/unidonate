@@ -1,6 +1,5 @@
 <script lang="ts">
   import { WarningCircle } from "phosphor-svelte";
-  import { number } from "../actions/number";
   import { percentInput } from "../actions/percentInput";
   import { btcInput } from "../actions/btcInput";
 
