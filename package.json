@@ -18,6 +18,7 @@
     "lint": "prettier --check . && eslint ."
   },
   "devDependencies": {
+    "@dfinity/agent": "^0.21.4",
     "@dfinity/candid": "^0.21.4",
     "@dfinity/principal": "^0.21.4",
     "@sveltejs/adapter-auto": "^3.0.0",

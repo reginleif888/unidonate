@@ -23,7 +23,7 @@
   },
   "networks": {
     "local": {
-      "bind": "127.0.0.1:4942"
+      "bind": "127.0.0.1:4943"
     }
   },
   "output_env_file": ".env",
