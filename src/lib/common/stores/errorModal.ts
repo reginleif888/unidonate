@@ -5,7 +5,9 @@ type ErrorModal = {
   message: string;
 };
 
-export const errorModal = writable<ErrorModal>({
+const errorModal = writable<ErrorModal>({
   isOpen: false,
   message: "",
 });
+
+export default errorModal;

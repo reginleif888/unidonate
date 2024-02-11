@@ -2,7 +2,7 @@
   import Button from "./Button.svelte";
   import Modal from "./Modal.svelte";
   import { Prohibit } from "phosphor-svelte";
-  import { errorModal } from "$lib/common/stores/errorModal";
+  import { errorModal } from "$lib/common/stores";
 
   const handleClose = () => {
     errorModal.set({ isOpen: false, message: "" });

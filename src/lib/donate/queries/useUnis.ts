@@ -4,7 +4,7 @@ import type {
   GetSchoolsPayload,
   GetSchoolsResponse,
 } from "../../../declarations/backend/backend.did";
-import { errorModal } from "$lib/common/stores/errorModal";
+import { errorModal } from "$lib/common/stores";
 
 export const useUnis = (payload: GetSchoolsPayload) => {
   const queryResult = useQuery<GetSchoolsResponse>(

@@ -1,6 +1,6 @@
 import { useMutation } from "@sveltestack/svelte-query";
 import { backend } from "../../../declarations/backend";
-import { errorModal } from "$lib/common/stores/errorModal";
+import { errorModal } from "$lib/common/stores";
 import type { VerifyDonationPayload } from "../../../declarations/backend/backend.did";
 
 type UseVerifyDonationParams = {

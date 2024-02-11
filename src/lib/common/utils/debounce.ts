@@ -1,4 +1,4 @@
-export const debounce = <T extends (...args: any[]) => any>(
+const debounce = <T extends (...args: any[]) => any>(
   fn: T,
   ms: number
 ): [(...args: Parameters<T>) => Promise<ReturnType<T>>, () => void] => {
@@ -19,3 +19,5 @@ export const debounce = <T extends (...args: any[]) => any>(
 
   return [debouncedFunc, dispose];
 };
+
+export default debounce;

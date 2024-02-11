@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Tooltip } from "bits-ui";
-  import { flyAndScale } from "$lib/common/transitions/flyAndScale";
+  import { flyAndScale } from "$lib/common/transitions";
 </script>
 
 <Tooltip.Root openDelay={0} closeOnPointerDown={false}>

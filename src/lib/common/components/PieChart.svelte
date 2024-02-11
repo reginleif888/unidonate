@@ -121,6 +121,11 @@
     gap: 8px;
     max-width: 280px;
     overflow: hidden;
+
+    @include respond-to(tabletSmall) {
+      flex-direction: row;
+      max-width: unset;
+    }
   }
 
   .legend-item {
@@ -133,12 +138,5 @@
   .legend-color {
     min-width: 10px;
     height: 10px;
-  }
-
-  @media (min-width: $sm) {
-    .root {
-      flex-direction: row;
-      max-width: unset;
-    }
   }
 </style>

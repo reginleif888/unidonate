@@ -1,0 +1,112 @@
+:global(.h1) {
+  font-family: var(--uni-hading-font-family);
+  font-size: 36px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:global(.h2) {
+  font-family: var(--uni-hading-font-family);
+  font-size: 32px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:global(.h3) {
+  font-family: var(--uni-hading-font-family);
+  font-size: 28px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:global(.h4) {
+  font-family: var(--uni-hading-font-family);
+  font-size: 24px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:global(.h5) {
+  font-family: var(--uni-hading-font-family);
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:global(.h6) {
+  font-family: var(--uni-hading-font-family);
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:global(.subtitle1) {
+  font-family: var(--uni-description-font-family);
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+}
+
+:global(.subtitle2) {
+  font-family: var(--uni-description-font-family);
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+}
+
+:global(.body1) {
+  font-family: var(--uni-description-font-family);
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+}
+
+:global(.body2) {
+  font-family: var(--uni-description-font-family);
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+}
+
+:global(.button-text-medium) {
+  font-family: var(--uni-description-font-family);
+  font-size: 16px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:global(.button-text-small) {
+  font-family: var(--uni-description-font-family);
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:global(.input-text-medium) {
+  font-family: var(--uni-description-font-family);
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:global(.input-text-small) {
+  font-family: var(--uni-description-font-family);
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:global(.caption) {
+  font-family: var(--uni-description-font-family);
+  font-size: 12px;
+  font-weight: normal;
+  font-style: italic;
+}
+
+:global(.overline) {
+  font-family: var(--uni-description-font-family);
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  text-transform: uppercase;
+}

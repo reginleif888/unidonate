@@ -4,7 +4,7 @@ import type {
   GetDonationsPayload,
   GetDonationsResponse,
 } from "../../../declarations/backend/backend.did";
-import { errorModal } from "$lib/common/stores/errorModal";
+import { errorModal } from "$lib/common/stores";
 
 export const useDonations = (payload: GetDonationsPayload) => {
   const queryResult = useQuery<GetDonationsResponse>(

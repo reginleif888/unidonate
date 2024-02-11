@@ -1,6 +1,6 @@
 import { cubicOut } from "svelte/easing";
 
-export function flyAndScale(
+export default function flyAndScale(
   node: Element,
   {
     delay = 0,

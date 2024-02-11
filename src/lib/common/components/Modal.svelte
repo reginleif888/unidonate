@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Dialog } from "bits-ui";
-  import { flyAndScale } from "$lib/common/transitions/flyAndScale";
+  import { flyAndScale } from "$lib/common/transitions";
   import { fade } from "svelte/transition";
 
   export let open: boolean = false;

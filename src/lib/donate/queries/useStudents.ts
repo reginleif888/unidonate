@@ -1,6 +1,6 @@
 import { useQuery } from "@sveltestack/svelte-query";
 import { backend } from "../../../declarations/backend";
-import { errorModal } from "$lib/common/stores/errorModal";
+import { errorModal } from "$lib/common/stores";
 import type { Student } from "../../../declarations/backend/backend.did";
 
 export const useStudents = (search: string) => {

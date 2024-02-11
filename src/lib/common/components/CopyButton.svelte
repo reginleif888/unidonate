@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { clickToCopy } from "$lib/common/actions/clickToCopy";
+  import { clickToCopy } from "$lib/common/actions";
   import { Copy } from "phosphor-svelte";
   import Button from "./Button.svelte";
   import Tooltip from "./Tooltip.svelte";
