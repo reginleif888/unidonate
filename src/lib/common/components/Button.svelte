@@ -1,172 +1,121 @@
 <script lang="ts">
-  import rippleCreator from "$lib/common/actions/rippleCreator";
-
-  export let label: string;
   export let variant: "primary" | "secondary" = "primary";
   export let contained: boolean = false;
-  export let disabled: boolean = false;
-  export let className: string = "";
-  export let type: "button" | "submit" | "reset" = "button";
-  export let onClick: () => void = () => null;
-
-  const ripple = rippleCreator({
-    classListCallback: (node) => {
-      node.classList.add(`ripple`);
-      node.classList.add(`ripple-${variant}`);
-
-      if (contained) {
-        node.classList.add(`ripple-contained`);
-      }
-    },
-  });
+  export let size: "small" | "medium" = "medium";
+  export let label: string;
 </script>
 
 <button
-  class={`button-root button ${className}`}
-  class:primary-button={variant === "primary"}
-  class:secondary-button={variant === "secondary"}
-  class:contained-button={contained}
-  class:disabled
-  {disabled}
-  {type}
-  use:ripple
-  on:click={onClick}
+  class:contained
+  class:primary={variant === "primary"}
+  class:secondary={variant === "secondary"}
+  class:small={size === "small"}
+  class:medium={size === "medium"}
+  class:button-text-medium={size === "medium"}
+  class:button-text-small={size === "small"}
+  {...$$restProps}
+  ><slot name="start-icon" />{label}<slot name="end-icon" /></button
 >
-  <slot name="start-icon" />
-  {label}
-  <slot name="end-icon" />
-</button>
 
-<style lang="scss">
-  .button-root {
-    height: var(--button-height);
-    border-radius: var(--button-border-radius);
-    border: 1px solid var(--divider-color);
-    box-shadow: var(--shadow-button);
-    padding: 0 20px;
-    width: fit-content;
-    transition:
-      background-color var(--transition-default),
-      color var(--transition-default);
-    position: relative;
-    overflow: hidden;
+<style>
+  button {
+    box-sizing: border-box;
+    border-radius: var(--uni-radius-button);
+    padding: var(--uni-padding-button);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    width: 100%;
   }
 
-  .button:not(.disabled) {
-    cursor: pointer;
+  button:focus {
+    outline: 2px solid var(--uni-focus-outline);
   }
 
-  .primary-button {
-    background-color: var(--primary-bg);
-    color: var(--brand-primary-color);
-    border-color: var(--brand-primary-color);
-
-    &:hover {
-      background-color: var(--primary-button-hover-bg);
-      color: var(--primary-button-hover-color);
-    }
+  .medium {
+    padding: var(--uni-padding-button-medium);
+    height: var(--uni-height-button-medium);
   }
 
-  .primary-button.disabled {
-    background-color: var(--button-disabled-bg);
-    color: var(--button-disabled-color);
-    border-color: var(--button-disabled-bg);
+  .small {
+    padding: var(--uni-padding-button-small);
+    height: var(--uni-height-button-small);
   }
 
-  .secondary-button {
-    background-color: var(--primary-bg);
-    color: var(--brand-secondary-color);
-    border-color: var(--brand-secondary-color);
-
-    &:hover {
-      background-color: var(--secondary-button-hover-bg);
-      color: var(--secondary-button-hover-color);
-    }
+  button:disabled {
+    cursor: default;
   }
 
-  .secondary-button.disabled {
-    background-color: var(--button-disabled-bg);
-    color: var(--button-disabled-color);
-    border-color: var(--button-disabled-bg);
+  .primary {
+    background: var(--uni-primary-outlined-button-default-bg);
+    color: var(--uni-primary-outlined-button-default-color);
+    border: 1px solid var(--uni-primary-outlined-button-default-border);
   }
 
-  .primary-button.contained-button {
-    background-color: var(--brand-primary-color);
-    color: var(--opposite-text);
-    border-color: var(--brand-primary-color);
-
-    &:hover {
-      background-color: var(--primary-button-contained-hover-bg);
-      color: var(--primary-button-contained-hover-color);
-    }
+  .primary:hover {
+    background: var(--uni-primary-outlined-button-hover-bg);
+    color: var(--uni-primary-outlined-button-hover-color);
+    border: 1px solid var(--uni-primary-outlined-button-hover-border);
   }
 
-  :global(.primary-button.contained-button path) {
-    fill: var(--opposite-text);
+  .primary:disabled {
+    background: var(--uni-primary-outlined-button-disabled-bg);
+    color: var(--uni-primary-outlined-button-disabled-color);
+    border: 1px solid var(--uni-primary-outlined-button-disabled-border);
   }
 
-  :global(.secondary-button.contained-button path) {
-    fill: var(--opposite-text);
+  .primary.contained {
+    background: var(--uni-primary-contained-button-default-bg);
+    color: var(--uni-primary-contained-button-default-color);
+    border: 1px solid var(--uni-primary-contained-button-default-border);
   }
 
-  .primary-button.contained-button.disabled {
-    background-color: var(--button-disabled-bg);
-    color: var(--button-disabled-color);
-    border-color: var(--button-disabled-bg);
+  .primary.contained:hover {
+    background: var(--uni-primary-contained-button-hover-bg);
+    color: var(--uni-primary-contained-button-hover-color);
+    border: 1px solid var(--uni-primary-contained-button-hover-border);
   }
 
-  .secondary-button.contained-button {
-    color: var(--opposite-text);
-    background-color: var(--brand-secondary-color);
-
-    &:hover {
-      background-color: var(--secondary-button-contained-hover-bg);
-      color: var(--secondary-button-contained-hover-color);
-    }
+  .primary.contained:disabled {
+    background: var(--uni-primary-contained-button-disabled-bg);
+    color: var(--uni-primary-contained-button-disabled-color);
+    border: 1px solid var(--uni-primary-contained-button-disabled-border);
   }
 
-  .secondary-button.contained-button.disabled {
-    background-color: var(--button-disabled-bg);
-    color: var(--button-disabled-color);
-    border-color: var(--button-disabled-bg);
+  .secondary {
+    background: var(--uni-secondary-outlined-button-default-bg);
+    color: var(--uni-secondary-outlined-button-default-color);
+    border: 1px solid var(--uni-secondary-outlined-button-default-border);
   }
 
-  :global(.ripple) {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple 600ms linear;
+  .secondary:hover {
+    background: var(--uni-secondary-outlined-button-hover-bg);
+    color: var(--uni-secondary-outlined-button-hover-color);
+    border: 1px solid var(--uni-secondary-outlined-button-hover-border);
   }
 
-  :global(.ripple-primary) {
-    background: var(--brand-primary-color);
-    opacity: 0.3;
+  .secondary:disabled {
+    background: var(--uni-secondary-outlined-button-disabled-bg);
+    color: var(--uni-secondary-outlined-button-disabled-color);
+    border: 1px solid var(--uni-secondary-outlined-button-disabled-border);
   }
 
-  :global(.ripple-primary.ripple-contained) {
-    background: var(--primary-bg);
-    opacity: 0.3;
+  .secondary.contained {
+    background: var(--uni-secondary-contained-button-default-bg);
+    color: var(--uni-secondary-contained-button-default-color);
+    border: 1px solid var(--uni-secondary-contained-button-default-border);
   }
 
-  :global(.ripple-secondary) {
-    background: var(--brand-secondary-color);
-    opacity: 0.3;
+  .secondary.contained:hover {
+    background: var(--uni-secondary-contained-button-hover-bg);
+    color: var(--uni-secondary-contained-button-hover-color);
+    border: 1px solid var(--uni-secondary-contained-button-hover-border);
   }
 
-  :global(.ripple-secondary.ripple-contained) {
-    background: var(--opposite-text);
-    opacity: 0.3;
-  }
-
-  @keyframes ripple {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
+  .secondary.contained:disabled {
+    background: var(--uni-secondary-contained-button-disabled-bg);
+    color: var(--uni-secondary-contained-button-disabled-color);
+    border: 1px solid var(--uni-secondary-contained-button-disabled-border);
   }
 </style>

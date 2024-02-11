@@ -1,38 +1,15 @@
 <script lang="ts">
   import { Slider } from "bits-ui";
-  import TextInput from "./TextInput.svelte";
 
   export let value: Array<number> = [25];
 
   export let label: string = "Label";
-
-  export let onChange: (value: Array<number>) => void = () => null;
-
-  function handleChange(newValue: Array<number>) {
-    if (isNaN(newValue[0])) {
-      onChange([0]);
-
-      return;
-    }
-
-    if (value[0] === newValue[0]) {
-      return;
-    }
-
-    onChange(newValue);
-  }
 </script>
 
 <div class="slider-container">
   <div class="slider-label subtitle1">{label}</div>
   <div class="inner">
-    <Slider.Root
-      step={1}
-      {value}
-      onValueChange={handleChange}
-      let:thumbs
-      class="slider-root"
-    >
+    <Slider.Root step={1} {value} let:thumbs class="slider-root">
       <span class="slider-track">
         <Slider.Range class="slider-range" />
       </span>
@@ -40,18 +17,6 @@
         <Slider.Thumb {thumb} class="slider-thumb" />
       {/each}
     </Slider.Root>
-    <div class="input-wrapper">
-      <TextInput
-        label="Percent"
-        onChange={(value) => {
-          handleChange([Number(String(value).replace("%", ""))]);
-        }}
-        value={String(value[0]).includes("%")
-          ? String(value[0])
-          : String(value[0]) + "%"}
-        isPercent
-      />
-    </div>
   </div>
 </div>
 
@@ -70,14 +35,12 @@
   }
 
   .input-wrapper {
-    /* max-width: 58px; */
     width: 100%;
   }
 
   :global(.slider-container) {
     width: 100%;
     height: 90px;
-    /* max-width: 280px; */
   }
 
   :global(.slider-root) {
@@ -97,13 +60,13 @@
     flex-grow: 1;
     overflow: hidden;
     border-radius: 9999px;
-    background-color: var(--divider-color);
+    background-color: grey;
   }
 
   :global(.slider-range) {
     position: absolute;
     height: 100%;
-    background-color: var(--brand-primary-color);
+    background-color: red;
   }
 
   :global(.slider-thumb) {
@@ -112,14 +75,14 @@
     height: 27px;
     cursor: grab;
     border-radius: 9999px;
-    border: 1px solid var(--divider-color);
+    border: 1px solid grey;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     transition: border-color 0.2s;
-    background-color: var(--brand-primary-color);
+    background-color: red;
   }
 
   :global(.slider-thumb:hover) {
-    border-color: var(--brand-primary-color);
+    border-color: red;
   }
 
   :global(.slider-thumb:focus-visible) {

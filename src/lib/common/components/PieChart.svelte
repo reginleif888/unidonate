@@ -1,7 +1,5 @@
 <script lang="ts">
   import type { PicChartDataItem } from "../types";
-  import { screenWidth } from "$lib/common/stores/screen";
-  import { Screen } from "$lib/common/constant";
 
   export let data: Array<PicChartDataItem> = [];
 
@@ -53,13 +51,7 @@
   }
 
   function getTextClassNameByScreen() {
-    if ($screenWidth > Screen.sm) {
-      return "body1";
-    } else if ($screenWidth > Screen.md) {
-      return "body2";
-    } else {
-      return "caption";
-    }
+    return "body1";
   }
 
   let textClass: string;
@@ -105,22 +97,12 @@
         style={`transform-origin: 50% 50%; transition: transform 0.3s ease; ${hoveredSlice === id ? "transform: scale(1.1);" : ""}`}
         class="pie"
       />
-      <!-- <text
-        x={labelX}
-        y={labelY}
-        fill="black"
-        text-anchor="middle"
-        alignment-baseline="middle"
-        class="percent"
-      >
-        {percent}
-      </text> -->
     {/each}
   </svg>
 </div>
 
 <style lang="scss">
-  @import "$lib/styles/media.scss";
+  @import "$lib/common/styles/media.scss";
 
   .label {
     max-width: 50%;
@@ -146,7 +128,6 @@
     align-items: center;
     gap: 4px;
     padding-bottom: 4px;
-    border-bottom: 1px solid var(--divider-color);
   }
 
   .legend-color {

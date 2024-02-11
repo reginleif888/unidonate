@@ -10,7 +10,7 @@
 </script>
 
 <Modal open={$errorModal.isOpen} onClose={handleClose}>
-  <svelte:fragment slot="content">
+  <svelte:fragment>
     <div class="content">
       <div class="error-icon-container">
         <Prohibit size="80" class="error-icon" />
@@ -42,7 +42,7 @@
     height: 100%;
     width: 100px;
     height: 100px;
-    background-color: var(--error-bg);
+    background-color: red;
     border-radius: 50%;
   }
 
