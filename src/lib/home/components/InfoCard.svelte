@@ -8,22 +8,38 @@
     <span class="info-root__title h3">{title}</span>
     <span class="info-root__description h6">{description}</span>
   </div>
-  <slot />
+  <div class="icon-wrapper"><slot name="icon" /></div>
 </div>
 
 <style lang="scss">
   .root {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 16px;
     border-radius: 16px;
-    background-color: var(--uni-secondary);
+    background: var(--uni-secondary);
+    justify-content: space-between;
+    padding: 24px;
   }
 
   .info-root {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 32px;
+
+    min-width: 200px;
+    max-width: 600px;
+  }
+
+  .icon-wrapper {
+    width: 200px;
+    background: var(--uni-primary-gradient);
+    padding: 16px;
+    border-radius: 16px;
+    margin: 0 auto;
   }
 </style>

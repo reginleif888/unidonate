@@ -21,6 +21,16 @@
   @return rgba($adjusted-color, $opacity);
 }
 
+@function linear-gradient($direction, $colors...) {
+  $gradient: null;
+  $gradient: "linear-gradient(" + $direction;
+  @each $color in $colors {
+    $gradient: $gradient + ", " + $color;
+  }
+  $gradient: $gradient + ")";
+  @return unquote($gradient);
+}
+
 @mixin theme(
   $lib,
   $primary,
@@ -93,6 +103,30 @@
   // Primary
   --#{$lib}-primary: #{$primary};
   --#{$lib}-on-primary: #{$onPrimary};
+
+  @for $i from 1 through 10 {
+    --#{$lib}-primary-#{$i}00: #{adjust-saturation(
+        $primary,
+        $percent: $i * 10%
+      )};
+  }
+  @for $i from 1 through 10 {
+    --#{$lib}-on-primary-#{$i}00: #{adjust-color(
+        $onPrimary,
+        $percent: $i * 10%
+      )};
+  }
+  // -----------------------------------------------------
+
+  // Gradient
+  --#{$lib}-primary-gradient: linear-gradient(
+    to right,
+    #{$primary},
+    #{adjust-saturation($primary, 0%, 0.9)},
+    #{adjust-saturation($primary, 0%, 0.7)},
+    #{adjust-saturation($primary, 0%, 0.5)},
+    #{adjust-saturation($primary, 0%, 0.4)}
+  );
   // -----------------------------------------------------
 
   // Secondary
@@ -281,7 +315,7 @@
     $primary: #553dee,
     $onPrimary: #ffffff,
     $secondary: #ececec,
-    $onSecondary: #000000,
+    $onSecondary: #202020,
     $background: #ffffff,
     $onBackground: #000000
   );
@@ -294,7 +328,7 @@
     $onPrimary: #ffffff,
     $secondary: #434343,
     $onSecondary: #c5c4c4,
-    $background: #232222,
+    $background: #212122,
     $onBackground: #ffffff
   );
 }

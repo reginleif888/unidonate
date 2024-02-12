@@ -18,6 +18,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Uni Donate</title>
+</svelte:head>
+
 <QueryClientProvider client={queryClient}>
   <main>
     <Header />
