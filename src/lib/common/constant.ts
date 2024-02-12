@@ -1,6 +1,6 @@
 import { AllocationCategory } from "./types";
 
-export const Screen = {
+export const SCREEN = {
   sm: 576, // Small devices (landscape phones, 576px and up)
   md: 768, // Medium devices (tablets, 768px and up)
   lg: 992, // Large devices (desktops, 992px and up)
@@ -8,6 +8,11 @@ export const Screen = {
   xxl: 1400, // Extra extra large devices (larger desktops, 1400px and up)
 } as const;
 
+/**
+ * @todo
+ *
+ * move to another module
+ */
 export const MAP_ALLOCATION_CATEGORY: Record<
   string,
   { label: string; color: string }

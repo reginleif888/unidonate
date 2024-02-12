@@ -1,4 +1,4 @@
 <script lang="ts">
 </script>
 
-<section class="content"></section>
+<section class="content">confirm-donate</section>

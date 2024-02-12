@@ -30,7 +30,7 @@
   $background,
   $onBackground
 ) {
-  $divider-color: adjust-color($onBackground, 65%);
+  $divider-color: adjust-color($onBackground, 80%);
   $focus-outline: adjust-saturation($primary, 0%, 0.75);
 
   $error: #f44336;
@@ -103,6 +103,10 @@
   // Background
   --#{$lib}-bg: #{$background};
   --#{$lib}-on-bg: #{$onBackground};
+
+  @for $i from 1 through 10 {
+    --#{$lib}-bg-#{$i}00: #{adjust-color($background, $percent: $i * 1%)};
+  }
   // -----------------------------------------------------
 
   // Divider
@@ -257,4 +261,40 @@
   // Fonts
   --#{$lib}-heading-font-family: "Roboto", sans-serif;
   --#{$lib}-description-font-family: "Roboto", sans-serif;
+  // -----------------------------------------------------
+
+  // zIndex
+  --#{$lib}-zIndex-app-bar: 1100;
+  --#{$lib}-zIndex-drawer: 1200;
+  --#{$lib}-zIndex-modal: 1300;
+  --#{$lib}-zIndex-popover: 1400;
+  --#{$lib}-zIndex-tooltip: 1500;
+  // -----------------------------------------------------
+
+  // transitions
+  --#{$lib}-transition-default: ease 0.2s;
+}
+
+:global(html.light) {
+  @include theme(
+    "uni",
+    $primary: #553dee,
+    $onPrimary: #ffffff,
+    $secondary: #ececec,
+    $onSecondary: #000000,
+    $background: #ffffff,
+    $onBackground: #000000
+  );
+}
+
+:global(html.dark) {
+  @include theme(
+    "uni",
+    $primary: #8675f0,
+    $onPrimary: #ffffff,
+    $secondary: #434343,
+    $onSecondary: #c5c4c4,
+    $background: #232222,
+    $onBackground: #ffffff
+  );
 }

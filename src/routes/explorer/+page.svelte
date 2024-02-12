@@ -1,4 +1,4 @@
 <script lang="ts">
 </script>
 
-<segment> Explorer </segment>
+<segment>Explorer</segment>
