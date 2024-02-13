@@ -17,7 +17,7 @@ function createScreenWidthStore() {
 
 export const screenWidth =
   typeof window === "undefined"
-    ? writable(SCREEN.smallTablet)
+    ? writable<number>(undefined)
     : createScreenWidthStore();
 
 export default screenWidth;

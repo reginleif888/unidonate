@@ -79,6 +79,6 @@
     padding: 8px;
     padding-top: 16px;
     border-top: 1px solid var(--uni-divider-color);
-    background-color: var(--uni-bg-200);
+    background-color: var(--uni-bg-400);
   }
 </style>

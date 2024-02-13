@@ -3,6 +3,7 @@
   export let contained: boolean = false;
   export let size: "small" | "medium" = "medium";
   export let label: string;
+  export let onClick: () => void = () => null;
 </script>
 
 <button
@@ -13,6 +14,7 @@
   class:medium={size === "medium"}
   class:button-text-medium={size === "medium"}
   class:button-text-small={size === "small"}
+  on:click={onClick}
   {...$$restProps}
   ><slot name="start-icon" />{label}<slot name="end-icon" /></button
 >

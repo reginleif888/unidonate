@@ -1,5 +1,7 @@
 <script>
+  import { goto } from "$app/navigation";
   import { Button } from "$lib/common/components";
+  import { Route } from "$lib/common/routes";
   import { ListMagnifyingGlass } from "phosphor-svelte";
 </script>
 
@@ -20,7 +22,14 @@
     contribution has a tangible impact.
   </div>
 
-  <Button label="Explore donations" variant="secondary" contained>
+  <Button
+    label="Explore donations"
+    variant="secondary"
+    contained
+    onClick={() => {
+      goto(Route.Explorer);
+    }}
+  >
     <span slot="end-icon" class="explore-donations-icon">
       <ListMagnifyingGlass size={20} />
     </span>

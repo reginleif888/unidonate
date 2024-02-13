@@ -1,5 +1,7 @@
 <script>
+  import { goto } from "$app/navigation";
   import { Button } from "$lib/common/components";
+  import { Route } from "$lib/common/routes";
   import { HandHeart } from "phosphor-svelte";
 </script>
 
@@ -14,7 +16,12 @@
       most powerful open‑source blockchain network: the Internet Computer
     </p>
     <div class="donate-button-wrapper">
-      <Button label="Donate for education" contained>
+      <Button
+        label="Donate for education"
+        onClick={() => {
+          goto(Route.Donate);
+        }}
+      >
         <span slot="end-icon" class="hand-heart-icon">
           <HandHeart size={20} />
         </span>
@@ -58,7 +65,7 @@
     top: -40px;
 
     @include respond-to("largeDesktop") {
-      right: -160px;
+      right: -100px;
     }
   }
 

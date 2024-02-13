@@ -105,6 +105,14 @@
   --#{$lib}-on-primary: #{$onPrimary};
 
   @for $i from 1 through 10 {
+    --#{$lib}-primary-transparent-#{$i}0: #{adjust-saturation(
+        $primary,
+        0%,
+        $i / 10
+      )};
+  }
+
+  @for $i from 1 through 10 {
     --#{$lib}-primary-#{$i}00: #{adjust-saturation(
         $primary,
         $percent: $i * 10%

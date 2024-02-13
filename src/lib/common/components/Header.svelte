@@ -8,13 +8,41 @@
   import { MODES, SCREEN } from "../constant";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { onMount, onDestroy } from "svelte";
+
+  let lastScrollY = 0;
+  let showHeader = true;
+
+  function handleScroll() {
+    const scrollY = typeof window !== "undefined" ? window?.scrollY : 0;
+
+    if (scrollY < lastScrollY || scrollY <= 80) {
+      showHeader = true;
+    } else {
+      showHeader = false;
+    }
+
+    lastScrollY = scrollY;
+  }
+
+  onMount(() => {
+    if (typeof window !== "undefined") {
+      window?.addEventListener("scroll", handleScroll);
+    }
+  });
+
+  onDestroy(() => {
+    if (typeof window !== "undefined") {
+      window?.removeEventListener("scroll", handleScroll);
+    }
+  });
 
   const openBurger = () => {
     burgerMenu.set(true);
   };
 </script>
 
-<header>
+<header class:hidden-header={!showHeader}>
   <div class="logo-wrapper">
     <LogoFull />
   </div>
@@ -53,6 +81,31 @@
 <style lang="scss">
   @import "$lib/common/styles/media.scss";
 
+  header {
+    background-color: var(--uni-primary);
+    color: var(--uni-on-primary);
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: var(--uni-zIndex-app-bar);
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+
+    @include respond-to("tablet") {
+      justify-content: center;
+    }
+
+    transform: translateY(0%);
+    transition: transform var(--uni-transition-default);
+  }
+
+  .hidden-header {
+    transform: translateY(-100%);
+  }
+
   .logo-wrapper {
     height: 50px;
     width: 200px;
@@ -76,24 +129,6 @@
 
     @include respond-to("largeDesktop") {
       min-width: 800px;
-    }
-  }
-
-  header {
-    background-color: var(--uni-primary);
-    color: var(--uni-on-primary);
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: var(--uni-zIndex-app-bar);
-    position: sticky;
-    top: 0;
-    display: flex;
-    justify-content: flex-end;
-
-    @include respond-to("tablet") {
-      justify-content: center;
     }
   }
 

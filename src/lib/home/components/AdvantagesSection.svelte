@@ -23,7 +23,7 @@
 </InfoCard>
 <InfoCard
   title="Seamless Donation Statistic"
-  description="View and manage all donations in real-time, with a transparent ledger powered by the Internet Computer blockchain."
+  description="View all donations in real-time, with a transparent ledger powered by the Internet Computer blockchain."
   desktopReverse
 >
   <div class="icon" slot="icon">
