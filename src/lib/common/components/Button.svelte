@@ -27,6 +27,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
+    box-shadow: var(--uni-shadow-button);
   }
 
   button:focus {

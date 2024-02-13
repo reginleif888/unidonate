@@ -7,7 +7,7 @@
   <h1 class="h1 header">Empowering Education through Donations</h1>
 
   <div class="measurement">
-    <span class="measurement__name">Donations processed:</span>
+    <span class="measurement__name subtitle2">Donations processed:</span>
     <span class="measurement__value h4">2500+</span>
   </div>
 

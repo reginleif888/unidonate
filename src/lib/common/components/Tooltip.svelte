@@ -47,5 +47,6 @@
     border-radius: var(--input-border-radius);
     border-width: 1px;
     padding: 0.75rem;
+    z-index: var(--uni-zIndex-tooltip);
   }
 </style>

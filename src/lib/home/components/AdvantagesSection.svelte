@@ -24,6 +24,7 @@
 <InfoCard
   title="Seamless Donation Statistic"
   description="View and manage all donations in real-time, with a transparent ledger powered by the Internet Computer blockchain."
+  desktopReverse
 >
   <div class="icon" slot="icon">
     <DonationStatistic />
@@ -51,6 +52,7 @@
 <InfoCard
   title="Innovative Funding for Education"
   description="Our platform leverages the Internet Computer to provide an unprecedented level of scalability and affordability for educational donations."
+  desktopReverse
 >
   <div class="icon" slot="icon">
     <FundingForEducation />
@@ -58,6 +60,7 @@
 </InfoCard>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
   .icon {
     color: var(--uni-on-primary);
   }
@@ -70,5 +73,13 @@
 
   .categories-icon {
     width: 72px;
+
+    @include respond-to("desktop") {
+      width: 38px;
+    }
+
+    @include respond-to("largeDesktop") {
+      width: 46px;
+    }
   }
 </style>

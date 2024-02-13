@@ -42,7 +42,10 @@
     >
       {#if Icon}
         <Icon size={20} />
-      {/if}<span>{label ?? ""}</span>
+      {/if}
+      {#if label}
+        <span>{label ?? ""}</span>
+      {/if}
     </button>
   {/each}
 

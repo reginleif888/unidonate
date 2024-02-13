@@ -285,16 +285,36 @@
   // -----------------------------------------------------
 
   // Shadows
-  --#{$lib}-shadow-button: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  --#{$lib}-shadow-input: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  --#{$lib}-padding-paper: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  --#{$lib}-radius-tooltip: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  --#{$lib}-radius-popover: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  --#{$lib}-shadow-button: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-input: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-paper: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-tooltip: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-popover: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
   // -----------------------------------------------------
 
   // Fonts
-  --#{$lib}-heading-font-family: "Roboto", sans-serif;
-  --#{$lib}-description-font-family: "Roboto", sans-serif;
+  --#{$lib}-heading-font-family: "Montserrat", sans-serif;
+  --#{$lib}-description-font-family: "Open Sans", sans-serif;
   // -----------------------------------------------------
 
   // zIndex

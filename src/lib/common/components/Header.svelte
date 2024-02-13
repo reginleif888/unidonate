@@ -1,11 +1,11 @@
 <script>
   import BurgerButton from "./BurgerButton.svelte";
-  import { burgerMenu, theme } from "$lib/common/stores";
+  import { burgerMenu, screenWidth, theme } from "$lib/common/stores";
   import LogoFull from "./LogoFull.svelte";
   import Tabs from "./Tabs.svelte";
   import { ROUTES } from "../routes";
   import Only from "./Only.svelte";
-  import { MODES } from "../constant";
+  import { MODES, SCREEN } from "../constant";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
 
@@ -19,13 +19,13 @@
     <LogoFull />
   </div>
   <div class="inner">
-    <Only from="desktop"
-      ><div class="tabs-wrapper">
+    <Only from="tablet">
+      <div class="tabs-wrapper">
         <Tabs
           options={ROUTES.map(({ route, label, Icon }) => ({
             value: route,
             label,
-            Icon,
+            Icon: $screenWidth > SCREEN.desktop ? Icon : undefined,
           }))}
           fullWidth
           onChange={goto}
@@ -34,11 +34,11 @@
       </div>
     </Only>
 
-    <Only to="desktop">
+    <Only to="tablet">
       <BurgerButton onlyBurger onClick={openBurger} open={$burgerMenu} />
     </Only>
   </div>
-  <Only from="desktop">
+  <Only from="tablet">
     <div class="modes-wrapper">
       <Tabs
         options={MODES}
@@ -66,8 +66,17 @@
     display: flex;
     gap: 16px;
     max-width: 900px;
-    min-width: 600px;
     margin: 0 auto;
+
+    min-width: 400px;
+
+    @include respond-to("desktop") {
+      min-width: 600px;
+    }
+
+    @include respond-to("largeDesktop") {
+      min-width: 800px;
+    }
   }
 
   header {
@@ -83,7 +92,7 @@
     display: flex;
     justify-content: flex-end;
 
-    @include respond-to("desktop") {
+    @include respond-to("tablet") {
       justify-content: center;
     }
   }
@@ -93,10 +102,21 @@
   }
 
   .modes-wrapper {
-    width: 200px;
     position: absolute;
     right: 0px;
     top: 50%;
     transform: translateY(-50%);
+
+    @include respond-to("tablet") {
+      width: 120px;
+    }
+
+    @include respond-to("desktop") {
+      width: 160px;
+    }
+
+    @include respond-to("largeDesktop") {
+      width: 200px;
+    }
   }
 </style>

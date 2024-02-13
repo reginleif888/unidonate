@@ -1,49 +1,74 @@
+@import "$lib/common/styles/media.scss";
+
 :global(.h1) {
-  font-family: var(--uni-hading-font-family);
+  font-family: var(--uni-heading-font-family);
   font-size: 36px;
   font-weight: bold;
   font-style: normal;
   line-height: 1.2;
+  @include respond-to("desktop") {
+    font-size: 48px;
+  }
 }
 
 :global(.h2) {
-  font-family: var(--uni-hading-font-family);
+  font-family: var(--uni-heading-font-family);
   font-size: 32px;
   font-weight: bold;
   font-style: normal;
   line-height: 1.2;
+
+  @include respond-to("desktop") {
+    font-size: 40px;
+  }
 }
 
 :global(.h3) {
-  font-family: var(--uni-hading-font-family);
+  font-family: var(--uni-heading-font-family);
   font-size: 28px;
   font-weight: bold;
   font-style: normal;
   line-height: 1.3;
+
+  @include respond-to("desktop") {
+    font-size: 36px;
+  }
 }
 
 :global(.h4) {
-  font-family: var(--uni-hading-font-family);
+  font-family: var(--uni-heading-font-family);
   font-size: 24px;
   font-weight: bold;
   font-style: normal;
   line-height: 1.3;
+
+  @include respond-to("desktop") {
+    font-size: 32px;
+  }
 }
 
 :global(.h5) {
-  font-family: var(--uni-hading-font-family);
+  font-family: var(--uni-heading-font-family);
   font-size: 20px;
   font-weight: bold;
   font-style: normal;
   line-height: 1.4;
+
+  @include respond-to("desktop") {
+    font-size: 28px;
+  }
 }
 
 :global(.h6) {
-  font-family: var(--uni-hading-font-family);
+  font-family: var(--uni-heading-font-family);
   font-size: 16px;
-  font-weight: bold;
+  font-weight: normal;
   font-style: normal;
   line-height: 1.4;
+
+  @include respond-to("desktop") {
+    font-size: 18px;
+  }
 }
 
 :global(.subtitle1) {
@@ -52,6 +77,10 @@
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 16px;
+  }
 }
 
 :global(.subtitle2) {
@@ -60,6 +89,10 @@
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 15px;
+  }
 }
 
 :global(.body1) {
@@ -68,6 +101,10 @@
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 16px;
+  }
 }
 
 :global(.body2) {
@@ -76,6 +113,10 @@
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 14px;
+  }
 }
 
 :global(.button-text-medium) {
@@ -84,6 +125,10 @@
   font-weight: 500;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 16px;
+  }
 }
 
 :global(.button-text-small) {
@@ -92,6 +137,10 @@
   font-weight: 500;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 14px;
+  }
 }
 
 :global(.input-text-medium) {
@@ -100,6 +149,10 @@
   font-weight: 500;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 14px;
+  }
 }
 
 :global(.input-text-small) {
@@ -108,6 +161,10 @@
   font-weight: 500;
   font-style: normal;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 12px;
+  }
 }
 
 :global(.caption) {
@@ -116,6 +173,10 @@
   font-weight: normal;
   font-style: italic;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 12px;
+  }
 }
 
 :global(.overline) {
@@ -125,4 +186,8 @@
   font-style: normal;
   text-transform: uppercase;
   line-height: 1.5;
+
+  @include respond-to("desktop") {
+    font-size: 12px;
+  }
 }
