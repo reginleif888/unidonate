@@ -9,3 +9,6 @@ export { default as LogoFull } from "./LogoFull.svelte";
 export { default as LogoShort } from "./LogoShort.svelte";
 export { default as Only } from "./Only.svelte";
 export { default as Tooltip } from "./Tooltip.svelte";
+export { default as Stars } from "./Stars.svelte";
+export { default as ClientOnly } from "./ClientOnly.svelte";
+export { default as Page } from "./Page.svelte";

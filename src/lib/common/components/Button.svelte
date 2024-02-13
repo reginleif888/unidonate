@@ -3,6 +3,7 @@
   export let contained: boolean = false;
   export let size: "small" | "medium" = "medium";
   export let label: string;
+  export let fullWidth: boolean = false;
   export let onClick: () => void = () => null;
 </script>
 
@@ -14,6 +15,7 @@
   class:medium={size === "medium"}
   class:button-text-medium={size === "medium"}
   class:button-text-small={size === "small"}
+  class:full-width={fullWidth}
   on:click={onClick}
   {...$$restProps}
   ><slot name="start-icon" />{label}<slot name="end-icon" /></button
@@ -30,6 +32,10 @@
     justify-content: space-between;
     gap: 8px;
     box-shadow: var(--uni-shadow-button);
+  }
+
+  .full-width {
+    width: 100%;
   }
 
   button:focus {

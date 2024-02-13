@@ -1,4 +1,13 @@
 <script lang="ts">
+  import Page from "$lib/common/components/Page.svelte";
+  import Button from "$lib/common/components/Button.svelte";
 </script>
 
-<segment>Explorer</segment>
+<Page>
+  <Button label="Back" variant="secondary" contained fullWidth />
+  <Button label="Next" variant="primary" contained fullWidth />
+  <Button label="Back" variant="secondary" contained fullWidth />
+  <Button label="Next" variant="primary" contained fullWidth />
+  <Button label="Back" variant="secondary" contained fullWidth />
+  <Button label="Next" variant="primary" contained fullWidth />
+</Page>

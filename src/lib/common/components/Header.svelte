@@ -83,6 +83,7 @@
 
   header {
     background-color: var(--uni-primary);
+    box-shadow: var(--uni-shadow-paper);
     color: var(--uni-on-primary);
     padding: 16px;
     display: flex;

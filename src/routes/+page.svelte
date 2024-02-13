@@ -10,7 +10,7 @@
   } from "$lib/home/components";
 </script>
 
-<div class="main-wrapper" transition:fade={{ duration: 150 }}>
+<div class="main-wrapper">
   <section>
     <MainSection />
   </section>
@@ -18,7 +18,7 @@
 
 <Divider />
 
-<div class="primary-bg" transition:fade={{ duration: 150 }}>
+<div class="primary-bg">
   <section>
     <AdvantagesSection />
   </section>
@@ -26,7 +26,7 @@
 
 <Divider />
 
-<div transition:fade={{ duration: 150 }}>
+<div>
   <section>
     <AboutSection />
   </section>
@@ -34,7 +34,7 @@
 
 <Divider />
 
-<div class="primary-bg" transition:fade={{ duration: 150 }}>
+<div class="primary-bg">
   <section>
     <PoweredBy />
   </section>
@@ -42,7 +42,7 @@
 
 <Divider />
 
-<div transition:fade={{ duration: 150 }}>
+<div>
   <section>
     <StartContribution />
   </section>

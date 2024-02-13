@@ -108,7 +108,7 @@
     --#{$lib}-primary-transparent-#{$i}0: #{adjust-saturation(
         $primary,
         0%,
-        $i / 10
+        calc($i / 10)
       )};
   }
 
@@ -135,6 +135,13 @@
     #{adjust-saturation($primary, 0%, 0.55)},
     #{adjust-saturation($primary, 0%, 0.5)}
   );
+
+  --#{$lib}-page-gradient: linear-gradient(
+    to right,
+    #{$primary},
+    #{adjust-saturation($primary, 0%, 0.9)},
+    #{adjust-saturation($primary, 0%, 0.7)}
+  );
   // -----------------------------------------------------
 
   // Secondary
@@ -148,6 +155,14 @@
 
   @for $i from 1 through 10 {
     --#{$lib}-bg-#{$i}00: #{adjust-color($background, $percent: $i * 1%)};
+  }
+
+  @for $i from 1 through 10 {
+    --#{$lib}-bg-transparent-#{$i}00: #{adjust-saturation(
+        $background,
+        0%,
+        $opacity: $i * 10%
+      )};
   }
   // -----------------------------------------------------
 
