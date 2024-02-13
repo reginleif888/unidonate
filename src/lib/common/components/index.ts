@@ -5,3 +5,6 @@ export { default as Header } from "./Header.svelte";
 export { default as BurgerMenu } from "./BurgerMenu.svelte";
 export { default as Divider } from "./Divider.svelte";
 export { default as Tabs } from "./Tabs.svelte";
+export { default as LogoFull } from "./LogoFull.svelte";
+export { default as LogoShort } from "./LogoShort.svelte";
+export { default as Only } from "./Only.svelte";

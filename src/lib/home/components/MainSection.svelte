@@ -3,7 +3,7 @@
   import { HandHeart } from "phosphor-svelte";
 </script>
 
-<div>
+<div class="logos-wrapper">
   <h1 class="h1 first-main-label">Next generation</h1>
   <h1 class="h1 second-main-label">Donation Platform</h1>
 </div>
@@ -27,16 +27,24 @@
     margin-top: 16px;
   }
 
+  .logos-wrapper {
+    width: 100%;
+  }
+
   .first-main-label {
     color: var(--uni-primary);
+    width: 100%;
+    text-align: center;
   }
 
   .second-main-label {
-    font-size: 2rem;
+    width: 100%;
+    text-align: center;
   }
 
   .home-description {
     color: var(--uni-text-color-300);
+    text-align: center;
   }
 
   .hand-heart-icon {

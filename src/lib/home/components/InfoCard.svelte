@@ -30,9 +30,7 @@
     justify-content: center;
     text-align: center;
     gap: 32px;
-
     min-width: 200px;
-    max-width: 600px;
   }
 
   .icon-wrapper {

@@ -4,10 +4,11 @@
 
   export let variant: "primary" | "secondary" = "primary";
   export let options: SelectItem[] = [];
-  export let selected: string = "";
+  export let selected: string | null = null;
   export let onChange: (value: string) => void = (value) => {
     selected = value;
   };
+  export let fullWidth: boolean = false;
   let elements: Record<string, HTMLButtonElement | null> = {};
 
   onMount(() => {
@@ -21,6 +22,7 @@
   class="root"
   class:primary={variant === "primary"}
   class:secondary={variant === "secondary"}
+  style={`width: ${fullWidth ? "100%" : "auto"}`}
 >
   {#each options as { label, disabled, value, Icon } (value)}
     <button
@@ -44,12 +46,12 @@
     </button>
   {/each}
 
-  {#if elements[selected]}
+  {#if selected && elements[selected ?? ""]}
     <div
       class="indicator"
       class:primary={variant === "primary"}
       class:secondary={variant === "secondary"}
-      style={`width: ${elements[selected]?.offsetWidth}px; height: ${elements[selected]?.offsetHeight}px; top: ${elements[selected]?.offsetTop}px; left: ${elements[selected]?.offsetLeft}px;`}
+      style={`width: ${elements[selected ?? ""]?.offsetWidth}px; height: ${elements[selected]?.offsetHeight}px; top: ${elements[selected]?.offsetTop}px; left: ${elements[selected]?.offsetLeft}px;`}
     />
   {/if}
 </div>
@@ -75,6 +77,7 @@
     background-color: transparent;
     border-radius: 10px;
     z-index: 2;
+    gap: 8px;
     transition: all var(--uni-transition-default);
     cursor: pointer;
 
@@ -125,24 +128,25 @@
   }
 
   .select-item.secondary {
-    color: var(--uni-text-color-1000);
+    color: var(--uni-on-primary);
 
     &:disabled {
       color: var(--uni-text-color-700);
     }
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not(.selected) {
       color: var(--uni-text-color);
-      background-color: var(--uni-text-color-800);
+      background-color: var(--uni-text-color-1000);
+      opacity: 0.5;
     }
   }
 
   .select-item.secondary.selected {
-    color: var(--on-secondary);
+    color: var(--uni-on-secondary);
 
     &:hover {
       background-color: transparent;
-      color: var(--uni-text-color-200);
+      color: var(--uni-on-secondary);
     }
   }
 

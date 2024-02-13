@@ -49,6 +49,7 @@
 
 <style lang="scss">
   @import "$lib/common/styles/theme.scss";
+  @import "$lib/common/styles/media.scss";
   @import "$lib/common/styles/typography.scss";
   main {
     display: flex;

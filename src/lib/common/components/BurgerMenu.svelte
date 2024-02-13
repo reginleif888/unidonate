@@ -2,29 +2,15 @@
   import Drawer from "./Drawer.svelte";
   import { burgerMenu, theme } from "$lib/common/stores";
   import { X, Check } from "phosphor-svelte";
-  import * as Icons from "phosphor-svelte";
   import Divider from "./Divider.svelte";
   import Tabs from "./Tabs.svelte";
   import { page } from "$app/stores";
-  import type { SelectItem } from "../types";
   import { ROUTES } from "../routes";
+  import { MODES } from "../constant";
 
   function closeBurger() {
     burgerMenu.set(false);
   }
-
-  const modes: Array<SelectItem> = [
-    {
-      label: "",
-      value: "light",
-      Icon: Icons.Sun,
-    },
-    {
-      label: "",
-      value: "dark",
-      Icon: Icons.Moon,
-    },
-  ];
 </script>
 
 <Drawer position="left" open={$burgerMenu} onClose={closeBurger}>
@@ -53,8 +39,8 @@
           {/if}
         </li>
       {/each}
-      <div class="chooser-wrapper">
-        <Tabs options={modes} selected={$theme} onChange={theme.updateTheme} />
+      <div class="modes-wrapper">
+        <Tabs options={MODES} selected={$theme} onChange={theme.updateTheme} />
       </div>
     </ul>
   </nav>
@@ -107,7 +93,7 @@
     color: var(--uni-primary);
   }
 
-  .chooser-wrapper {
+  .modes-wrapper {
     position: absolute;
     bottom: 8px;
     left: 8px;
