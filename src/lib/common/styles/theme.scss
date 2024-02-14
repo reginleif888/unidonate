@@ -77,7 +77,11 @@
   // Secondary Contained Button
   $secondary-contained-button-default-bg: $secondary;
   $secondary-contained-button-hover-bg: adjust-color($secondary, 5%);
-  $secondary-contained-button-disabled-bg: adjust-color($onBackground, 80%);
+  $secondary-contained-button-disabled-bg: adjust-saturation(
+    $background,
+    0%,
+    20%
+  );
 
   $secondary-contained-button-default-color: $onSecondary;
   $secondary-contained-button-hover-color: $onSecondary;

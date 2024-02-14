@@ -11,7 +11,7 @@
   bind:page={currentPage}
   {count}
   {perPage}
-  siblingCount={0}
+  siblingCount={1}
   let:pages
   let:range
   class="pagination-root"
@@ -39,7 +39,7 @@
     </Pagination.NextButton>
   </div>
   <p class="subtitle2">
-    Showing {range.start} - {range.end}
+    Showing {range.start + 1} - {range.end}
   </p>
 </Pagination.Root>
 
@@ -56,7 +56,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     margin-bottom: 8px;
   }
 
@@ -65,48 +65,47 @@
     font-size: 10px;
     align-items: center;
     justify-content: center;
-    border-radius: var(--button-border-radius);
-    border: 1px solid var(--divider-color);
-    background-color: var(--brand-secondary-color);
-    height: var(--button-height-small);
-    width: var(--button-height-small);
-    color: var(--opposite-text);
+    border-radius: var(--uni-radius-button);
+    background: var(--uni-secondary-contained-button-default-bg);
+    color: var(--uni-secondary-contained-button-default-color);
+    border: 1px solid var(--uni-secondary-contained-button-default-border);
+    height: var(--uni-height-button-medium);
+    width: var(--uni-height-button-medium);
+    color: var(--uni-on-secondary);
     cursor: pointer;
     transition: all var(--transition-default);
   }
 
   :global(.pagination-button:hover) {
-    background-color: var(--secondary-button-contained-hover-bg);
+    background: var(--uni-secondary-contained-button-hover-bg);
+    color: var(--uni-secondary-contained-button-hover-color);
+    border: 1px solid var(--uni-secondary-contained-button-hover-border);
   }
 
   :global(.current-page.current-page) {
-    background-color: var(--brand-primary-color);
-    color: var(--opposite-text);
+    background: var(--uni-primary-contained-button-default-bg);
+    color: var(--uni-primary-contained-button-default-color);
+    border: 1px solid var(--uni-primary-contained-button-default-border);
   }
 
   :global(.current-page.current-page.current-page:hover) {
-    background-color: var(--primary-button-contained-hover-bg);
-    color: var(--primary-button-contained-hover-color);
+    background: var(--uni-primary-contained-button-hover-bg);
+    color: var(--uni-primary-contained-button-hover-color);
+    border: 1px solid var(--uni-primary-contained-button-hover-border);
   }
 
-  :global(.pagination-button:disabled path) {
-    fill: var(--button-disabled-color);
-    transition: all var(--transition-default);
-  }
   :global(.pagination-button:disabled) {
-    background: var(--button-disabled-bg);
+    background: var(--uni-secondary-contained-button-disabled-bg);
+    color: var(--uni-secondary-contained-button-disabled-color);
+    border: 1px solid var(--uni-secondary-contained-button-disabled-border);
     cursor: default;
-  }
-
-  :global(.pagination-button path) {
-    fill: var(--opposite-text);
   }
 
   :global(.pages-container) {
     display: flex;
     align-items: center;
     gap: 2.5px;
-    color: var(--divider-color);
+    color: var(--uni-on-bg);
   }
 
   :global(.pagination-ellipsis) {
@@ -119,13 +118,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--button-border-radius);
-    background-color: transparent;
-    height: var(--button-height-small);
-    width: var(--button-height-small);
+    border-radius: var(--uni-radius-button);
+    background: var(--uni-primary-outlined-button-default-bg);
+    color: var(--uni-primary-outlined-button-default-color);
+    border: 1px solid var(--uni-primary-outlined-button-default-border);
     cursor: pointer;
-    border: 1px solid var(--divider-color);
-    color: var(--divider-color);
+    height: var(--uni-height-button-medium);
+    min-width: var(--uni-height-button-medium);
   }
 
   :global(.pagination-page:hover) {
