@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Page from "$lib/common/components/Page.svelte";
-  import Button from "$lib/common/components/Button.svelte";
+  import Page from "$lib/common/components/page.svelte";
+  import Button from "$lib/common/components/button.svelte";
 </script>
 
 <Page>

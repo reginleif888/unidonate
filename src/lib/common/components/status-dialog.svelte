@@ -1,6 +1,6 @@
 <script>
-  import Button from "./Button.svelte";
-  import Modal from "./Modal.svelte";
+  import Button from "./button.svelte";
+  import Modal from "./modal.svelte";
   import { Prohibit } from "phosphor-svelte";
   import { errorModal } from "$lib/common/stores";
 

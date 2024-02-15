@@ -3,7 +3,7 @@
   let ClientOnlyComponent: typeof SvelteComponent<any>;
 
   onMount(async () => {
-    const module = await import("$lib/common/components/Stars.svelte");
+    const module = await import("$lib/common/components/starts-bg.svelte");
     ClientOnlyComponent = module.default;
   });
 </script>

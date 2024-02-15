@@ -1,5 +1,5 @@
 <script>
-  import PoweredBy from "./PoweredBy.svelte";
+  import PoweredBy from "./powered-by.svelte";
   import { Button } from "$lib/common/components";
 </script>
 

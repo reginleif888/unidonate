@@ -6,7 +6,8 @@
     Button,
     Input,
   } from "$lib/common/components";
-  import Pagination from "$lib/common/components/Pagination.svelte";
+  import InputWithLabel from "$lib/common/components/Input-with-label.svelte";
+  import Pagination from "$lib/common/components/pagination.svelte";
   import type { StepItem } from "$lib/common/types";
   import { EntityGrid } from "$lib/donate/components";
   import { DonationStep } from "$lib/donate/types";
@@ -40,12 +41,16 @@
 
   let currentPage = 1;
 
+  let search = "";
+
   let loading: boolean = false;
 
   let timerId: NodeJS.Timeout;
 
   $: {
-    if (currentPage || !currentPage) {
+    let deps = [currentPage, search, currentStep];
+
+    if (deps) {
       clearTimeout(timerId);
 
       loading = true;
@@ -69,11 +74,13 @@
           Please select the school you would like to donate to. {currentPage}
         </div>
         <div class="search-wrapper">
-          <Input placeholder="School...">
-            <span slot="end-icon">
-              <Icons.MagnifyingGlass size={20} />
-            </span>
-          </Input>
+          <InputWithLabel label="Label">
+            <Input placeholder="School..." bind:value={search}>
+              <span slot="end-icon">
+                <Icons.MagnifyingGlass size={20} />
+              </span>
+            </Input>
+          </InputWithLabel>
         </div>
         <div>
           <EntityGrid perPage={11} bind:selected {loading} />

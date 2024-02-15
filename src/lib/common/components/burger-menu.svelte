@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Drawer from "./Drawer.svelte";
+  import Drawer from "./drawer.svelte";
   import { burgerMenu, theme } from "$lib/common/stores";
   import { X, Check } from "phosphor-svelte";
-  import Divider from "./Divider.svelte";
-  import Tabs from "./Tabs.svelte";
+  import Divider from "./divider.svelte";
+  import Tabs from "./tabs.svelte";
   import { page } from "$app/stores";
   import { ROUTES } from "../routes";
   import { MODES } from "../constant";

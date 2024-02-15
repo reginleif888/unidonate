@@ -1,8 +1,8 @@
 <script lang="ts">
   import { clickToCopy } from "$lib/common/actions";
   import { Copy } from "phosphor-svelte";
-  import Button from "./Button.svelte";
-  import Tooltip from "./Tooltip.svelte";
+  import Button from "./button.svelte";
+  import Tooltip from "./tooltip.svelte";
 
   export let value: string = "";
 

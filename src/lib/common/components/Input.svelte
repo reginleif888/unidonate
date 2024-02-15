@@ -1,6 +1,8 @@
 <script lang="ts">
+  export let value: string = "";
   export let size: "small" | "medium" = "medium";
   export let error: boolean = false;
+  export let name: string = "";
 
   let focused: boolean = false;
 
@@ -24,7 +26,9 @@
 >
   <slot name="start-icon" />
   <input
+    bind:value
     {...$$restProps}
+    {name}
     class:input-text-medium={size === "medium"}
     class:input-text-small={size === "small"}
     class:medium={size === "medium"}

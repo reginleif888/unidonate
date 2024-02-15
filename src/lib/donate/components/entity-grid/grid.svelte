@@ -1,10 +1,10 @@
 <script lang="ts">
-  import UniCard from "./UniCard.svelte";
+  import UniCard from "./uni-card.svelte";
 
   import { unis } from "$lib/donate/mocks";
   import type { FormUni } from "$lib/donate/types";
   import type { UniqueIdentifier } from "$lib/common/types";
-  import SkeletonCard from "./SkeletonCard.svelte";
+  import SkeletonCard from "./skeleton-card.svelte";
 
   export let selected: UniqueIdentifier | null = null;
   export let perPage: number = 10;

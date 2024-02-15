@@ -1,10 +1,10 @@
 <script>
-  import BurgerButton from "./BurgerButton.svelte";
+  import BurgerButton from "./burger-button.svelte";
   import { burgerMenu, screenWidth, theme } from "$lib/common/stores";
-  import LogoFull from "./LogoFull.svelte";
-  import Tabs from "./Tabs.svelte";
+  import LogoFull from "./logo-full.svelte";
+  import Tabs from "./tabs.svelte";
   import { ROUTES } from "../routes";
-  import Only from "./Only.svelte";
+  import Only from "./only.svelte";
   import { MODES, SCREEN } from "../constant";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";

@@ -1,3 +1,3 @@
-export { default as clickOutside } from "./clickOutside";
-export { default as clickToCopy } from "./clickToCopy";
-export { default as rippleCreator } from "./rippleCreator";
+export { default as clickOutside } from "./click-outside";
+export { default as clickToCopy } from "./click-to-copy";
+export { default as rippleCreator } from "./ripple-creator";

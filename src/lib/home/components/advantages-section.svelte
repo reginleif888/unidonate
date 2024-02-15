@@ -1,10 +1,10 @@
 <script>
-  import InfoCard from "./InfoCard.svelte";
+  import InfoCard from "./info-card.svelte";
   import {
     EmpowerEducation,
     FundingForEducation,
     DonationStatistic,
-  } from "./AdvantagesIcons";
+  } from "./advantages-icons";
   import {
     LunchAndSnacks,
     SchoolSupplies,
