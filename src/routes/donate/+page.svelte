@@ -1,20 +1,12 @@
 <script lang="ts">
-  import type { FormUni } from "$lib/donate/types.ts";
-  import {
-    Page,
-    UniIcon,
-    DesktopStepper,
-    Button,
-    Input,
-    Modal,
-    Pagination,
-    InputWithLabel,
-  } from "$lib/common/components";
+  import { type FormSchool, EntityType } from "$lib/donate/types";
+  import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
   import type { StepItem } from "$lib/common/types";
-  import { EntityGrid, SelectedModal, UniCard } from "$lib/donate/components";
+  import { SelectedModal } from "$lib/donate/components";
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
-  import { unis } from "$lib/donate/mocks";
+  import { students, schools } from "$lib/donate/mocks";
+  import { EntityPage } from "$lib/donate/pages";
 
   let steps: Array<StepItem> = [
     {
@@ -52,7 +44,7 @@
 
   let selectedModalOpen = false;
 
-  let selectedUni: FormUni | null = null;
+  let selectedSchool: FormSchool | null = null;
 
   function handleSelectedModalOpen() {
     selectedModalOpen = true;
@@ -64,7 +56,7 @@
 
   $: {
     if (selected) {
-      selectedUni = unis.find((uni) => uni.id === selected)!;
+      selectedSchool = schools.find((school) => school.id === selected)!;
     }
   }
 
@@ -88,53 +80,30 @@
     <div class="stepper-wrapper">
       <DesktopStepper {steps} bind:current={currentStep} />
     </div>
-    <div class="form-content">
-      <div class="main-section">
-        <h4 class="h4 step-heading">Select school</h4>
-        <div class="body1 step-description">
-          Please select the school you would like to donate to.
-        </div>
-        <div class="search-wrapper">
-          <InputWithLabel label="Search">
-            <Input placeholder="School..." bind:value={search}>
-              <span slot="end-icon">
-                <Icons.MagnifyingGlass size={20} />
-              </span>
-            </Input>
-          </InputWithLabel>
-        </div>
-        <div>
-          <EntityGrid perPage={11} bind:selected {loading} />
-        </div>
-      </div>
-      <div class="controls-section">
-        <div>
-          <Pagination count={50} bind:currentPage />
-        </div>
-        <Button
-          label="Show selected"
-          contained
-          variant="primary"
-          onClick={handleSelectedModalOpen}
-        />
-        <div
-          class="controls-section-buttons"
-          class:controls-section-buttons--selected={selected}
-        >
-          <Button label="Select student" contained variant="secondary" />
-          <span class="body1">Or</span>
-          <Button label="Donate directly to school" contained />
-        </div>
-      </div>
-    </div>
+
+    {#if currentStep === DonationStep.School}
+      <EntityPage
+        entityType={EntityType.School}
+        onSelectedModalOpen={handleSelectedModalOpen}
+        data={schools}
+      />
+    {/if}
+
+    {#if currentStep === DonationStep.Student}
+      <EntityPage
+        entityType={EntityType.Student}
+        onSelectedModalOpen={handleSelectedModalOpen}
+        data={students}
+      />
+    {/if}
   </div>
 </Page>
 
-{#if selectedUni}
+{#if selectedSchool}
   <SelectedModal
     bind:open={selectedModalOpen}
     onClose={handleSelectedModalClose}
-    uni={selectedUni}
+    school={selectedSchool}
     student={null}
   />
 {/if}
@@ -150,55 +119,5 @@
     align-items: flex-start;
     height: 100%;
     margin-bottom: 0;
-  }
-
-  .form-content {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--uni-bg-transparent-700);
-    box-shadow: var(--uni-shadow-paper);
-    width: 100%;
-    height: 100%;
-    margin-left: 80px;
-    overflow: scroll;
-  }
-
-  .step-heading {
-    margin-bottom: 8px;
-  }
-
-  .step-description {
-    margin-bottom: 24px;
-  }
-
-  .search-wrapper {
-    margin-bottom: 24px;
-    width: 400px;
-  }
-
-  .main-section {
-    padding: 16px;
-  }
-
-  .controls-section {
-    bottom: 0;
-    position: sticky;
-    background-color: var(--uni-bg);
-    padding: 16px;
-    border-top: 1px solid var(--uni-primary-transparent-70);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .controls-section-buttons {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    opacity: 0;
-    transition: all var(--uni-transition-default);
-    &--selected {
-      opacity: 1;
-    }
   }
 </style>

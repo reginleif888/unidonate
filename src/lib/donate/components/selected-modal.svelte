@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Modal } from "$lib/common/components";
-  import type { FormStudent, FormUni } from "../types";
+  import type { FormStudent, FormSchool } from "../types";
 
-  export let uni: FormUni | null;
+  export let school: FormSchool | null;
   export let student: FormStudent | null;
   export let open: boolean;
   export let onClose: () => void = () => null;
@@ -10,8 +10,11 @@
 
 <Modal {onClose} bind:open>
   <div class="selected-modal-content">
-    {#if uni}
-      {uni.name}
+    {#if school}
+      {school.name}
+    {/if}
+    {#if student}
+      {student.firstName} {student.lastName}
     {/if}
   </div>
 </Modal>

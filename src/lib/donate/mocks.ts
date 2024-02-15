@@ -1,85 +1,6 @@
-import type { FormUni, School } from "./types";
+import type { FormStudent, FormSchool, School } from "./types";
 
-export const schools: School[] = [
-  {
-    id: "1",
-    name: "School 1",
-    image: "",
-    description: "Description 1",
-    studentsCount: "100",
-  },
-  {
-    id: "2",
-    name: "School 2",
-    image:
-      "https://educationlinks.com.bh/wp-content/uploads/2021/12/education-links-logo-1.png",
-    description: "Description 2",
-    studentsCount: "200",
-  },
-  {
-    id: "3",
-    name: "School 3",
-    image: "",
-    description: "Description 3",
-    studentsCount: "300",
-  },
-  {
-    id: "4",
-    name: "School 4",
-    image:
-      "https://c8.alamy.com/compde/2r2tp7f/die-fom-university-of-applied-sciences-for-economics-and-management-im-rheinau-hafen-links-das-alte-lagerhaus-ein-exklusives-anwesen-fur-offi-2r2tp7f.jpg",
-    description: "Description 4",
-    studentsCount: "400",
-  },
-  {
-    id: "5",
-    name: "School 5",
-    image:
-      "https://campuls.hof-university.de/wp-content/uploads/2023/11/Bahir_Dar_University-Kopie-1024x819.jpg",
-    description: "Description 5",
-    studentsCount: "500",
-  },
-  {
-    id: "6",
-    name: "School 6",
-    image: "",
-    description: "Description 6",
-    studentsCount: "600",
-  },
-  {
-    id: "7",
-    name: "School 7",
-    image:
-      "https://drupal-varnish-703-urz-webkit-webkit31-prd.apps.ocp-west.urz.uni-heidelberg.de/sites/default/files/styles/img_4_3_aspect_0375/public/2022-08/hero_Suedfassade_Giebel.jpg?h=8f74817f&itok=fUX4NEVr",
-    description: "Description 7",
-    studentsCount: "700",
-  },
-  {
-    id: "8",
-    name: "School 8",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNEE9c9BTWtZ3JNJT7rH0fegqpSFuJNkwIgg&usqp=CAU",
-    description: "Description 8",
-    studentsCount: "800",
-  },
-  {
-    id: "9",
-    name: "School 9",
-    image: "",
-    description: "Description 9",
-    studentsCount: "900",
-  },
-  {
-    id: "10",
-    name: "School 10",
-    image:
-      "https://i2-prod.liverpoolecho.co.uk/incoming/article18807876.ece/ALTERNATES/s615/1_University-of-Liverpool-Photo-by-Colin-Lane.jpg",
-    description: "Description 10",
-    studentsCount: "1000",
-  },
-];
-
-export const unis: Array<FormUni> = [
+export const schools: Array<FormSchool> = [
   {
     id: "1",
     name: "Harvard",
@@ -167,5 +88,168 @@ export const unis: Array<FormUni> = [
     img: "images/harvard.webp",
     location: "Massachusetts Hall, Cambridge, MA 02138, United States",
     numberOfStudents: 100,
+  },
+];
+
+export const students: Array<FormStudent> = [
+  {
+    id: "1",
+    firstName: "Tonya",
+    lastName: "Johnston",
+    dateOfBirth: "2005-07-30",
+    grade: "D",
+    img: "images/student1.webp",
+  },
+  {
+    id: "2",
+    firstName: "Kelli",
+    lastName: "Diaz",
+    dateOfBirth: "2002-01-03",
+    grade: "E",
+    img: "images/student2.webp",
+  },
+  {
+    id: "3",
+    firstName: "Charles",
+    lastName: "Smith",
+    dateOfBirth: "2005-05-22",
+    grade: "A",
+    img: "images/student3.webp",
+  },
+  {
+    id: "4",
+    firstName: "Mark",
+    lastName: "Hill",
+    dateOfBirth: "2002-05-23",
+    grade: "C",
+    img: "images/student4.webp",
+  },
+  {
+    id: "5",
+    firstName: "Lisa",
+    lastName: "Walker",
+    dateOfBirth: "2004-09-14",
+    grade: "C",
+    img: "images/student5.webp",
+  },
+  {
+    id: "6",
+    firstName: "Sarah",
+    lastName: "Nelson",
+    dateOfBirth: "2002-12-21",
+    grade: "D",
+    img: "images/student6.webp",
+  },
+  {
+    id: "7",
+    firstName: "Stephen",
+    lastName: "Gamble",
+    dateOfBirth: "2002-08-24",
+    grade: "E",
+    img: "images/student7.webp",
+  },
+  {
+    id: "8",
+    firstName: "Hayley",
+    lastName: "Sharp",
+    dateOfBirth: "2001-03-31",
+    grade: "B",
+    img: "images/student8.webp",
+  },
+  {
+    id: "9",
+    firstName: "Brian",
+    lastName: "Smith",
+    dateOfBirth: "2002-09-10",
+    grade: "C",
+    img: "images/student9.webp",
+  },
+  {
+    id: "10",
+    firstName: "Edward",
+    lastName: "Brown",
+    dateOfBirth: "2003-01-22",
+    grade: "D",
+    img: "images/student10.webp",
+  },
+  {
+    id: "11",
+    firstName: "Crystal",
+    lastName: "Boone",
+    dateOfBirth: "2005-04-24",
+    grade: "B",
+    img: "images/student11.webp",
+  },
+  {
+    id: "12",
+    firstName: "James",
+    lastName: "Brown",
+    dateOfBirth: "2001-03-08",
+    grade: "A",
+    img: "images/student12.webp",
+  },
+  {
+    id: "13",
+    firstName: "Bonnie",
+    lastName: "Torres",
+    dateOfBirth: "2002-02-16",
+    grade: "C",
+    img: "images/student13.webp",
+  },
+  {
+    id: "14",
+    firstName: "John",
+    lastName: "Freeman",
+    dateOfBirth: "2005-07-18",
+    grade: "E",
+    img: "images/student14.webp",
+  },
+  {
+    id: "15",
+    firstName: "Michael",
+    lastName: "Miller",
+    dateOfBirth: "2005-06-22",
+    grade: "B",
+    img: "images/student15.webp",
+  },
+  {
+    id: "16",
+    firstName: "Kimberly",
+    lastName: "Lewis",
+    dateOfBirth: "2002-08-12",
+    grade: "B",
+    img: "images/student16.webp",
+  },
+  {
+    id: "17",
+    firstName: "Katherine",
+    lastName: "Martin",
+    dateOfBirth: "2004-11-15",
+    grade: "D",
+    img: "images/student17.webp",
+  },
+  {
+    id: "18",
+    firstName: "Christopher",
+    lastName: "Freeman",
+    dateOfBirth: "2001-12-04",
+    grade: "A",
+    img: "images/student18.webp",
+  },
+  {
+    id: "19",
+    firstName: "Christopher",
+    lastName: "Gilmore",
+    dateOfBirth: "2002-05-04",
+    grade: "E",
+    img: "images/student19.webp",
+  },
+  {
+    id: "20",
+    firstName: "Johnny",
+    lastName: "Pena",
+    dateOfBirth: "2004-10-23",
+    grade: "B",
+    img: "images/student20.webp",
   },
 ];

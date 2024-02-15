@@ -1,3 +1,5 @@
+import type { SvelteComponent } from "svelte";
+
 export type UniqueIdentifier = string;
 
 export interface SelectItem {
@@ -49,7 +51,7 @@ export enum DonationStep {
   Budget = "Budget",
 }
 
-export interface FormUni {
+export interface FormSchool {
   id: string;
   name: string;
   website: string;
@@ -64,5 +66,17 @@ export interface FormStudent {
   lastName: string;
   dateOfBirth: string;
   grade: string;
-  imageId: string;
+  img: string;
+}
+
+export enum EntityType {
+  School = "School",
+  Student = "Student",
+}
+
+export interface EntityTypeValue {
+  title: string;
+  subtitle: string;
+  searchPlaceholder: string;
+  Component: typeof SvelteComponent<any>;
 }

@@ -180,12 +180,12 @@
 
 :global(.overline) {
   font-family: var(--uni-description-font-family);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
 
   @include respond-to("desktop") {
-    font-size: 12px;
+    font-size: 14px;
   }
 }

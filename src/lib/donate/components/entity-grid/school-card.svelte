@@ -1,31 +1,31 @@
 <script lang="ts">
   import { Button } from "$lib/common/components";
-  import type { FormUni } from "$lib/donate/types";
+  import type { FormSchool } from "$lib/donate/types";
   import { fade } from "svelte/transition";
 
   export let selected: boolean = false;
-  export let uni: FormUni;
-  export let onSelect: (uni: FormUni) => void = () => null;
+  export let item: FormSchool;
+  export let onSelect: (uni: FormSchool) => void = () => null;
 
   const handleSelect = () => {
-    onSelect(uni);
+    onSelect(item);
   };
 </script>
 
 <div class="card-root" transition:fade>
-  <img src="images/harvard.webp" alt="school/student" />
+  <img src="images/harvard.webp" alt="school" />
   <div class="description body2">
     <div>
       <b class="attribute-label">Name:</b>
-      <span>{uni.name}</span>
+      <span>{item.name}</span>
     </div>
     <div>
       <b class="attribute-label">Location:</b>
-      <span>{uni.location}</span>
+      <span>{item.location}</span>
     </div>
     <div>
       <b class="attribute-label">Number of students:</b>
-      <span>{uni.numberOfStudents}</span>
+      <span>{item.numberOfStudents}</span>
     </div>
   </div>
   <Button
@@ -64,5 +64,6 @@
     height: 200px;
     object-fit: cover;
     border-radius: 16px;
+    background-color: var(--uni-secondary);
   }
 </style>
