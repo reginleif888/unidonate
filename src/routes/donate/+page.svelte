@@ -69,7 +69,11 @@
           Please select the school you would like to donate to. {currentPage}
         </div>
         <div class="search-wrapper">
-          <Input placeholder="Search" />
+          <Input placeholder="School...">
+            <span slot="end-icon">
+              <Icons.MagnifyingGlass size={20} />
+            </span>
+          </Input>
         </div>
         <div>
           <EntityGrid perPage={11} bind:selected {loading} />
