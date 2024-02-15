@@ -1,17 +1,20 @@
 <script lang="ts">
+  import type { FormUni } from "$lib/donate/types.ts";
   import {
     Page,
     UniIcon,
     DesktopStepper,
     Button,
     Input,
+    Modal,
+    Pagination,
+    InputWithLabel,
   } from "$lib/common/components";
-  import InputWithLabel from "$lib/common/components/input-with-label.svelte";
-  import Pagination from "$lib/common/components/pagination.svelte";
   import type { StepItem } from "$lib/common/types";
-  import { EntityGrid } from "$lib/donate/components";
+  import { EntityGrid, SelectedModal, UniCard } from "$lib/donate/components";
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
+  import { unis } from "$lib/donate/mocks";
 
   let steps: Array<StepItem> = [
     {
@@ -46,6 +49,24 @@
   let loading: boolean = false;
 
   let timerId: NodeJS.Timeout;
+
+  let selectedModalOpen = false;
+
+  let selectedUni: FormUni | null = null;
+
+  function handleSelectedModalOpen() {
+    selectedModalOpen = true;
+  }
+
+  function handleSelectedModalClose() {
+    selectedModalOpen = false;
+  }
+
+  $: {
+    if (selected) {
+      selectedUni = unis.find((uni) => uni.id === selected)!;
+    }
+  }
 
   $: {
     let deps = [currentPage, search, currentStep];
@@ -90,6 +111,12 @@
         <div>
           <Pagination count={50} bind:currentPage />
         </div>
+        <Button
+          label="Show selected"
+          contained
+          variant="primary"
+          onClick={handleSelectedModalOpen}
+        />
         <div
           class="controls-section-buttons"
           class:controls-section-buttons--selected={selected}
@@ -102,6 +129,15 @@
     </div>
   </div>
 </Page>
+
+{#if selectedUni}
+  <SelectedModal
+    bind:open={selectedModalOpen}
+    onClose={handleSelectedModalClose}
+    uni={selectedUni}
+    student={null}
+  />
+{/if}
 
 <style lang="scss">
   .stepper-wrapper {
@@ -124,7 +160,6 @@
     width: 100%;
     height: 100%;
     margin-left: 80px;
-    /* padding: 24px; */
     overflow: scroll;
   }
 
@@ -139,9 +174,6 @@
   .search-wrapper {
     margin-bottom: 24px;
     width: 400px;
-  }
-
-  .grid-wrapper {
   }
 
   .main-section {

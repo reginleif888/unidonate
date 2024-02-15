@@ -22,26 +22,26 @@
     <Dialog.Overlay
       transition={fade}
       transitionConfig={{ duration: 150 }}
-      class="dialog__overlay"
+      class="modal__overlay"
     />
-    <Dialog.Content transition={flyAndScale} class="dialog__content"
+    <Dialog.Content transition={flyAndScale} class="modal__content"
       ><slot /></Dialog.Content
     >
   </Dialog.Portal>
 </Dialog.Root>
 
 <style>
-  :global(.dialog__overlay) {
+  :global(.modal__overlay) {
     opacity: 0.5;
-    background-color: var(--overlay-bg);
-    backdrop-filter: blur(3.5px);
-    filter: blur(3.5px);
+    background-color: var(--uni-overlay-bg);
+    backdrop-filter: blur(8px);
+    filter: blur(8px);
     inset: 0;
     position: fixed;
-    z-index: 50;
+    z-index: var(--uni-zIndex-modal);
   }
 
-  :global(.dialog__content) {
+  :global(.modal__content) {
     position: fixed;
     left: 50%;
     top: 50%;
@@ -51,5 +51,10 @@
     transform: translate(-50%, -50%);
     background-color: var(--secondary-bg);
     padding: 1.25rem;
+    z-index: var(--uni-zIndex-modal-content);
+  }
+
+  :global(.modal__content:focus-visible) {
+    outline: none;
   }
 </style>

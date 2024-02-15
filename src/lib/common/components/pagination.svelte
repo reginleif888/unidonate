@@ -5,6 +5,7 @@
   export let currentPage: number = 1;
   export let perPage: number = 10;
   export let count: number = 0;
+  export let showingHidden: boolean = false;
 </script>
 
 <Pagination.Root
@@ -38,9 +39,11 @@
       <CaretRight size={16} />
     </Pagination.NextButton>
   </div>
-  <p class="subtitle2">
-    Showing {range.start + 1} - {range.end}
-  </p>
+  {#if showingHidden}
+    <p class="subtitle2">
+      Showing {range.start + 1} - {range.end}
+    </p>
+  {/if}
 </Pagination.Root>
 
 <style>

@@ -1,2 +1,3 @@
 export * from "./donation-category-icon";
-export { EntityGrid } from "./entity-grid";
+export { EntityGrid, UniCard } from "./entity-grid";
+export { default as SelectedModal } from "./selected-modal.svelte";

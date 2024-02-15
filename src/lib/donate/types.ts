@@ -57,3 +57,12 @@ export interface FormUni {
   location: string;
   numberOfStudents: number;
 }
+
+export interface FormStudent {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  grade: string;
+  imageId: string;
+}

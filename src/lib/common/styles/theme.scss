@@ -348,6 +348,7 @@
   --#{$lib}-zIndex-app-bar: 1100;
   --#{$lib}-zIndex-drawer: 1200;
   --#{$lib}-zIndex-modal: 1300;
+  --#{$lib}-zIndex-modal-content: 1301;
   --#{$lib}-zIndex-popover: 1400;
   --#{$lib}-zIndex-tooltip: 1500;
   // -----------------------------------------------------
@@ -361,6 +362,10 @@
   // skeletons
   --#{$lib}-skeleton-bg-main: #{adjust-color($background, 20%)};
   --#{$lib}-skeleton-bg-secondary: #{adjust-color($background, 10%)};
+
+  // overlay
+
+  --#{$lib}-overlay-bg: #(adjust-saturation($background, 0%, 0.5));
 }
 
 :global(html.light) {
