@@ -15,4 +15,4 @@ export { default as Page } from "./page.svelte";
 export { default as Pagination } from "./pagination.svelte";
 export { default as DesktopStepper } from "./desktop-stepper.svelte";
 export { default as UniIcon } from "./uni-icon.svelte";
-export { default as Input } from "./Input.svelte";
+export { default as Input } from "./input.svelte";

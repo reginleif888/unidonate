@@ -6,7 +6,7 @@
     Button,
     Input,
   } from "$lib/common/components";
-  import InputWithLabel from "$lib/common/components/Input-with-label.svelte";
+  import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import Pagination from "$lib/common/components/pagination.svelte";
   import type { StepItem } from "$lib/common/types";
   import { EntityGrid } from "$lib/donate/components";
@@ -74,7 +74,7 @@
           Please select the school you would like to donate to. {currentPage}
         </div>
         <div class="search-wrapper">
-          <InputWithLabel label="Label">
+          <InputWithLabel label="Search" errorMessage="Some error here">
             <Input placeholder="School..." bind:value={search}>
               <span slot="end-icon">
                 <Icons.MagnifyingGlass size={20} />
