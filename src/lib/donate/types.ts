@@ -42,3 +42,18 @@ export type DonationFormError = {
   categoryAllocation?: boolean | undefined;
   budgetError?: boolean | undefined;
 };
+
+export enum DonationStep {
+  School = "School",
+  Student = "Student",
+  Budget = "Budget",
+}
+
+export interface FormUni {
+  id: string;
+  name: string;
+  website: string;
+  img: string;
+  location: string;
+  numberOfStudents: number;
+}

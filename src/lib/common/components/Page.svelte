@@ -44,6 +44,7 @@
     position: relative;
     overflow: scroll;
     display: block;
+    margin-bottom: 0;
     &::before {
       content: "";
       position: absolute;

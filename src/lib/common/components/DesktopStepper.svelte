@@ -44,6 +44,7 @@
   .root {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: flex-end;
     height: 100%;
     position: relative;
@@ -127,6 +128,7 @@
     width: 100%;
     width: 60px;
     height: 100%;
+    max-height: 300px;
     position: relative;
     opacity: 0.7;
 

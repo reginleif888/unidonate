@@ -356,8 +356,11 @@
   --#{$lib}-transition-default: ease 0.2s;
 
   // Steps
-
   --#{$lib}-step-active-bg: #62c98d;
+
+  // skeletons
+  --#{$lib}-skeleton-bg-main: #{adjust-color($background, 20%)};
+  --#{$lib}-skeleton-bg-secondary: #{adjust-color($background, 10%)};
 }
 
 :global(html.light) {

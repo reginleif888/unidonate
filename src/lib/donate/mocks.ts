@@ -1,4 +1,4 @@
-import type { School } from "./types";
+import type { FormUni, School } from "./types";
 
 export const schools: School[] = [
   {
@@ -76,5 +76,96 @@ export const schools: School[] = [
       "https://i2-prod.liverpoolecho.co.uk/incoming/article18807876.ece/ALTERNATES/s615/1_University-of-Liverpool-Photo-by-Colin-Lane.jpg",
     description: "Description 10",
     studentsCount: "1000",
+  },
+];
+
+export const unis: Array<FormUni> = [
+  {
+    id: "1",
+    name: "Harvard",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "2",
+    name: "Stanford",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "3",
+    name: "MIT",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "4",
+    name: "Harvard",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "5",
+    name: "Stanford",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "6",
+    name: "MIT",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "7",
+    name: "Harvard",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "8",
+    name: "Stanford",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "9",
+    name: "MIT",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "10",
+    name: "Harvard",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
+  },
+  {
+    id: "11",
+    name: "Stanford",
+    website: "https://www.google.de/",
+    img: "images/harvard.webp",
+    location: "Massachusetts Hall, Cambridge, MA 02138, United States",
+    numberOfStudents: 100,
   },
 ];
