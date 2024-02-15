@@ -21,3 +21,11 @@ export interface SelectItem {
   Icon?: typeof SvelteComponent<any>;
   disabled?: boolean;
 }
+
+export interface StepItem {
+  label: string;
+  value: UniqueIdentifier;
+  Icon: typeof SvelteComponent<any>;
+  disabled?: boolean;
+  optional?: boolean;
+}

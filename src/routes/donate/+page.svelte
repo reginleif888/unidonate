@@ -1,12 +1,58 @@
 <script lang="ts">
-  import { Page, Pagination } from "$lib/common/components";
-  import Button from "$lib/common/components/Button.svelte";
+  import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
+  import type { StepItem } from "$lib/common/types";
+  import * as Icons from "phosphor-svelte";
+
+  let steps: Array<StepItem> = [
+    {
+      label: "Select school",
+      disabled: false,
+      Icon: UniIcon,
+      value: "school",
+    },
+    {
+      label: "Select student",
+      disabled: false,
+      Icon: Icons.Student,
+      value: "student",
+      optional: true,
+    },
+    {
+      label: "Allocate budget",
+      disabled: true,
+      Icon: Icons.HandHeart,
+      value: "budget",
+    },
+  ];
 </script>
 
 <Page>
-  <Button label="Back" variant="secondary" contained />
-  <Button label="Next" variant="primary" contained />
-  <div style="width: 400px">
-    <Pagination count={7} perPage={5} />
+  <div class="inner">
+    <div class="stepper-wrapper">
+      <DesktopStepper {steps} current={"student"} />
+    </div>
+    <div class="form-content"></div>
   </div>
 </Page>
+
+<style>
+  .stepper-wrapper {
+    width: 340px;
+    height: 100%;
+  }
+
+  .inner {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+  }
+
+  .form-content {
+    display: flex;
+    background-color: var(--uni-bg-transparent-700);
+    box-shadow: var(--uni-shadow-paper);
+    width: 100%;
+    height: 100%;
+    margin-left: 80px;
+  }
+</style>

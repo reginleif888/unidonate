@@ -13,3 +13,5 @@ export { default as Stars } from "./Stars.svelte";
 export { default as ClientOnly } from "./ClientOnly.svelte";
 export { default as Page } from "./Page.svelte";
 export { default as Pagination } from "./Pagination.svelte";
+export { default as DesktopStepper } from "./DesktopStepper.svelte";
+export { default as UniIcon } from "./UniIcon.svelte";

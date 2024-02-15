@@ -354,6 +354,10 @@
 
   // transitions
   --#{$lib}-transition-default: ease 0.2s;
+
+  // Steps
+
+  --#{$lib}-step-active-bg: #62c98d;
 }
 
 :global(html.light) {

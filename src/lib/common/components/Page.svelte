@@ -32,8 +32,6 @@
   .inner-container {
     width: 100%;
     margin: 0 auto;
-    max-width: 1400px;
-    padding: 24px 8px;
     display: flex;
     flex-direction: column;
     height: 0;
@@ -42,13 +40,10 @@
 
   .inner {
     flex-grow: 1;
-    box-shadow: var(--uni-shadow-paper);
-    border-radius: 24px;
-    padding: 24px;
     z-index: 3;
     position: relative;
     overflow: scroll;
-    background-color: var(--uni-bg-transparent-700);
+    display: block;
     &::before {
       content: "";
       position: absolute;
