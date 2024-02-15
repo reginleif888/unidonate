@@ -71,10 +71,10 @@
       <div class="main-section">
         <h4 class="h4 step-heading">Select school</h4>
         <div class="body1 step-description">
-          Please select the school you would like to donate to. {currentPage}
+          Please select the school you would like to donate to.
         </div>
         <div class="search-wrapper">
-          <InputWithLabel label="Search" errorMessage="Some error here">
+          <InputWithLabel label="Search">
             <Input placeholder="School..." bind:value={search}>
               <span slot="end-icon">
                 <Icons.MagnifyingGlass size={20} />

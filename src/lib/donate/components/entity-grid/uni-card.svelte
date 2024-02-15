@@ -12,7 +12,7 @@
   };
 </script>
 
-<div class="card-root">
+<div class="card-root" transition:fade>
   <img src="images/harvard.webp" alt="school/student" />
   <div class="description body2">
     <div>

@@ -104,7 +104,7 @@
   :global(.pages-container) {
     display: flex;
     align-items: center;
-    gap: 2.5px;
+    gap: 4px;
     color: var(--uni-on-bg);
   }
 

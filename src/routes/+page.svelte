@@ -10,7 +10,7 @@
   } from "$lib/home/components";
 </script>
 
-<div class="main-wrapper">
+<div class="main-wrapper" in:fade>
   <section>
     <MainSection />
   </section>
@@ -18,7 +18,7 @@
 
 <Divider />
 
-<div class="primary-bg">
+<div class="primary-bg" in:fade>
   <section>
     <AdvantagesSection />
   </section>
@@ -26,7 +26,7 @@
 
 <Divider />
 
-<div>
+<div in:fade>
   <section>
     <AboutSection />
   </section>
@@ -34,7 +34,7 @@
 
 <Divider />
 
-<div class="primary-bg">
+<div class="primary-bg" in:fade>
   <section>
     <PoweredBy />
   </section>
@@ -42,7 +42,7 @@
 
 <Divider />
 
-<div>
+<div in:fade>
   <section>
     <StartContribution />
   </section>
