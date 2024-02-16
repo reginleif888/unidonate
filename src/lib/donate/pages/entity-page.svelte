@@ -7,7 +7,6 @@
   } from "$lib/common/components";
   import { EntityGrid, SchoolCard, StudentCard } from "$lib/donate/components";
   import * as Icons from "phosphor-svelte";
-  import type { SvelteComponent } from "svelte";
   import {
     type FormStudent,
     type FormSchool,
@@ -46,6 +45,20 @@
 
   let timerId: NodeJS.Timeout;
 
+  let scrollRoot: HTMLElement;
+
+  let headingRoot: HTMLElement;
+
+  let stickyTopControls: boolean = false;
+
+  function checkStickyTopControls() {
+    if (scrollRoot) {
+      const scrollTop = scrollRoot.scrollTop;
+
+      stickyTopControls = scrollTop > headingRoot.clientHeight + 48;
+    }
+  }
+
   $: {
     let deps = [currentPage, search];
 
@@ -61,25 +74,32 @@
   }
 </script>
 
-<div class="root">
+<div class="root" bind:this={scrollRoot} on:scroll={checkStickyTopControls}>
   <div class="main-section">
-    <h4 class="h4 step-heading">{mapEntityType[entityType].title}</h4>
-    <div class="body1 step-description">
-      {mapEntityType[entityType].subtitle}
+    <div bind:this={headingRoot} class="heading-section">
+      <h4 class="h4 step-heading">{mapEntityType[entityType].title}</h4>
+      <div class="body1 step-description">
+        {mapEntityType[entityType].subtitle}
+      </div>
     </div>
-    <div class="search-wrapper">
-      <InputWithLabel label="Search">
-        <Input
-          placeholder={mapEntityType[entityType].searchPlaceholder}
-          bind:value={search}
-        >
-          <span slot="end-icon">
-            <Icons.MagnifyingGlass size={20} />
-          </span>
-        </Input>
-      </InputWithLabel>
+    <div
+      class="top-controls-wrapper"
+      class:top-controls-wrapper--scrolling={stickyTopControls}
+    >
+      <div class="search-wrapper">
+        <InputWithLabel label="Search">
+          <Input
+            placeholder={mapEntityType[entityType].searchPlaceholder}
+            bind:value={search}
+          >
+            <span slot="end-icon">
+              <Icons.MagnifyingGlass size={20} />
+            </span>
+          </Input>
+        </InputWithLabel>
+      </div>
     </div>
-    <div>
+    <div class="grid-wrapper">
       <EntityGrid
         {data}
         perPage={11}
@@ -136,13 +156,33 @@
     margin-bottom: 24px;
   }
 
-  .search-wrapper {
+  .heading-section {
+    padding: 16px;
+    padding-bottom: 0px;
+  }
+
+  .grid-wrapper {
+    padding: 0 16px;
+  }
+
+  .top-controls-wrapper {
     margin-bottom: 24px;
-    width: 400px;
+    width: 100;
+    position: sticky;
+    top: 0;
+    transition: all var(--uni-transition-default);
+    padding: 0 16px;
+
+    &--scrolling {
+      background-color: var(--uni-bg);
+      box-shadow: var(--uni-shadow-paper);
+      z-index: 1;
+      padding: 16px;
+      padding-bottom: 8px;
+    }
   }
 
   .main-section {
-    padding: 16px;
     flex-grow: 1;
   }
 
@@ -174,5 +214,9 @@
     &--selected {
       opacity: 1;
     }
+  }
+
+  .search-wrapper {
+    max-width: 400px;
   }
 </style>
