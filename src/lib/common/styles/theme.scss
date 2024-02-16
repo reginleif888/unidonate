@@ -40,7 +40,7 @@
   $background,
   $onBackground
 ) {
-  $divider-color: adjust-color($onBackground, 80%);
+  $divider-color: adjust-color($onBackground, 70%);
   $focus-outline: adjust-saturation($primary, 0%, 0.75);
 
   $error: #f44336;
@@ -332,11 +332,12 @@
       0%,
       0.2
     )};
-  --#{$lib}-shadow-popover: 0 2px 4px 0 #{adjust-saturation(
-      $onBackground,
-      0%,
-      0.2
-    )};
+  --#{$lib}-shadow-popover: 0 2px 6px -1 #{adjust-saturation(
+        $onBackground,
+        0%,
+        0.1
+      )},
+    0 2px 4px -1 #{adjust-saturation($onBackground, 0%, 0.06)};
   // -----------------------------------------------------
 
   // Fonts

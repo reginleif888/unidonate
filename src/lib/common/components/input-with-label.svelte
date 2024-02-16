@@ -15,7 +15,10 @@
     {#if required}(required){/if}</label
   >
   <slot />
-  <span class="caption error-message">{errorMessage}</span>
+
+  {#if errorMessage}
+    <span class="caption error-message">{errorMessage}</span>
+  {/if}
 </div>
 
 <style>
@@ -23,6 +26,7 @@
     margin-bottom: 4px;
     display: block;
     padding-left: 8px;
+    font-weight: bold;
   }
 
   .error-message {

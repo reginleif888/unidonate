@@ -4,6 +4,7 @@
     Input,
     Pagination,
     InputWithLabel,
+    Select,
   } from "$lib/common/components";
   import { EntityGrid, SchoolCard, StudentCard } from "$lib/donate/components";
   import * as Icons from "phosphor-svelte";
@@ -13,6 +14,7 @@
     EntityType,
     type EntityTypeValue,
   } from "../types";
+  import { PAGE_SIZES_SELECT_ITEMS } from "../constant";
 
   export let onSelectedModalOpen: () => void = () => null;
 
@@ -98,6 +100,17 @@
           </Input>
         </InputWithLabel>
       </div>
+      <div
+        class="controls-section-show-selected"
+        class:controls-section-show-selected--selected={selected}
+      >
+        <Button
+          label="Show selected"
+          contained
+          variant="primary"
+          onClick={onSelectedModalOpen}
+        />
+      </div>
     </div>
     <div class="grid-wrapper">
       <EntityGrid
@@ -111,20 +124,17 @@
     </div>
   </div>
   <div class="controls-section">
-    <div>
-      <Pagination count={50} bind:currentPage />
+    <div class="pagination-wrapper">
+      <div class="select-wrapper">
+        <InputWithLabel label="Per page">
+          <Select items={PAGE_SIZES_SELECT_ITEMS} />
+        </InputWithLabel>
+      </div>
+      <div>
+        <Pagination count={50} bind:currentPage />
+      </div>
     </div>
-    <div
-      class="controls-section-show-selected"
-      class:controls-section-show-selected--selected={selected}
-    >
-      <Button
-        label="Show selected"
-        contained
-        variant="primary"
-        onClick={onSelectedModalOpen}
-      />
-    </div>
+
     <div
       class="controls-section-buttons"
       class:controls-section-buttons--selected={selected}
@@ -163,6 +173,7 @@
 
   .grid-wrapper {
     padding: 0 16px;
+    padding-bottom: 16px;
   }
 
   .top-controls-wrapper {
@@ -173,12 +184,15 @@
     transition: all var(--uni-transition-default);
     padding: 0 16px;
 
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
     &--scrolling {
       background-color: var(--uni-bg);
       box-shadow: var(--uni-shadow-paper);
       z-index: 1;
       padding: 16px;
-      padding-bottom: 8px;
     }
   }
 
@@ -194,15 +208,18 @@
     border-top: 1px solid var(--uni-primary-transparent-70);
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
   }
 
   .controls-section-buttons {
     display: flex;
     gap: 16px;
     align-items: center;
+    justify-content: flex-end;
     opacity: 0;
     transition: all var(--uni-transition-default);
+    max-width: 600px;
+    width: 100%;
     &--selected {
       opacity: 1;
     }
@@ -217,6 +234,19 @@
   }
 
   .search-wrapper {
-    max-width: 400px;
+    max-width: 300px;
+    width: 100%;
+  }
+
+  .select-wrapper {
+    max-width: 120px;
+    width: 100%;
+  }
+
+  .pagination-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    width: 100%;
   }
 </style>

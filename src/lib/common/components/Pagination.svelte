@@ -15,32 +15,34 @@
   siblingCount={1}
   let:pages
   let:range
-  class="pagination-root"
 >
-  <div class="inner">
-    <Pagination.PrevButton class="pagination-button">
+  <div
+    class="uni-pagination-root__inner"
+    class:uni-pagination-root__inner--showing-hidden={showingHidden}
+  >
+    <Pagination.PrevButton class="uni-pagination-root__button">
       <CaretLeft size={16} />
     </Pagination.PrevButton>
-    <div class="pages-container">
+    <div class="uni-pagination-root__pages-container">
       {#each pages as page (page.key)}
         {#if page.type === "ellipsis"}
-          <div class="pagination-ellipsis">...</div>
+          <div class="uni-pagination-root__ellipsis">...</div>
         {:else}
           <Pagination.Page
             {page}
-            class={`pagination-page subtitle1 ${String(currentPage) === String(page.value) ? "current-page" : ""}`}
+            class={`uni-pagination-root__page subtitle1 ${String(currentPage) === String(page.value) ? "uni-pagination-root__current-page" : ""}`}
           >
             {page.value}
           </Pagination.Page>
         {/if}
       {/each}
     </div>
-    <Pagination.NextButton class="pagination-button">
+    <Pagination.NextButton class="uni-pagination-root__button">
       <CaretRight size={16} />
     </Pagination.NextButton>
   </div>
   {#if showingHidden}
-    <p class="subtitle2">
+    <p class="subtitle2" style="margin-top: 8px;">
       Showing {range.start + 1} - {range.end}
     </p>
   {/if}
@@ -55,15 +57,14 @@
     width: fit-content;
   }
 
-  :global(.inner) {
+  :global(.uni-pagination-root__inner) {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
   }
 
-  :global(.pagination-button) {
+  :global(.uni-pagination-root__button) {
     display: inline-flex;
     font-size: 10px;
     align-items: center;
@@ -76,48 +77,52 @@
     width: var(--uni-height-button-medium);
     color: var(--uni-on-secondary);
     cursor: pointer;
-    transition: all var(--transition-default);
+    transition: all var(__transition-default);
   }
 
-  :global(.pagination-button:hover) {
+  :global(.uni-pagination-root__button:hover) {
     background: var(--uni-secondary-contained-button-hover-bg);
     color: var(--uni-secondary-contained-button-hover-color);
     border: 1px solid var(--uni-secondary-contained-button-hover-border);
   }
 
-  :global(.current-page.current-page) {
+  :global(
+      .uni-pagination-root__current-page.uni-pagination-root__current-page
+    ) {
     background: var(--uni-primary-contained-button-default-bg);
     color: var(--uni-primary-contained-button-default-color);
     border: 1px solid var(--uni-primary-contained-button-default-border);
   }
 
-  :global(.current-page.current-page.current-page:hover) {
+  :global(
+      .uni-pagination-root__current-page.uni-pagination-root__current-page.uni-pagination-root__current-page:hover
+    ) {
     background: var(--uni-primary-contained-button-hover-bg);
     color: var(--uni-primary-contained-button-hover-color);
     border: 1px solid var(--uni-primary-contained-button-hover-border);
   }
 
-  :global(.pagination-button:disabled) {
+  :global(.uni-pagination-root__button:disabled) {
     background: var(--uni-secondary-contained-button-disabled-bg);
     color: var(--uni-secondary-contained-button-disabled-color);
     border: 1px solid var(--uni-secondary-contained-button-disabled-border);
     cursor: default;
   }
 
-  :global(.pages-container) {
+  :global(.uni-pagination-root__pages-container) {
     display: flex;
     align-items: center;
     gap: 4px;
     color: var(--uni-on-bg);
   }
 
-  :global(.pagination-ellipsis) {
+  :global(.uni-pagination-root__pagination-ellipsis) {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  :global(.pagination-page) {
+  :global(.uni-pagination-root__page) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +135,7 @@
     min-width: var(--uni-height-button-medium);
   }
 
-  :global(.pagination-page:hover) {
-    background-color: var(--primary-button-hover-bg);
+  :global(.uni-pagination-root__page:hover) {
+    background-color: var(__primary-button-hover-bg);
   }
 </style>

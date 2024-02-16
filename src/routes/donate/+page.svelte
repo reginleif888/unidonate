@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   import { type FormSchool, EntityType } from "$lib/donate/types";
   import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
   import type { StepItem } from "$lib/common/types";
@@ -76,7 +77,7 @@
 </script>
 
 <Page>
-  <div class="inner">
+  <div class="inner" transition:fade>
     <div class="stepper-wrapper">
       <DesktopStepper {steps} bind:current={currentStep} />
     </div>

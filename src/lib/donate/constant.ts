@@ -1,5 +1,5 @@
 import { AllocationCategory } from "$lib/common/types";
-import type { DonationFormValues } from "./types";
+import type { DonationFormValues, SelectItem } from "./types";
 
 export const DONATE_INITIAL_VALUES: DonationFormValues = {
   totalAmount: 0,
@@ -44,3 +44,14 @@ export const MAP_ALLOCATION_CATEGORY: Record<
     color: "var(--info-color)",
   },
 };
+
+export const PAGE_SIZES = [5, 10, 20, 50];
+
+export const DEFAULT_PAGE_SIZE = 5;
+
+export const PAGE_SIZES_SELECT_ITEMS: Array<SelectItem> = PAGE_SIZES.map(
+  (size) => ({
+    value: size.toString(),
+    label: size.toString(),
+  })
+);

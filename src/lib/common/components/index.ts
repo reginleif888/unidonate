@@ -18,3 +18,4 @@ export { default as UniIcon } from "./uni-icon.svelte";
 export { default as Input } from "./input.svelte";
 export { default as Modal } from "./modal.svelte";
 export { default as InputWithLabel } from "./input-with-label.svelte";
+export { default as Select } from "./select.svelte";
