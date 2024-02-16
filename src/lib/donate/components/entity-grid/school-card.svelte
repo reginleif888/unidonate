@@ -14,8 +14,11 @@
 
 <div class="card-root" transition:fade>
   <img src="images/harvard.webp" alt="school" />
+  <a href={item.website} target="_blank" class="website-badge overline"
+    >Website</a
+  >
   <div class="description body2">
-    <div>
+    <div class="school-name">
       <b class="attribute-label">Name:</b>
       <span>{item.name}</span>
     </div>
@@ -35,7 +38,7 @@
   />
 </div>
 
-<style>
+<style lang="scss">
   .card-root {
     display: flex;
     flex-direction: column;
@@ -46,6 +49,7 @@
     border-radius: 24px;
     background: var(--uni-bg);
     box-shadow: var(--uni-shadow-paper);
+    position: relative;
   }
 
   .description {
@@ -53,6 +57,22 @@
     flex-direction: column;
     gap: 8px;
     flex-grow: 1;
+  }
+
+  .website-badge {
+    position: absolute;
+    top: 190px;
+    left: 6px;
+    display: block;
+    background: var(--uni-primary-contained-button-default-bg);
+    color: var(--uni-on-primary);
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--uni-primary-contained-button-hover-bg);
+    }
   }
 
   .attribute-label {
