@@ -3,6 +3,10 @@
 
   export let data: Array<PicChartDataItem> = [];
 
+  export let width: number = 100;
+
+  export let height: number = 100;
+
   let hoveredSlice: number | null | SVGPathElement = null;
 
   function polarToCartesian(
@@ -23,13 +27,30 @@
 
   function calculatePieSlices(data: Array<PicChartDataItem>) {
     let startAngle = 0;
+    const outerRadius = 40;
+    const innerRadius = 20;
 
     return data.map(({ color, label, value }, index) => {
       const sliceAngle = (value / total) * 360;
       const endAngle = startAngle + sliceAngle;
       const largeArcFlag = sliceAngle > 180 ? 1 : 0;
+
       const { X: startX, Y: startY } = polarToCartesian(50, 50, 40, startAngle);
       const { X: endX, Y: endY } = polarToCartesian(50, 50, 40, endAngle);
+
+      const { X: innerStartX, Y: innerStartY } = polarToCartesian(
+        50,
+        50,
+        innerRadius,
+        endAngle
+      );
+      const { X: innerEndX, Y: innerEndY } = polarToCartesian(
+        50,
+        50,
+        innerRadius,
+        startAngle
+      );
+
       const labelPosition = polarToCartesian(
         50,
         50,
@@ -39,7 +60,7 @@
       startAngle = endAngle;
 
       return {
-        d: `M 50 50 L ${startX} ${startY} A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY} z`,
+        d: `M ${startX} ${startY} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endX} ${endY} L ${innerStartX} ${innerStartY} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerEndX} ${innerEndY} z`,
         color,
         label,
         labelX: labelPosition.X,
@@ -78,9 +99,9 @@
     {/each}
   </div>
   <svg
-    viewBox="0 0 100 100"
-    width="160"
-    height="160"
+    width={`${width}px`}
+    height={`${height}px`}
+    viewBox={`0 0 100 100`}
     style="overflow: visible;"
   >
     <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -105,7 +126,7 @@
   @import "$lib/common/styles/media.scss";
 
   .label {
-    max-width: 50%;
+    // max-width: 50%;
   }
 
   .percent {
@@ -116,16 +137,19 @@
 
   .root {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 8px;
-    max-width: 280px;
     overflow: hidden;
+  }
 
-    @include respond-to(tabletSmall) {
-      flex-direction: row;
-      max-width: unset;
-    }
+  .legend-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    background-color: var(--uni-bg);
+    border-radius: 16px;
+    box-shadow: var(--uni-shadow-paper);
   }
 
   .legend-item {
@@ -138,5 +162,6 @@
   .legend-color {
     min-width: 10px;
     height: 10px;
+    border-radius: 50%;
   }
 </style>

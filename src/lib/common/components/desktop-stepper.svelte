@@ -19,8 +19,10 @@
       class="step-item-wrapper h6"
       class:step-item-wrapper--disabled={disabled}
     >
-      <div class="label-wrappe">
-        {label}
+      <div class="label-wrapper">
+        <div>
+          {label}
+        </div>
         {#if optional}
           <span class="caption">(optional)</span>
         {/if}
@@ -50,6 +52,7 @@
     position: relative;
     padding: 80px 0px;
     padding-left: 24px;
+    margin-right: 100px;
 
     &::after {
       content: "";

@@ -1,13 +1,17 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { type FormSchool, EntityType } from "$lib/donate/types";
+  import {
+    type FormSchool,
+    EntityType,
+    type FormStudent,
+  } from "$lib/donate/types";
   import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
   import type { StepItem } from "$lib/common/types";
   import { SelectedModal } from "$lib/donate/components";
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
   import { students, schools } from "$lib/donate/mocks";
-  import { EntityPage } from "$lib/donate/pages";
+  import { EntityPage, DonationPage } from "$lib/donate/pages";
 
   let steps: Array<StepItem> = [
     {
@@ -31,21 +35,17 @@
     },
   ];
 
-  let selected: string | null = null;
+  let selectedSchoolId: string | null = null;
+
+  let selectedStudentId: string | null = null;
 
   let currentStep = DonationStep.School;
-
-  let currentPage = 1;
-
-  let search = "";
-
-  let loading: boolean = false;
-
-  let timerId: NodeJS.Timeout;
 
   let selectedModalOpen = false;
 
   let selectedSchool: FormSchool | null = null;
+
+  let selectedStudent: FormStudent | null = null;
 
   function handleSelectedModalOpen() {
     selectedModalOpen = true;
@@ -56,23 +56,33 @@
   }
 
   $: {
-    if (selected) {
-      selectedSchool = schools.find((school) => school.id === selected)!;
+    if (selectedSchoolId) {
+      selectedSchool = schools.find(
+        (school) => school.id === selectedSchoolId
+      )!;
     }
   }
 
   $: {
-    let deps = [currentPage, search, currentStep];
-
-    if (deps) {
-      clearTimeout(timerId);
-
-      loading = true;
-
-      timerId = setTimeout(() => {
-        loading = false;
-      }, 1000);
+    if (selectedStudentId) {
+      selectedStudent = students.find(
+        (student) => student.id === selectedStudentId
+      )!;
     }
+  }
+
+  $: {
+    steps = steps.map((step) => {
+      if (step.value === DonationStep.Student) {
+        step.disabled = !selectedSchoolId;
+      }
+
+      if (step.value === DonationStep.Budget) {
+        step.disabled = !selectedSchoolId;
+      }
+
+      return step;
+    });
   }
 </script>
 
@@ -87,6 +97,7 @@
         entityType={EntityType.School}
         onSelectedModalOpen={handleSelectedModalOpen}
         data={schools}
+        bind:selected={selectedSchoolId}
       />
     {/if}
 
@@ -95,7 +106,12 @@
         entityType={EntityType.Student}
         onSelectedModalOpen={handleSelectedModalOpen}
         data={students}
+        bind:selected={selectedStudentId}
       />
+    {/if}
+
+    {#if currentStep === DonationStep.Budget}
+      <DonationPage />
     {/if}
   </div>
 </Page>
@@ -111,7 +127,8 @@
 
 <style lang="scss">
   .stepper-wrapper {
-    width: 340px;
+    max-width: 380px;
+    width: 100%;
     height: 100%;
   }
 

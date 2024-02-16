@@ -3,11 +3,13 @@
 
   export let value: Array<number> = [25];
 
-  export let label: string = "Label";
+  export let label: string = "";
 </script>
 
 <div class="slider-container">
-  <div class="slider-label subtitle1">{label}</div>
+  {#if label}
+    <div class="slider-label subtitle1">{label}</div>
+  {/if}
   <div class="inner">
     <Slider.Root step={1} {value} let:thumbs class="slider-root">
       <span class="slider-track">
@@ -31,12 +33,10 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    margin-bottom: 8px;
   }
 
   :global(.slider-container) {
     width: 100%;
-    height: 90px;
   }
 
   :global(.slider-root) {
@@ -46,12 +46,11 @@
     touch-action: none;
     user-select: none;
     align-items: center;
-    margin-bottom: 16px;
   }
 
   :global(.slider-track) {
     position: relative;
-    height: 2px;
+    height: 8px;
     width: 100%;
     flex-grow: 1;
     overflow: hidden;
@@ -61,24 +60,24 @@
 
   :global(.slider-range) {
     position: absolute;
-    height: 100%;
-    background-color: red;
+    height: 8px;
+    background-color: var(--uni-primary);
   }
 
   :global(.slider-thumb) {
     display: block;
-    width: 27px;
-    height: 27px;
+    width: 26px;
+    height: 26px;
     cursor: grab;
     border-radius: 9999px;
     border: 1px solid grey;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     transition: border-color 0.2s;
-    background-color: red;
+    background-color: var(--uni-primary);
   }
 
   :global(.slider-thumb:hover) {
-    border-color: red;
+    border-color: var(--uni-primary);
   }
 
   :global(.slider-thumb:focus-visible) {

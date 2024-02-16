@@ -22,6 +22,8 @@
 
   export let entityType: EntityType = EntityType.School;
 
+  export let selected: string | null = null;
+
   const mapEntityType: Record<EntityType, EntityTypeValue> = {
     [EntityType.School]: {
       title: "Select school",
@@ -36,8 +38,6 @@
       Component: StudentCard,
     },
   };
-
-  let selected: string | null = null;
 
   let currentPage = 1;
 
@@ -154,7 +154,6 @@
     box-shadow: var(--uni-shadow-paper);
     width: 100%;
     height: 100%;
-    margin-left: 80px;
     overflow: scroll;
   }
 

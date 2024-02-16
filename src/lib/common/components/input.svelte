@@ -19,7 +19,7 @@
     focused = false;
   }
 
-  const { label } = getContext<InputWithLabelContextType>(
+  const labelContext = getContext<InputWithLabelContextType>(
     INPUT_WITH_LABEL_CONTEXT_KEY
   );
 </script>
@@ -37,7 +37,7 @@
   <input
     bind:value
     {...$$restProps}
-    name={label || $$restProps.name}
+    name={labelContext?.label || $$restProps.name}
     class:input-text-medium={size === "medium"}
     class:input-text-small={size === "small"}
     class:medium={size === "medium"}
