@@ -5,7 +5,6 @@
     type InputWithLabelContextType,
   } from "../context";
 
-  export let value: string = "";
   export let size: "small" | "medium" = "medium";
   export let error: boolean = false;
 
@@ -35,7 +34,6 @@
 >
   <slot name="start-icon" />
   <input
-    bind:value
     {...$$restProps}
     name={labelContext?.label || $$restProps.name}
     class:input-text-medium={size === "medium"}

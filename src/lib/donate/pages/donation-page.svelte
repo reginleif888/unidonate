@@ -6,10 +6,15 @@
     InlineNotification,
     InputWithLabel,
     Tooltip,
+    Divider,
   } from "$lib/common/components";
   import { CategoryDonationCard } from "$lib/donate/components";
   import { CurrencyBtc } from "phosphor-svelte";
-  import { AllocationCategory } from "../types";
+  import {
+    AllocationCategory,
+    type FormSchool,
+    type FormStudent,
+  } from "../types";
   import { MAP_ALLOCATION_CATEGORY } from "../constant";
   import { type DoughnutChartDataItem } from "$lib/common/types";
   import { snackbarStore } from "$lib/common/stores";
@@ -43,6 +48,10 @@
     },
   ];
 
+  export let selectedSchool: FormSchool;
+
+  export let selectedStudent: FormStudent | null = null;
+
   let scrollRoot: HTMLElement;
 
   let headingRoot: HTMLElement;
@@ -63,23 +72,28 @@
 <div class="root" bind:this={scrollRoot} on:scroll={checkStickyTopControls}>
   <div class="inner">
     <div class="heading-section" bind:this={headingRoot}>
-      <h4 class="h4 step-heading">Allocate budget</h4>
+      <h4 class="h4 step-heading">Allocate donation</h4>
       <div class="body1 step-description">
-        Allocate budget to a school or student
+        {#if selectedStudent}
+          Allocate a donation for <b
+            >{selectedStudent.firstName} {selectedStudent.lastName}</b
+          >, a student at <b>{selectedSchool.name}</b>.
+        {:else}
+          Allocate a donation for <b>{selectedSchool.name}</b>.
+        {/if}
       </div>
     </div>
 
-    <div
-      class="budget-wrapper"
-      class:budget-wrapper--scrolling={stickyTopControls}
-    >
-      <InputWithLabel label="Total (BTC)">
-        <Input>
-          <span slot="start-icon" class="btc-icon"
-            ><CurrencyBtc weight="bold" /></span
-          >
-        </Input>
-      </InputWithLabel>
+    <div class="top-controls" class:top-controls--scrolling={stickyTopControls}>
+      <div class="budget-wrapper">
+        <InputWithLabel label="Total (BTC)">
+          <Input>
+            <span slot="start-icon" class="btc-icon"
+              ><CurrencyBtc weight="bold" /></span
+            >
+          </Input>
+        </InputWithLabel>
+      </div>
     </div>
 
     <div class="notifications-wrapper">
@@ -103,6 +117,8 @@
         </div>
       {/each}
     </div>
+
+    <Divider />
 
     <div class="chart-wrapper">
       <DoughnutChart
@@ -130,7 +146,7 @@
       <Button
         label="Create donation"
         contained
-        onClick={() => {
+        on:click={() => {
           console.log("?????");
 
           snackbarStore.addMessage({
@@ -147,6 +163,10 @@
 </div>
 
 <style lang="scss">
+  b {
+    font-weight: 800;
+  }
+
   .root {
     background-color: var(--uni-bg-transparent-700);
     box-shadow: var(--uni-shadow-paper);
@@ -184,14 +204,18 @@
     flex-wrap: wrap;
     gap: 16px;
     padding: 0 16px;
+    margin-bottom: 24px;
   }
 
-  .budget-wrapper {
-    margin-bottom: 16px;
+  .top-controls {
+    margin-bottom: 24px;
     position: sticky;
     top: 0;
     padding: 0 16px;
     transition: all var(--uni-transition-default);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 
     &--scrolling {
       background-color: var(--uni-bg);
@@ -199,6 +223,11 @@
       z-index: 2;
       padding: 16px;
     }
+  }
+
+  .budget-wrapper {
+    max-width: 50%;
+    width: 100%;
   }
 
   .card-wrapper {
@@ -215,7 +244,9 @@
   .chart-wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 0 16px;
+    flex-grow: 1;
   }
 
   .controls-section {

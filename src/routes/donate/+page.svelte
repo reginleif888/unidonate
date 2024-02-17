@@ -7,7 +7,6 @@
   } from "$lib/donate/types";
   import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
   import type { StepItem } from "$lib/common/types";
-  import { SelectedModal } from "$lib/donate/components";
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
   import { students, schools } from "$lib/donate/mocks";
@@ -28,10 +27,10 @@
       optional: true,
     },
     {
-      label: "Allocate budget",
+      label: "Allocate donation",
       disabled: true,
       Icon: Icons.HandHeart,
-      value: DonationStep.Budget,
+      value: DonationStep.DonationAllocation,
     },
   ];
 
@@ -47,19 +46,14 @@
 
   let selectedStudent: FormStudent | null = null;
 
-  function handleSelectedModalOpen() {
-    selectedModalOpen = true;
-  }
-
-  function handleSelectedModalClose() {
-    selectedModalOpen = false;
-  }
-
   $: {
     if (selectedSchoolId) {
       selectedSchool = schools.find(
         (school) => school.id === selectedSchoolId
       )!;
+    } else {
+      selectedSchool = null;
+      selectedStudentId = null;
     }
   }
 
@@ -68,6 +62,8 @@
       selectedStudent = students.find(
         (student) => student.id === selectedStudentId
       )!;
+    } else {
+      selectedStudent = null;
     }
   }
 
@@ -84,7 +80,7 @@
         step.useImgInsteadOfIcon = Boolean(selectedStudent?.img);
       }
 
-      if (step.value === DonationStep.Budget) {
+      if (step.value === DonationStep.DonationAllocation) {
         step.disabled = !selectedSchoolId;
       }
 
@@ -102,7 +98,6 @@
     {#if currentStep === DonationStep.School}
       <EntityPage
         entityType={EntityType.School}
-        onSelectedModalOpen={handleSelectedModalOpen}
         data={schools}
         bind:selected={selectedSchoolId}
       />
@@ -111,26 +106,16 @@
     {#if currentStep === DonationStep.Student}
       <EntityPage
         entityType={EntityType.Student}
-        onSelectedModalOpen={handleSelectedModalOpen}
         data={students}
         bind:selected={selectedStudentId}
       />
     {/if}
 
-    {#if currentStep === DonationStep.Budget}
-      <DonationPage />
+    {#if currentStep === DonationStep.DonationAllocation && selectedSchool}
+      <DonationPage {selectedSchool} {selectedStudent} />
     {/if}
   </div>
 </Page>
-
-{#if selectedSchool}
-  <SelectedModal
-    bind:open={selectedModalOpen}
-    onClose={handleSelectedModalClose}
-    school={selectedSchool}
-    student={null}
-  />
-{/if}
 
 <style lang="scss">
   .stepper-wrapper {

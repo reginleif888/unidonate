@@ -67,7 +67,7 @@
     </Only>
 
     <Only to="tablet">
-      <BurgerButton onlyBurger onClick={openBurger} open={$burgerMenuStore} />
+      <BurgerButton onlyBurger on:click={openBurger} open={$burgerMenuStore} />
     </Only>
   </div>
   <Only from="tablet">

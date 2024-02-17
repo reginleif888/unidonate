@@ -19,7 +19,7 @@
     label="Learn more about internet computer"
     variant="secondary"
     contained
-    onClick={() => {
+    on:click={() => {
       window.open("https://internetcomputer.org/");
     }}
   />

@@ -48,7 +48,7 @@ export type DonationFormError = {
 export enum DonationStep {
   School = "School",
   Student = "Student",
-  Budget = "Budget",
+  DonationAllocation = "DonationAllocation",
 }
 
 export interface FormSchool {

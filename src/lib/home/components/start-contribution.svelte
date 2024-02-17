@@ -15,7 +15,7 @@
   <Button
     label="Support schools and students directly"
     contained
-    onClick={() => {
+    on:click={() => {
       goto(Route.Donate);
     }}
   >

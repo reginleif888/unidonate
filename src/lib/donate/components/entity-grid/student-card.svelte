@@ -39,9 +39,9 @@
     </div>
   </div>
   <Button
-    label={selected ? "Selected" : "Select"}
+    label={selected ? "Unselect" : "Select"}
     contained={selected}
-    onClick={handleSelect}
+    on:click={handleSelect}
   />
 </div>
 

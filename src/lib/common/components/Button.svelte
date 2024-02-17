@@ -1,10 +1,19 @@
 <script lang="ts">
+  import type { HTMLButtonAttributes } from "svelte/elements";
+
+  type $$Props = HTMLButtonAttributes & {
+    variant?: "primary" | "secondary";
+    contained?: boolean;
+    size?: "small" | "medium";
+    label?: string;
+    fullWidth?: boolean;
+  };
+
   export let variant: "primary" | "secondary" = "primary";
   export let contained: boolean = false;
   export let size: "small" | "medium" = "medium";
-  export let label: string;
+  export let label: string = "";
   export let fullWidth: boolean = false;
-  export let onClick: () => void = () => null;
 </script>
 
 <button
@@ -16,7 +25,7 @@
   class:button-text-medium={size === "medium"}
   class:button-text-small={size === "small"}
   class:full-width={fullWidth}
-  on:click={onClick}
+  on:click
   {...$$restProps}
   ><slot name="start-icon" />{label}<slot name="end-icon" /></button
 >

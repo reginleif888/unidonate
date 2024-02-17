@@ -17,6 +17,12 @@
   export let entityType: EntityType = EntityType.School;
 
   function onSelect<T extends FormSchool | FormStudent>(data: T) {
+    if (selected === data.id) {
+      selected = null;
+
+      return;
+    }
+
     selected = data.id;
   }
 </script>

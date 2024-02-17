@@ -26,7 +26,7 @@
     label="Explore donations"
     variant="secondary"
     contained
-    onClick={() => {
+    on:click={() => {
       goto(Route.Explorer);
     }}
   >

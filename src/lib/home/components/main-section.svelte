@@ -18,7 +18,7 @@
     <div class="donate-button-wrapper">
       <Button
         label="Donate for education"
-        onClick={() => {
+        on:click={() => {
           goto(Route.Donate);
         }}
       >

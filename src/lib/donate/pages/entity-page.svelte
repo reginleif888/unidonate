@@ -16,8 +16,6 @@
   } from "../types";
   import { PAGE_SIZES_SELECT_ITEMS } from "../constant";
 
-  export let onSelectedModalOpen: () => void = () => null;
-
   export let data: Array<FormStudent> | Array<FormSchool> = [];
 
   export let entityType: EntityType = EntityType.School;
@@ -100,17 +98,6 @@
           </Input>
         </InputWithLabel>
       </div>
-      <div
-        class="controls-section-show-selected"
-        class:controls-section-show-selected--selected={selected}
-      >
-        <Button
-          label="Show selected"
-          contained
-          variant="primary"
-          onClick={onSelectedModalOpen}
-        />
-      </div>
     </div>
     <div class="grid-wrapper">
       <EntityGrid
@@ -135,14 +122,29 @@
       </div>
     </div>
 
-    <div
-      class="controls-section-buttons"
-      class:controls-section-buttons--selected={selected}
-    >
-      <Button label="Select student" contained variant="secondary" />
-      <span class="body1">Or</span>
-      <Button label="Donate directly to school" contained />
-    </div>
+    {#if entityType === EntityType.School}
+      <div
+        class="controls-section-buttons"
+        class:controls-section-buttons--selected={selected}
+      >
+        <Button
+          label="Donate directly to school"
+          contained
+          variant="secondary"
+        />
+        <span class="body1">Or</span>
+        <Button label="Select student" contained />
+      </div>
+    {/if}
+
+    {#if entityType === EntityType.Student}
+      <div
+        class="controls-section-buttons"
+        class:controls-section-buttons--selected={selected}
+      >
+        <Button label="Allocate donation" contained />
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -219,14 +221,6 @@
     transition: all var(--uni-transition-default);
     max-width: 600px;
     width: 100%;
-    &--selected {
-      opacity: 1;
-    }
-  }
-
-  .controls-section-show-selected {
-    opacity: 0;
-    transition: all var(--uni-transition-default);
     &--selected {
       opacity: 1;
     }
