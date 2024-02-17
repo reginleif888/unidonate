@@ -25,3 +25,10 @@ export interface StepItem {
   disabled?: boolean;
   optional?: boolean;
 }
+
+export interface Snackbar {
+  id: UniqueIdentifier;
+  message: string;
+  type: "success" | "error";
+  timeout: number;
+}

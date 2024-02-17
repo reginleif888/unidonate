@@ -31,33 +31,28 @@
   class:inline-notification-root--warning={type === "warning"}
   class:inline-notification-root--info={type === "info"}
 >
-  <div class="inline-notification-root__title-wrapper">
-    <span class="inline-notification-root__title subtitle1">{title}</span>
-    <span
-      class="inline-notification-root__icon"
-      class:inline-notification-root__icon--error={type === "error"}
-      class:inline-notification-root__icon--success={type === "success"}
-      class:inline-notification-root__icon--warning={type === "warning"}
-      class:inline-notification-root__icon--info={type === "info"}
-    >
-      <Component size={20} weight="bold" />
-    </span>
+  <div class="inline-notification-root__text">
+    <div class="inline-notification-root__title-wrapper">
+      <span class="inline-notification-root__title subtitle1">{title}</span>
+      <span
+        class="inline-notification-root__icon"
+        class:inline-notification-root__icon--error={type === "error"}
+        class:inline-notification-root__icon--success={type === "success"}
+        class:inline-notification-root__icon--warning={type === "warning"}
+        class:inline-notification-root__icon--info={type === "info"}
+      >
+        <Component size={20} weight="bold" />
+      </span>
+    </div>
+    <span class="subtitle2">{message}</span>
   </div>
-  <span class="subtitle2">{message}</span>
+  <slot name="end" />
 </div>
 
 <style lang="scss">
-  .inline-notification-root__title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
   .inline-notification-root {
     position: relative;
     display: flex;
-    align-items: flex-start;
-    flex-direction: column;
     gap: 8px;
     padding: 8px;
     border: 1px solid var(--uni-divider-color);
@@ -65,9 +60,22 @@
     color: var(--uni-on-bg);
     padding: 16px;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__text {
+      max-width: 75%;
+    }
 
     &__title {
       font-weight: 700;
+    }
+
+    &__title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     &__icon {

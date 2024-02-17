@@ -1,4 +1,4 @@
-export { default as errorModal } from "./error-modal";
-export { default as theme } from "./theme";
-export { default as screenWidth } from "./screen-width";
-export { default as burgerMenu } from "./burger-menu";
+export { default as themeStore } from "./theme-store";
+export { default as screenWidthStore } from "./screen-width-store";
+export { default as burgerMenuStore } from "./burger-menu-store";
+export { default as snackbarStore } from "./snackbar-store";

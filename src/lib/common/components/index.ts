@@ -1,6 +1,5 @@
 export { default as Button } from "./button.svelte";
 export { default as CopyButton } from "./copy-button.svelte";
-export { default as StatusDialog } from "./status-dialog.svelte";
 export { default as Header } from "./header.svelte";
 export { default as BurgerMenu } from "./burger-menu.svelte";
 export { default as Divider } from "./divider.svelte";
@@ -22,3 +21,5 @@ export { default as Select } from "./select.svelte";
 export { default as Slider } from "./slider.svelte";
 export { default as DoughnutChart } from "./doughnut-chart";
 export { default as InlineNotification } from "./inline-notification.svelte";
+export { default as Snackbar } from "./snackbar";
+export { default as CircularProgress } from "./circular-progress.svelte";

@@ -1,6 +1,10 @@
-<script>
+<script lang="ts">
   import BurgerButton from "./burger-button.svelte";
-  import { burgerMenu, screenWidth, theme } from "$lib/common/stores";
+  import {
+    burgerMenuStore,
+    screenWidthStore,
+    themeStore,
+  } from "$lib/common/stores";
   import LogoFull from "./logo-full.svelte";
   import Tabs from "./tabs.svelte";
   import { ROUTES } from "../routes";
@@ -38,7 +42,7 @@
   });
 
   const openBurger = () => {
-    burgerMenu.set(true);
+    burgerMenuStore.set(true);
   };
 </script>
 
@@ -53,7 +57,7 @@
           options={ROUTES.map(({ route, label, Icon }) => ({
             value: route,
             label,
-            Icon: $screenWidth > SCREEN.desktop ? Icon : undefined,
+            Icon: $screenWidthStore > SCREEN.desktop ? Icon : undefined,
           }))}
           fullWidth
           onChange={goto}
@@ -63,15 +67,15 @@
     </Only>
 
     <Only to="tablet">
-      <BurgerButton onlyBurger onClick={openBurger} open={$burgerMenu} />
+      <BurgerButton onlyBurger onClick={openBurger} open={$burgerMenuStore} />
     </Only>
   </div>
   <Only from="tablet">
     <div class="modes-wrapper">
       <Tabs
         options={MODES}
-        selected={$theme}
-        onChange={theme.updateTheme}
+        selected={$themeStore}
+        onChange={themeStore.updateTheme}
         variant="secondary"
       />
     </div>

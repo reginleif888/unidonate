@@ -1,6 +1,6 @@
 <script lang="ts">
   import Drawer from "./drawer.svelte";
-  import { burgerMenu, theme } from "$lib/common/stores";
+  import { burgerMenuStore, themeStore } from "$lib/common/stores";
   import { X, Check } from "phosphor-svelte";
   import Divider from "./divider.svelte";
   import Tabs from "./tabs.svelte";
@@ -9,11 +9,11 @@
   import { MODES } from "../constant";
 
   function closeBurger() {
-    burgerMenu.set(false);
+    burgerMenuStore.set(false);
   }
 </script>
 
-<Drawer position="left" open={$burgerMenu} onClose={closeBurger}>
+<Drawer position="left" open={$burgerMenuStore} onClose={closeBurger}>
   <div class="header">
     <h2 class="h2">Menu</h2>
     <button on:click={closeBurger} class="close-button">
@@ -40,7 +40,11 @@
         </li>
       {/each}
       <div class="modes-wrapper">
-        <Tabs options={MODES} selected={$theme} onChange={theme.updateTheme} />
+        <Tabs
+          options={MODES}
+          selected={$themeStore}
+          onChange={themeStore.updateTheme}
+        />
       </div>
     </ul>
   </nav>

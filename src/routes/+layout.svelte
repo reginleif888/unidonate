@@ -1,9 +1,9 @@
 <script>
-  import { Header, BurgerMenu } from "$lib/common/components";
+  import { Header, BurgerMenu, Snackbar } from "$lib/common/components";
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
   import { onMount } from "svelte";
-  import { theme } from "$lib/common/stores";
+  import { themeStore } from "$lib/common/stores";
 
   const queryClient = new QueryClient();
 
@@ -11,9 +11,9 @@
     const themeFromStorage = localStorage.getItem("uni-theme");
 
     if (themeFromStorage && ["light", "dark"].includes(themeFromStorage)) {
-      theme.updateTheme(themeFromStorage);
+      themeStore.updateTheme(themeFromStorage);
     } else {
-      theme.updateTheme("light");
+      themeStore.updateTheme("light");
     }
   });
 </script>
@@ -26,6 +26,7 @@
   <main>
     <Header />
     <BurgerMenu />
+    <Snackbar />
     <div class="content">
       <slot />
     </div>
@@ -51,6 +52,7 @@
   @import "$lib/common/styles/theme.scss";
   @import "$lib/common/styles/media.scss";
   @import "$lib/common/styles/typography.scss";
+
   main {
     display: flex;
     flex-direction: column;

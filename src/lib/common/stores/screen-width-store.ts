@@ -1,5 +1,4 @@
 import { writable } from "svelte/store";
-import { SCREEN } from "../constant";
 
 function createScreenWidthStore() {
   const { subscribe, set } = writable(window.innerWidth);

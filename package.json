@@ -28,6 +28,7 @@
     "@types/animejs": "^3.1.12",
     "@types/eslint": "8.56.0",
     "@types/node": "^20.11.10",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.16",
@@ -53,7 +54,8 @@
     "animejs": "^3.2.2",
     "bits-ui": "^0.17.0",
     "phosphor-svelte": "^1.4.2",
-    "svelte-forms-lib": "^2.0.1"
+    "svelte-forms-lib": "^2.0.1",
+    "uuid": "^9.0.1"
   },
   "type": "module"
 }

@@ -12,6 +12,7 @@
   import { AllocationCategory } from "../types";
   import { MAP_ALLOCATION_CATEGORY } from "../constant";
   import { type DoughnutChartDataItem } from "$lib/common/types";
+  import { snackbarStore } from "$lib/common/stores";
 
   let donutData: Array<DoughnutChartDataItem> = [
     {
@@ -126,7 +127,19 @@
           <div slot="content">Reset all categories to 25%</div>
         </Tooltip>
       </div>
-      <Button label="Create donation" contained>
+      <Button
+        label="Create donation"
+        contained
+        onClick={() => {
+          console.log("?????");
+
+          snackbarStore.addMessage({
+            message: `Reset all categories to 25% ${Date.now()}`,
+            type: "success",
+            timeout: 3000,
+          });
+        }}
+      >
         <span slot="end-icon" class="h6">🎉</span>
       </Button>
     </div>
