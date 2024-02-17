@@ -1,19 +1,13 @@
 import type { SvelteComponent } from "svelte";
 
-export type PicChartDataItem = {
+export type UniqueIdentifier = string;
+
+export type DoughnutChartDataItem = {
   value: number;
   color: string;
   label: string;
+  id: UniqueIdentifier;
 };
-
-export enum AllocationCategory {
-  LunchAndSnacks = "LunchAndSnacks",
-  SchoolSupplies = "SchoolSupplies",
-  DesignAndDevelopment = "DesignAndDevelopment",
-  TeacherSupport = "TeacherSupport",
-}
-
-export type UniqueIdentifier = string;
 
 export interface SelectItem {
   value: UniqueIdentifier;
@@ -26,6 +20,8 @@ export interface StepItem {
   label: string;
   value: UniqueIdentifier;
   Icon: typeof SvelteComponent<any>;
+  img?: string;
+  useImgInsteadOfIcon?: boolean;
   disabled?: boolean;
   optional?: boolean;
 }

@@ -80,3 +80,10 @@ export interface EntityTypeValue {
   searchPlaceholder: string;
   Component: typeof SvelteComponent<any>;
 }
+
+export enum AllocationCategory {
+  LunchAndSnacks = "LunchAndSnacks",
+  SchoolSupplies = "SchoolSupplies",
+  DesignAndDevelopment = "DesignAndDevelopment",
+  TeacherSupport = "TeacherSupport",
+}

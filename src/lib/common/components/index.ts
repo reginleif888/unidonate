@@ -20,4 +20,5 @@ export { default as Modal } from "./modal.svelte";
 export { default as InputWithLabel } from "./input-with-label.svelte";
 export { default as Select } from "./select.svelte";
 export { default as Slider } from "./slider.svelte";
-export { default as PieChart } from "./pie-chart.svelte";
+export { default as DoughnutChart } from "./doughnut-chart";
+export { default as InlineNotification } from "./inline-notification.svelte";

@@ -98,7 +98,7 @@ export const students: Array<FormStudent> = [
     lastName: "Johnston",
     dateOfBirth: "2005-07-30",
     grade: "D",
-    img: "images/student1.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "2",
@@ -106,7 +106,7 @@ export const students: Array<FormStudent> = [
     lastName: "Diaz",
     dateOfBirth: "2002-01-03",
     grade: "E",
-    img: "images/student2.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "3",
@@ -114,7 +114,7 @@ export const students: Array<FormStudent> = [
     lastName: "Smith",
     dateOfBirth: "2005-05-22",
     grade: "A",
-    img: "images/student3.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "4",
@@ -122,7 +122,7 @@ export const students: Array<FormStudent> = [
     lastName: "Hill",
     dateOfBirth: "2002-05-23",
     grade: "C",
-    img: "images/student4.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "5",
@@ -130,7 +130,7 @@ export const students: Array<FormStudent> = [
     lastName: "Walker",
     dateOfBirth: "2004-09-14",
     grade: "C",
-    img: "images/student5.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "6",
@@ -138,7 +138,7 @@ export const students: Array<FormStudent> = [
     lastName: "Nelson",
     dateOfBirth: "2002-12-21",
     grade: "D",
-    img: "images/student6.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "7",
@@ -146,7 +146,7 @@ export const students: Array<FormStudent> = [
     lastName: "Gamble",
     dateOfBirth: "2002-08-24",
     grade: "E",
-    img: "images/student7.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "8",
@@ -154,7 +154,7 @@ export const students: Array<FormStudent> = [
     lastName: "Sharp",
     dateOfBirth: "2001-03-31",
     grade: "B",
-    img: "images/student8.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "9",
@@ -162,7 +162,7 @@ export const students: Array<FormStudent> = [
     lastName: "Smith",
     dateOfBirth: "2002-09-10",
     grade: "C",
-    img: "images/student9.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "10",
@@ -170,7 +170,7 @@ export const students: Array<FormStudent> = [
     lastName: "Brown",
     dateOfBirth: "2003-01-22",
     grade: "D",
-    img: "images/student10.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "11",
@@ -178,7 +178,7 @@ export const students: Array<FormStudent> = [
     lastName: "Boone",
     dateOfBirth: "2005-04-24",
     grade: "B",
-    img: "images/student11.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "12",
@@ -186,7 +186,7 @@ export const students: Array<FormStudent> = [
     lastName: "Brown",
     dateOfBirth: "2001-03-08",
     grade: "A",
-    img: "images/student12.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "13",
@@ -194,7 +194,7 @@ export const students: Array<FormStudent> = [
     lastName: "Torres",
     dateOfBirth: "2002-02-16",
     grade: "C",
-    img: "images/student13.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "14",
@@ -202,7 +202,7 @@ export const students: Array<FormStudent> = [
     lastName: "Freeman",
     dateOfBirth: "2005-07-18",
     grade: "E",
-    img: "images/student14.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "15",
@@ -210,7 +210,7 @@ export const students: Array<FormStudent> = [
     lastName: "Miller",
     dateOfBirth: "2005-06-22",
     grade: "B",
-    img: "images/student15.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "16",
@@ -218,7 +218,7 @@ export const students: Array<FormStudent> = [
     lastName: "Lewis",
     dateOfBirth: "2002-08-12",
     grade: "B",
-    img: "images/student16.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "17",
@@ -226,7 +226,7 @@ export const students: Array<FormStudent> = [
     lastName: "Martin",
     dateOfBirth: "2004-11-15",
     grade: "D",
-    img: "images/student17.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "18",
@@ -234,7 +234,7 @@ export const students: Array<FormStudent> = [
     lastName: "Freeman",
     dateOfBirth: "2001-12-04",
     grade: "A",
-    img: "images/student18.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "19",
@@ -242,7 +242,7 @@ export const students: Array<FormStudent> = [
     lastName: "Gilmore",
     dateOfBirth: "2002-05-04",
     grade: "E",
-    img: "images/student19.webp",
+    img: "https://picsum.photos/200/300",
   },
   {
     id: "20",
@@ -250,6 +250,6 @@ export const students: Array<FormStudent> = [
     lastName: "Pena",
     dateOfBirth: "2004-10-23",
     grade: "B",
-    img: "images/student20.webp",
+    img: "https://picsum.photos/200/300",
   },
 ];

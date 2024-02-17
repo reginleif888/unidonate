@@ -53,6 +53,7 @@
   .root {
     display: flex;
     align-items: center;
+    gap: 8px;
     background-color: var(--uni-input-bg);
     border-radius: var(--uni-radius-input);
     border: 1px solid;

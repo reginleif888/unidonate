@@ -1,10 +1,12 @@
 <script lang="ts">
   import { Input, Slider } from "$lib/common/components";
   import { Percent } from "phosphor-svelte";
+
+  export let label: string = "";
 </script>
 
 <div class="root">
-  <h4 class="h6">lunch & snacks</h4>
+  <h4 class="h6">{label}</h4>
   <div class="input-wrapper">
     <Input value="25">
       <span slot="end-icon"><Percent /></span>

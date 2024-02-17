@@ -1,10 +1,14 @@
 <script lang="ts">
   import { Tooltip } from "bits-ui";
   import { flyAndScale } from "$lib/common/transitions";
+
+  export let disabled: boolean = false;
 </script>
 
 <Tooltip.Root openDelay={0} closeOnPointerDown={false}>
-  <Tooltip.Trigger class="tooltip-trigger">
+  <Tooltip.Trigger
+    class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""}`}
+  >
     <slot name="trigger" />
   </Tooltip.Trigger>
   <Tooltip.Content
@@ -29,22 +33,28 @@
     margin: 0;
     width: 100%;
   }
+
+  :global(.tooltip-trigger--disabled) {
+    pointer-events: none;
+  }
+
   :global(.tooltip-arrow-wrapper) {
-    background-color: var(--secondary-bg);
+    background-color: var(--uni-bg);
   }
 
   :global(.tooltip-arrow) {
-    border-left: 1px solid var(--divider-color);
-    border-top: 1px solid var(--divider-color);
+    border-left: 1px solid var(--uni-divider-color);
+    border-top: 1px solid var(--uni-divider-color);
   }
 
   :global(.tooltip-content) {
-    background-color: var(--secondary-bg);
-    border-color: var(--divider-color);
-    box-shadow: var(--shadow-popover);
+    background-color: var(--uni-bg);
+    color: var(--uni-on-bg);
+    border-color: var(--uni-divider-color);
+    box-shadow: var(--uni-shadow-popover);
     outline: none;
     border-style: solid;
-    border-radius: var(--input-border-radius);
+    border-radius: 8px;
     border-width: 1px;
     padding: 0.75rem;
     z-index: var(--uni-zIndex-tooltip);

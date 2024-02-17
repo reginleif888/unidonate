@@ -73,8 +73,15 @@
 
   $: {
     steps = steps.map((step) => {
+      if (step.value === DonationStep.School) {
+        step.img = selectedSchool?.img;
+        step.useImgInsteadOfIcon = Boolean(selectedSchool?.img);
+      }
+
       if (step.value === DonationStep.Student) {
         step.disabled = !selectedSchoolId;
+        step.img = selectedStudent?.img;
+        step.useImgInsteadOfIcon = Boolean(selectedStudent?.img);
       }
 
       if (step.value === DonationStep.Budget) {

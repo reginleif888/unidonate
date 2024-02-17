@@ -1,24 +1,56 @@
 <script lang="ts">
+  import { Prohibit, CheckCircle, WarningCircle, Info } from "phosphor-svelte";
+
   export let type: "error" | "success" | "warning" | "info" = "error";
 
   export let title: string;
   export let message: string;
+
+  const mapTypeToIcon = {
+    error: {
+      Component: Prohibit,
+    },
+    success: {
+      Component: CheckCircle,
+    },
+    warning: {
+      Component: WarningCircle,
+    },
+    info: {
+      Component: Info,
+    },
+  };
+
+  $: Component = mapTypeToIcon[type].Component;
 </script>
 
 <div
   class="inline-notification-root"
-  class:error={type === "error"}
-  class:success={type === "success"}
-  class:warning={type === "warning"}
-  class:info={type === "info"}
+  class:inline-notification-root--error={type === "error"}
+  class:inline-notification-root--success={type === "success"}
+  class:inline-notification-root--warning={type === "warning"}
+  class:inline-notification-root--info={type === "info"}
 >
-  <span class="subtitle1">{title}</span>
+  <div class="inline-notification-root__title-wrapper">
+    <span class="inline-notification-root__title subtitle1">{title}</span>
+    <span
+      class="inline-notification-root__icon"
+      class:inline-notification-root__icon--error={type === "error"}
+      class:inline-notification-root__icon--success={type === "success"}
+      class:inline-notification-root__icon--warning={type === "warning"}
+      class:inline-notification-root__icon--info={type === "info"}
+    >
+      <Component size={20} weight="bold" />
+    </span>
+  </div>
   <span class="subtitle2">{message}</span>
 </div>
 
-<style>
-  .subtitle1 {
-    font-weight: 700;
+<style lang="scss">
+  .inline-notification-root__title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .inline-notification-root {
@@ -28,53 +60,90 @@
     flex-direction: column;
     gap: 8px;
     padding: 8px;
-    border: 1px solid var(--divider-color);
-    background-color: var(--primary-bg);
-    border-color: var(--primary-bg);
-    color: var(--error-color);
+    border: 1px solid var(--uni-divider-color);
+    background-color: var(--uni-bg);
+    color: var(--uni-on-bg);
     padding: 16px;
     width: 100%;
-  }
 
-  .inline-notification-root::before {
-    content: "";
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    bottom: 0px;
-    height: 100%;
-    width: 4px;
-  }
+    &__title {
+      font-weight: 700;
+    }
 
-  .error {
-    background-color: var(--error-bg);
-  }
+    &__icon {
+      &--error {
+        color: var(--uni-error-color);
+      }
 
-  .error::before {
-    background-color: var(--error-color);
-  }
+      &--success {
+        color: var(--uni-success-color);
+      }
 
-  .success {
-    background-color: var(--success-bg);
-  }
+      &--warning {
+        color: var(--uni-warning-color);
+      }
 
-  .success::before {
-    background-color: var(--success-color);
-  }
+      &--info {
+        color: var(--uni-info-color);
+      }
+    }
 
-  .warning {
-    background-color: var(--warning-bg);
-  }
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.5;
+    }
 
-  .warning::before {
-    background-color: var(--warning-color);
-  }
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      height: 100%;
+      width: 4px;
+    }
 
-  .info {
-    background-color: var(--info-bg);
-  }
+    &--error::before {
+      background-color: var(--uni-error-color);
+    }
 
-  .info::before {
-    background-color: var(--info-color);
+    &--success::before {
+      background-color: var(--uni-success-color);
+    }
+
+    &--warning::before {
+      background-color: var(--uni-warning-color);
+    }
+
+    &--info::before {
+      background-color: var(--uni-info-color);
+    }
+
+    &--error::after {
+      background-color: var(--uni-error-color);
+      opacity: 0.2;
+    }
+
+    &--success::after {
+      background-color: var(--uni-success-color);
+      opacity: 0.2;
+    }
+
+    &--warning::after {
+      background-color: var(--uni-warning-color);
+      opacity: 0.2;
+    }
+
+    &--info::after {
+      background-color: var(--uni-info-color);
+      opacity: 0.2;
+    }
   }
 </style>

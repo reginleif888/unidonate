@@ -131,3 +131,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+[role="tooltip"] {
+  z-index: var(--uni-zIndex-tooltip);
+}

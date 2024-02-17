@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   import type { StepItem } from "../types";
 
   export let steps: Array<StepItem> = [];
@@ -14,7 +15,7 @@
 </script>
 
 <div class="root">
-  {#each steps as { label, value, disabled, optional, Icon }, index}
+  {#each steps as { label, value, disabled, optional, Icon, img, useImgInsteadOfIcon }, index}
     <div
       class="step-item-wrapper h6"
       class:step-item-wrapper--disabled={disabled}
@@ -33,7 +34,20 @@
         {disabled}
         class:step-icon--current={current === value}
       >
-        <Icon size={40} />
+        {#if useImgInsteadOfIcon}
+          <img
+            src={img}
+            alt={label}
+            class="step-image"
+            transition:fade={{ duration: 250 }}
+          />
+        {/if}
+
+        {#if !useImgInsteadOfIcon}
+          <span transition:fade={{ duration: 250 }}>
+            <Icon size={40} />
+          </span>
+        {/if}
       </button>
     </div>
     {#if index !== steps.length - 1}
@@ -111,6 +125,17 @@
         background-color: var(--uni-step-active-bg);
       }
     }
+  }
+
+  .step-image {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: 0;
+    border-radius: 50%;
   }
 
   .step-item-wrapper {
