@@ -8,7 +8,7 @@
     Tooltip,
     Divider,
   } from "$lib/common/components";
-  import { CategoryDonationCard } from "$lib/donate/components";
+  import { CategoryDonationCard, DonationModal } from "$lib/donate/components";
   import { CurrencyBtc } from "phosphor-svelte";
   import {
     AllocationCategory,
@@ -161,6 +161,7 @@
     </div>
   </div>
 </div>
+<DonationModal />
 
 <style lang="scss">
   b {

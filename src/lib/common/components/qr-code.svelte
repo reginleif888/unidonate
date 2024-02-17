@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   export let codeValue: string;
-  export let squareSize: string;
+  export let squareSize: number;
   export let id: string;
 
   let qrcode;
