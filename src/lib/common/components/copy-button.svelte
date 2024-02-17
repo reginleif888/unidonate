@@ -3,12 +3,15 @@
   import { Copy } from "phosphor-svelte";
   import Button from "./button.svelte";
   import Tooltip from "./tooltip.svelte";
+  import type { TooltipSide } from "../types";
 
   export let value: string = "";
 
   export let onCopySuccess: () => void = () => null;
 
   export let onCopyFailure: () => void = () => null;
+
+  export let tooltipSide: TooltipSide = "top";
 
   let copyText = "Copy";
 
@@ -43,7 +46,7 @@
   }
 </script>
 
-<Tooltip
+<Tooltip side={tooltipSide}
   ><span
     slot="trigger"
     class="copy-trigger"
@@ -51,8 +54,8 @@
     on:copysuccess={handleCopySuccess}
     on:copyerror={handleCopyError}
   >
-    <Button label="" variant="primary">
-      <svelte:fragment slot="start-icon">
+    <Button label="" variant="secondary">
+      <svelte:fragment slot="end-icon">
         <Copy size={24} />
       </svelte:fragment>
     </Button>

@@ -1,8 +1,10 @@
 <script lang="ts">
   import { Tooltip } from "bits-ui";
   import { flyAndScale } from "$lib/common/transitions";
+  import type { TooltipSide } from "../types";
 
   export let disabled: boolean = false;
+  export let side: TooltipSide = "top";
 </script>
 
 <Tooltip.Root openDelay={0} closeOnPointerDown={false}>
@@ -15,6 +17,7 @@
     transition={flyAndScale}
     transitionConfig={{ y: 8, duration: 150 }}
     sideOffset={8}
+    {side}
   >
     <div class="tooltip-arrow-wrapper">
       <Tooltip.Arrow class="tooltip-arrow" />
@@ -31,7 +34,7 @@
     border: none;
     background: transparent;
     margin: 0;
-    width: 100%;
+    width: fit-content;
   }
 
   :global(.tooltip-trigger--disabled) {

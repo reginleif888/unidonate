@@ -7,6 +7,7 @@
     size?: "small" | "medium";
     label?: string;
     fullWidth?: boolean;
+    justify?: "left" | "center" | "right" | "between";
   };
 
   export let variant: "primary" | "secondary" = "primary";
@@ -14,6 +15,7 @@
   export let size: "small" | "medium" = "medium";
   export let label: string = "";
   export let fullWidth: boolean = false;
+  export let justify: "left" | "center" | "right" | "between" = "between";
 </script>
 
 <button
@@ -25,6 +27,10 @@
   class:button-text-medium={size === "medium"}
   class:button-text-small={size === "small"}
   class:full-width={fullWidth}
+  class:justify-left={justify === "left"}
+  class:justify-center={justify === "center"}
+  class:justify-right={justify === "right"}
+  class:justify-between={justify === "between"}
   on:click
   {...$$restProps}
   ><slot name="start-icon" />{label}<slot name="end-icon" /></button
@@ -41,6 +47,22 @@
     justify-content: space-between;
     gap: 8px;
     box-shadow: var(--uni-shadow-button);
+  }
+
+  .justify-left {
+    justify-content: flex-start;
+  }
+
+  .justify-center {
+    justify-content: center;
+  }
+
+  .justify-right {
+    justify-content: flex-end;
+  }
+
+  .justify-between {
+    justify-content: space-between;
   }
 
   .full-width {

@@ -52,6 +52,8 @@
 
   export let selectedStudent: FormStudent | null = null;
 
+  export let donationModalOpen: boolean = false;
+
   let scrollRoot: HTMLElement;
 
   let headingRoot: HTMLElement;
@@ -66,6 +68,16 @@
 
       stickyTopControls = scrollTop > headingRoot.clientHeight + 48;
     }
+  }
+
+  function handleCreateDonation() {
+    snackbarStore.addMessage({
+      message: `Donation created successfully! 🎉`,
+      type: "success",
+      timeout: 3000,
+    });
+
+    donationModalOpen = true;
   }
 </script>
 
@@ -143,25 +155,19 @@
           <div slot="content">Reset all categories to 25%</div>
         </Tooltip>
       </div>
-      <Button
-        label="Create donation"
-        contained
-        on:click={() => {
-          console.log("?????");
-
-          snackbarStore.addMessage({
-            message: `Reset all categories to 25% ${Date.now()}`,
-            type: "success",
-            timeout: 3000,
-          });
-        }}
-      >
+      <Button label="Create donation" contained on:click={handleCreateDonation}>
         <span slot="end-icon" class="h6">🎉</span>
       </Button>
     </div>
   </div>
 </div>
-<DonationModal />
+
+<DonationModal
+  transactionId="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
+  btcAddress="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
+  total="0.0000011"
+  bind:open={donationModalOpen}
+/>
 
 <style lang="scss">
   b {

@@ -32,3 +32,5 @@ export interface Snackbar {
   type: "success" | "error";
   timeout: number;
 }
+
+export type TooltipSide = "top" | "bottom" | "left" | "right";

@@ -5,6 +5,7 @@
 
   export let title: string;
   export let message: string;
+  export let fullWidthText: boolean = false;
 
   const mapTypeToIcon = {
     error: {
@@ -31,7 +32,10 @@
   class:inline-notification-root--warning={type === "warning"}
   class:inline-notification-root--info={type === "info"}
 >
-  <div class="inline-notification-root__text">
+  <div
+    class="inline-notification-root__text"
+    class:inline-notification-root__full-width-text={fullWidthText}
+  >
     <div class="inline-notification-root__title-wrapper">
       <span class="inline-notification-root__title subtitle1">{title}</span>
       <span
@@ -66,6 +70,10 @@
 
     &__text {
       max-width: 75%;
+    }
+
+    &__full-width-text {
+      max-width: 100%;
     }
 
     &__title {

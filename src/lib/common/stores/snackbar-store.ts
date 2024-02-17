@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import type { Snackbar } from "../types";
 
-const DEFAULT_TIMEOUT = 3000;
+const DEFAULT_TIMEOUT = 10000;
 
 interface AddMessagePayload {
   message: string;
