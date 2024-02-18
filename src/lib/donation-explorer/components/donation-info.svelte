@@ -108,7 +108,7 @@
 <style lang="scss">
   .donation-info-root {
     padding: 24px;
-    background-color: var(--uni-bg-transparent-700);
+    background-color: var(--uni-bg-transparent-900);
     border-radius: 24px;
     display: flex;
     flex-direction: column;
