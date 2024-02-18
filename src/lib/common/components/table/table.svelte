@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends UniqueIdentifier, TRow extends IRow<T>">
+  import { styleObjectToString } from "$lib/common/utils";
+
   import { type UniqueIdentifier } from "$lib/common/types";
   import type { Column, Row as IRow } from "./table.types";
   import Row from "./row.svelte";
@@ -24,10 +26,9 @@
         {#each columns as column (column.key)}
           <th
             class="table-root__head-cell subtitle2"
-            class:table-root__head-cell--left={column.align === "left"}
-            class:table-root__head-cell--right={column.align === "right"}
-            class:table-root__head-cell--center={column.align === "center"}
-            >{column.label}</th
+            style={styleObjectToString({
+              textAlign: column.align,
+            })}>{column.label}</th
           >
         {/each}
       </tr>
@@ -65,18 +66,6 @@
       padding: 16px;
       text-align: center;
       font-weight: 700;
-
-      &--left {
-        text-align: left;
-      }
-
-      &--right {
-        text-align: right;
-      }
-
-      &--center {
-        text-align: center;
-      }
     }
   }
 
