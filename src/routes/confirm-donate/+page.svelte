@@ -1,50 +1,47 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
+  import { Page, FireworksBg } from "$lib/common/components";
   import {
-    Page,
-    Button,
-    InputWithLabel,
-    Input,
-    FireworksBg,
-    InlineNotification,
-  } from "$lib/common/components";
+    ConfirmDonateForm,
+    ConfirmDonateSuccess,
+  } from "$lib/confirm-donate/components";
 
   let outerEl: HTMLElement;
 
   let fireworks = false;
+
+  let success: boolean;
+
+  let handleConfirm = () => {
+    fireworks = true;
+    success = true;
+  };
+
+  let handleFireworksFinish = () => {
+    fireworks = false;
+  };
 </script>
 
 <Page>
-  <div class="outer" bind:this={outerEl}>
-    <div class="inner">
-      <h1 class="h4">Confirm donation</h1>
+  <div class="outer" bind:this={outerEl} in:fade>
+    {#if !success}
+      <ConfirmDonateForm onConfirm={handleConfirm} />
+    {/if}
 
-      <p class="body1">
-        To confirm the donation, the transaction must be processed. Sometimes
-        this can take some time, and if you receive an error, please try again
-        later.
-      </p>
-
-      <InputWithLabel required label="Donation transaction Id (DTI)">
-        <Input placeholder="My DTI..." />
-      </InputWithLabel>
-      <InputWithLabel required label="Bitcoin transaction Id (TXID)">
-        <Input placeholder="My TXID..." />
-      </InputWithLabel>
-      <Button
-        label="Confirm"
-        contained
-        on:click={() => {
-          fireworks = true;
-        }}
+    {#if success}
+      <ConfirmDonateSuccess
+        txid="26773abc30f245ffee9cfc5f207e4766da31274e0ee1603ba5658a893dc18747"
+        dti="26773abc30f245ffee9cfc5f207e4766da31274e0ee1603ba5658a893dc18747"
       />
-    </div>
+    {/if}
+
     {#if outerEl && fireworks}
       <FireworksBg
         width={outerEl.getBoundingClientRect().width}
         height={outerEl.getBoundingClientRect().height}
-        numberOfParticles={100}
-        maxFireworks={30}
-        onFinish={() => (fireworks = false)}
+        numberOfParticles={50}
+        maxFireworks={15}
+        onFinish={handleFireworksFinish}
       />
     {/if}
   </div>
