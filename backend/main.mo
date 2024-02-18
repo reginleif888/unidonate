@@ -22,12 +22,26 @@ import Int64 "mo:base/Int64";
 import Blob "mo:base/Blob";
 import Random "mo:base/Random";
 import Nat8 "mo:base/Nat8";
+import Error "mo:base/Error";
+import Base58Check "mo:motoko-bitcoin/Base58Check";
+import Bip32 "mo:motoko-bitcoin/Bip32";
+import Jacobi "mo:motoko-bitcoin/ec/Jacobi";
+import Curves "mo:motoko-bitcoin/ec/Curves";
+import Hmac "mo:motoko-bitcoin/Hmac";
+import Hash "mo:motoko-bitcoin/Hash";
+import Bech32 "mo:motoko-bitcoin/Bech32";
+import Common "mo:motoko-bitcoin/Common";
 
 import BitcoinIntegration "bitcoin-integration";
+import BitcointIntegrationTypes "bitcoin-integration/types";
 import BitcoinIntegrationUtils "bitcoin-integration/utils";
 
 import Types "./types";
 import Utils "utils";
+import Payments "bitcoin-integration/payments";
+import Network "bitcoin-integration/network";
+import BIP32 "bitcoin-integration/bip32";
+import BitcoinApi "bitcoin-integration/bitcoin-api";
 
 actor class Main() {
   type Student = Types.Student;
@@ -68,8 +82,8 @@ actor class Main() {
   stable var stableDonationsMap = donationsMap.share();
 
   // Fot testing
-  private stable let ownerExtendedPublicKeyBase58Check : Text = "tprv8ZgxMBicQKsPd7Uf69XL1XwhmjHopUGep8GuEiJDZmbQz6o58LninorQAfcKZWARbtRtfnLcJ5MQ2AtHcQJCCRUcMRvmDUjyEmNUWwx8UbK";
-  private stable var currentChildKeyIndex : Nat = 0;
+  private stable let ownerExtendedPublicKeyBase58Check : Text = "tprv8ZgxMBicQKsPdgnvFHcRWyp7VYvmPnhCpKjTCLDts5XDJYAApXiN7tCeEiprLPAFegEUr2cCoug4116oqYtPWHWTCQ9H1Qbkwu63csXJSvv";
+  private stable var currentChildKeyIndex : Nat32 = 0;
 
   private stable var currentMemoryOffset : Nat64 = 2;
   var imgOffset : RBTree.RBTree<Text, Nat64> = RBTree.RBTree<Text, Nat64>(Text.compare);
@@ -229,23 +243,26 @@ actor class Main() {
     ignore _addStudent(schoolId, payload);
   };
 
+  public func generateAddress(extnendedKey : Text, childIndex : Nat32) : async ?Text {
+    return BitcoinIntegration.generateNextPaymentAddress(extnendedKey, childIndex);
+  };
+
   private func _createDonation(payload : CreateDonationPayload, status : DonationStatus, transactionId : ?Text) : async* Result.Result<CreateDonationResponse, Text> {
     if (Nat64.less(payload.amount, 1) == true) return #err("Amount must be more than 0 satoshi.");
 
-    let paymentAddress = await BitcoinIntegration.generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check, currentChildKeyIndex);
-
-    currentChildKeyIndex := currentChildKeyIndex + 1;
+    let paymentAddress = BitcoinIntegration.generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check, currentChildKeyIndex);
 
     switch (paymentAddress) {
-      case (#err(msg)) {
+      case (null) {
         return #err("Error occured when generating payment address.");
       };
-      case (#ok(paymentAddress)) {
+      case (?address) {
+        currentChildKeyIndex := currentChildKeyIndex + 1;
         let donationId = UUID.toText(await g.new());
 
         let newDonation : Donation = {
           donationId;
-          paymentAddress;
+          paymentAddress = address;
           schoolId = payload.schoolId;
           studentId = payload.studentId;
           amount = payload.amount;
@@ -257,7 +274,7 @@ actor class Main() {
         donationsMap.put(donationId, donations.size());
         donations.add(newDonation);
 
-        return #ok({ donationId; paymentAddress });
+        return #ok({ donationId; paymentAddress = address });
       };
     };
   };
