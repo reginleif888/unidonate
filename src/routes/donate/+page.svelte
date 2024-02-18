@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import {
     type FormSchool,
     EntityType,
@@ -11,6 +10,8 @@
   import * as Icons from "phosphor-svelte";
   import { students, schools } from "$lib/donate/mocks";
   import { EntityPage, DonationPage } from "$lib/donate/pages";
+  import { goto } from "$app/navigation";
+  import { Route } from "$lib/common/routes";
 
   let steps: Array<StepItem> = [
     {
@@ -40,11 +41,25 @@
 
   let currentStep = DonationStep.School;
 
-  let selectedModalOpen = false;
-
   let selectedSchool: FormSchool | null = null;
 
   let selectedStudent: FormStudent | null = null;
+
+  function goToAllocation() {
+    currentStep = DonationStep.DonationAllocation;
+  }
+
+  function goToStudent() {
+    currentStep = DonationStep.Student;
+  }
+
+  function handleConfirm() {
+    goto(Route.ConfirmDonate);
+  }
+
+  function handleSchoolSelect() {
+    selectedStudentId = null;
+  }
 
   $: {
     if (selectedSchoolId) {
@@ -90,7 +105,7 @@
 </script>
 
 <Page>
-  <div class="inner" transition:fade>
+  <div class="inner">
     <div class="stepper-wrapper">
       <DesktopStepper {steps} bind:current={currentStep} />
     </div>
@@ -100,6 +115,9 @@
         entityType={EntityType.School}
         data={schools}
         bind:selected={selectedSchoolId}
+        onDirectDonate={goToAllocation}
+        onStudentSelect={goToStudent}
+        onSelect={handleSchoolSelect}
       />
     {/if}
 
@@ -108,11 +126,16 @@
         entityType={EntityType.Student}
         data={students}
         bind:selected={selectedStudentId}
+        onDirectDonate={goToAllocation}
       />
     {/if}
 
     {#if currentStep === DonationStep.DonationAllocation && selectedSchool}
-      <DonationPage {selectedSchool} {selectedStudent} />
+      <DonationPage
+        {selectedSchool}
+        {selectedStudent}
+        onConfirm={handleConfirm}
+      />
     {/if}
   </div>
 </Page>

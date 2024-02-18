@@ -18,7 +18,7 @@
   };
 </script>
 
-<div class="card-root" transition:fade>
+<div class="card-root" transition:fade|local>
   <img src={imgSrc} alt="student" on:error={handleImgError} />
   <div class="description body2">
     <div>

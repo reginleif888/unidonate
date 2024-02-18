@@ -22,6 +22,12 @@
 
   export let selected: string | null = null;
 
+  export let onStudentSelect: () => void = () => null;
+
+  export let onDirectDonate: () => void = () => null;
+
+  export let onSelect: (selected: string | null) => void = () => null;
+
   const mapEntityType: Record<EntityType, EntityTypeValue> = {
     [EntityType.School]: {
       title: "Select school",
@@ -104,6 +110,7 @@
         {data}
         perPage={11}
         bind:selected
+        {onSelect}
         {loading}
         Entity={mapEntityType[entityType].Component}
         {entityType}
@@ -131,9 +138,10 @@
           label="Donate directly to school"
           contained
           variant="secondary"
+          on:click={onDirectDonate}
         />
         <span class="body1">Or</span>
-        <Button label="Select student" contained />
+        <Button label="Select student" contained on:click={onStudentSelect} />
       </div>
     {/if}
 
@@ -142,7 +150,7 @@
         class="controls-section-buttons"
         class:controls-section-buttons--selected={selected}
       >
-        <Button label="Allocate donation" contained />
+        <Button label="Allocate donation" contained on:click={onDirectDonate} />
       </div>
     {/if}
   </div>

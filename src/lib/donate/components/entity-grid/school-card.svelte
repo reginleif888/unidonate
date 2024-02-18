@@ -12,7 +12,7 @@
   };
 </script>
 
-<div class="card-root" transition:fade>
+<div class="card-root" transition:fade|local>
   <img src="images/harvard.webp" alt="school" />
   <a href={item.website} target="_blank" class="website-badge overline"
     >Website</a

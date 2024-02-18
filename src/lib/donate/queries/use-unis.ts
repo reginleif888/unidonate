@@ -4,20 +4,11 @@ import type {
   GetSchoolsPayload,
   GetSchoolsResponse,
 } from "../../../declarations/backend/backend.did";
-import { errorModal } from "$lib/common/stores";
 
 export const useUnis = (payload: GetSchoolsPayload) => {
-  const queryResult = useQuery<GetSchoolsResponse>(
-    ["unis", payload],
-    () => {
-      return backend.getSchools(payload);
-    },
-    {
-      onError: (error) => {
-        errorModal.set({ isOpen: true, message: error as string });
-      },
-    }
-  );
+  const queryResult = useQuery<GetSchoolsResponse>(["unis", payload], () => {
+    return backend.getSchools(payload);
+  });
 
   return queryResult;
 };

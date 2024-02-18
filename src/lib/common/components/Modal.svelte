@@ -17,6 +17,7 @@
   }}
   on:closeFocus={onClose}
   closeOnOutsideClick={false}
+  closeOnEscape={false}
 >
   <Dialog.Portal>
     <Dialog.Overlay

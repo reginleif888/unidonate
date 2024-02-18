@@ -24,3 +24,4 @@ export { default as InlineNotification } from "./inline-notification.svelte";
 export { default as Snackbar } from "./snackbar";
 export { default as CircularProgress } from "./circular-progress.svelte";
 export { default as QrCode } from "./qr-code.svelte";
+export { default as FireworksBg } from "./fireworks-bg";

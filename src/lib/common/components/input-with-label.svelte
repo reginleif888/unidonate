@@ -12,7 +12,7 @@
 <div>
   <label for={label} class="overline"
     >{label}
-    {#if required}(required){/if}</label
+    {#if required}<span class="required">(required)</span>{/if}</label
   >
   <slot />
 
@@ -27,6 +27,10 @@
     display: block;
     padding-left: 8px;
     font-weight: bold;
+  }
+
+  .required {
+    font-weight: normal;
   }
 
   .error-message {

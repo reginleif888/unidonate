@@ -54,6 +54,8 @@
 
   export let donationModalOpen: boolean = false;
 
+  export let onConfirm: () => void = () => null;
+
   let scrollRoot: HTMLElement;
 
   let headingRoot: HTMLElement;
@@ -71,12 +73,6 @@
   }
 
   function handleCreateDonation() {
-    snackbarStore.addMessage({
-      message: `Donation created successfully! 🎉`,
-      type: "success",
-      timeout: 3000,
-    });
-
     donationModalOpen = true;
   }
 </script>
@@ -167,6 +163,7 @@
   btcAddress="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
   total="0.0000011"
   bind:open={donationModalOpen}
+  {onConfirm}
 />
 
 <style lang="scss">

@@ -15,15 +15,20 @@
   export let data: Array<FormSchool> | Array<FormStudent> = [];
   export let Entity: typeof SvelteComponent<any>;
   export let entityType: EntityType = EntityType.School;
+  export let onSelect: (selected: UniqueIdentifier | null) => void = () => null;
 
-  function onSelect<T extends FormSchool | FormStudent>(data: T) {
+  function onSelectLocal<T extends FormSchool | FormStudent>(data: T) {
     if (selected === data.id) {
       selected = null;
+
+      onSelect(null);
 
       return;
     }
 
     selected = data.id;
+
+    onSelect(data.id);
   }
 </script>
 
@@ -31,7 +36,11 @@
   {#if !loading}
     <div class="grid" in:fade={{ duration: 150 }}>
       {#each data as item (entityType + item.id)}
-        <Entity {item} {onSelect} selected={selected === item.id} />
+        <Entity
+          {item}
+          onSelect={onSelectLocal}
+          selected={selected === item.id}
+        />
       {/each}
     </div>
   {/if}

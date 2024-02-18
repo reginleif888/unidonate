@@ -19,6 +19,8 @@
 
   export let transactionId: string = "";
 
+  export let onConfirm: () => void = () => null;
+
   let isCopied: boolean = false;
 
   function handleCopy() {
@@ -27,6 +29,8 @@
 
   function handleConfirm() {
     open = false;
+
+    onConfirm();
   }
 
   let textToCopy = "";
@@ -79,7 +83,7 @@
           <InputWithLabel label="BTC address">
             <Input readOnly value={btcAddress} />
           </InputWithLabel>
-          <InputWithLabel label="Transaction Id">
+          <InputWithLabel label="Donation transaction Id (DTI)">
             <Input readOnly value={transactionId} />
           </InputWithLabel>
           <CopyButton

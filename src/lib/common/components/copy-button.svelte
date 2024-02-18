@@ -17,10 +17,14 @@
 
   let timer: NodeJS.Timeout | undefined = undefined;
 
+  let tooltipCloseDelay = 300;
+
   function handleCopySuccess() {
     clearTimeout(timer);
 
     copyText = "Copied 🎉";
+
+    tooltipCloseDelay = 3000;
 
     if (onCopySuccess) {
       onCopySuccess();
@@ -28,6 +32,7 @@
 
     timer = setTimeout(() => {
       copyText = "Copy";
+      tooltipCloseDelay = 300;
     }, 3000);
   }
 
@@ -36,18 +41,21 @@
 
     copyText = "Error 💥";
 
+    tooltipCloseDelay = 3000;
+
     if (onCopyFailure) {
       onCopyFailure();
     }
 
     timer = setTimeout(() => {
       copyText = "Copy";
+      tooltipCloseDelay = 300;
     }, 3000);
   }
 </script>
 
-<Tooltip side={tooltipSide}
-  ><span
+<Tooltip side={tooltipSide} closeDelay={tooltipCloseDelay}>
+  <span
     slot="trigger"
     class="copy-trigger"
     use:clickToCopy={value}

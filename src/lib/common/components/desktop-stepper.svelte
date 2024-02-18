@@ -39,12 +39,12 @@
             src={img}
             alt={label}
             class="step-image"
-            transition:fade={{ duration: 250 }}
+            transition:fade|local={{ duration: 250 }}
           />
         {/if}
 
         {#if !useImgInsteadOfIcon}
-          <span transition:fade={{ duration: 250 }}>
+          <span transition:fade|local={{ duration: 250 }}>
             <Icon size={40} />
           </span>
         {/if}

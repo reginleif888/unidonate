@@ -5,9 +5,10 @@
 
   export let disabled: boolean = false;
   export let side: TooltipSide = "top";
+  export let closeDelay: number = 300;
 </script>
 
-<Tooltip.Root openDelay={0} closeOnPointerDown={false}>
+<Tooltip.Root openDelay={0} closeOnPointerDown={false} {closeDelay}>
   <Tooltip.Trigger
     class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""}`}
   >

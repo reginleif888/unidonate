@@ -1,5 +1,5 @@
 <script>
-  import { Header, BurgerMenu, Snackbar } from "$lib/common/components";
+  import { Header, BurgerMenu } from "$lib/common/components";
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
   import { onMount } from "svelte";
@@ -26,7 +26,7 @@
   <main>
     <Header />
     <BurgerMenu />
-    <Snackbar />
+    <!-- <Snackbar /> -->
     <div class="content">
       <slot />
     </div>
