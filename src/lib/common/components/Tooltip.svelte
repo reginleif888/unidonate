@@ -2,13 +2,20 @@
   import { Tooltip } from "bits-ui";
   import { flyAndScale } from "$lib/common/transitions";
   import type { TooltipSide } from "../types";
+  import { onDestroy } from "svelte";
 
   export let disabled: boolean = false;
   export let side: TooltipSide = "top";
   export let closeDelay: number = 300;
+
+  let open = false;
+
+  onDestroy(() => {
+    open = false;
+  });
 </script>
 
-<Tooltip.Root openDelay={0} closeOnPointerDown={false} {closeDelay}>
+<Tooltip.Root openDelay={0} closeOnPointerDown={false} {closeDelay} bind:open>
   <Tooltip.Trigger
     class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""}`}
   >
