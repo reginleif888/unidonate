@@ -9,6 +9,8 @@
   export let multiple: boolean = false;
 
   export let selected: Array<SelectItem> = [];
+
+  export let placeholder: string = "Select";
 </script>
 
 <Select.Root {items} bind:selected {multiple}>
@@ -17,7 +19,7 @@
     aria-label="Select a theme"
   >
     <slot name="start-icon" />
-    <Select.Value class="uni-custom-select__value" placeholder="Per page" />
+    <Select.Value class="uni-custom-select__value" {placeholder} />
     <CaretUpDown class="uni-custom-select__caret-icon" />
   </Select.Trigger>
   <Select.Content

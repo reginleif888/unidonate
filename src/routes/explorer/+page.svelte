@@ -1,13 +1,18 @@
 <script lang="ts">
-  import Page from "$lib/common/components/page.svelte";
-  import Button from "$lib/common/components/button.svelte";
+  import { Page } from "$lib/common/components";
+  import { ExplorerTable } from "$lib/donation-explorer/components";
 </script>
 
 <Page>
-  <Button label="Back" variant="secondary" contained fullWidth />
-  <Button label="Next" variant="primary" contained fullWidth />
-  <Button label="Back" variant="secondary" contained fullWidth />
-  <Button label="Next" variant="primary" contained fullWidth />
-  <Button label="Back" variant="secondary" contained fullWidth />
-  <Button label="Next" variant="primary" contained fullWidth />
+  <div class="root">
+    <ExplorerTable />
+  </div>
 </Page>
+
+<style>
+  .root {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--uni-bg-transparent-700);
+  }
+</style>

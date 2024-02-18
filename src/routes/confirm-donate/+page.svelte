@@ -57,16 +57,4 @@
     justify-content: center;
     position: relative;
   }
-
-  .inner {
-    padding: 24px;
-    background-color: var(--uni-bg-transparent-700);
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    max-width: 600px;
-    z-index: 1;
-  }
 </style>
