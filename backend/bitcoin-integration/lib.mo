@@ -4,8 +4,10 @@ import Array "mo:base/Array";
 import Nat64 "mo:base/Nat64";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
+import Option "mo:base/Option";
 
 import BitcoinTypes "mo:motoko-bitcoin/bitcoin/Types";
+import Base58Check "mo:motoko-bitcoin/Base58Check";
 
 import BitcoinApi "./bitcoin-api";
 import Utils "./utils";
@@ -27,26 +29,16 @@ module {
     Utils.bytesToText(Array.reverse(Blob.toArray(transactionId)));
   };
 
-  public func generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check : Text, currentChildKeyIndex : Nat) : async Result.Result<Text, Payments.GetDerivationError> {
-    if (ownerExtendedPublicKeyBase58Check == "") {
-      return #err(#OwnerExtendedPubKeyNotSet);
+  public func generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check : Text, currentChildKeyIndex : Nat32) : ?Text {
+    let decoded = Base58Check.decode(ownerExtendedPublicKeyBase58Check);
+
+    if (decoded == null) {
+      return null;
     };
-    return switch (Payments.parse(ownerExtendedPublicKeyBase58Check, NetworkConfig.config.network)) {
-      case null return #err(#Base58PubKeyWrongFormatError);
-      case (?parsedPublicKey) {
-        switch (parsedPublicKey.derivePath(Payments.getRelativePath(0))) {
-          case null return #err(#ChildKeyDerivationError);
-          case (?derivedFirstNonHardenedChild) {
-            switch (derivedFirstNonHardenedChild.derivePath(Payments.getRelativePath(currentChildKeyIndex))) {
-              case null return #err(#ChildKeyDerivationError);
-              case (?derived) {
-                let address : Text = Payments.getP2PKHAddress(derived.key, NetworkConfig.config.network);
-                return #ok(address);
-              };
-            };
-          };
-        };
-      };
+
+    switch (Payments.generatePaymentAddress(Option.get<[Nat8]>(decoded, []), currentChildKeyIndex, NetworkConfig.config.network)) {
+      case (#err(msg)) { return null };
+      case (#ok(val)) { return ?val };
     };
   };
 
