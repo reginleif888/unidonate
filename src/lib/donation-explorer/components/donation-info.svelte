@@ -18,7 +18,6 @@
   <button class="donation-info-root__go-back body1" on:click={goToExplorer}>
     <ArrowLeft />Explore all donations
   </button>
-  <h1 class="h4">Donation info</h1>
 
   <table class="donation-info-root__table body2">
     <tr class="donation-info-root__row">

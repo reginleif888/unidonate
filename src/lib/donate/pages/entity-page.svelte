@@ -226,10 +226,12 @@
     align-items: center;
     justify-content: flex-end;
     opacity: 0;
+    pointer-events: none;
     transition: all var(--uni-transition-default);
     max-width: 600px;
     width: 100%;
     &--selected {
+      pointer-events: all;
       opacity: 1;
     }
   }
