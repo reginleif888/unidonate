@@ -26,3 +26,4 @@ export { default as CircularProgress } from "./circular-progress.svelte";
 export { default as QrCode } from "./qr-code.svelte";
 export { default as FireworksBg } from "./fireworks-bg";
 export { default as Table, type IColumn, type IRow } from "./table";
+export { default as LockAnimatedIcon } from "./lock-animated-icon.svelte";
