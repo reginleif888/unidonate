@@ -12,6 +12,27 @@
   export let stickyHead: boolean = false;
   export let stickyTop: number = 0;
 
+  let thElements: HTMLElement[] = [];
+
+  function startResize(event: MouseEvent, index: number) {
+    const th = thElements[index];
+    const startX = event.pageX;
+    const startWidth = th.offsetWidth;
+
+    function doResize(event: MouseEvent) {
+      const newWidth = startWidth + event.pageX - startX;
+      th.style.width = `${newWidth}px`;
+    }
+
+    function stopResize() {
+      window.removeEventListener("mousemove", doResize);
+      window.removeEventListener("mouseup", stopResize);
+    }
+
+    window.addEventListener("mousemove", doResize);
+    window.addEventListener("mouseup", stopResize);
+  }
+
   $: columnsMap = columnsToMap(columns);
 </script>
 
@@ -23,12 +44,21 @@
       style={`top: ${stickyTop}px`}
     >
       <tr class="table-root__row">
-        {#each columns as column (column.key)}
+        {#each columns as column, index (column.key)}
           <th
             class="table-root__head-cell subtitle2"
             style={styleObjectToString({
               textAlign: column.align,
-            })}>{column.label}</th
+              width: column.width ? `${column.width}px` : undefined,
+              minWidth: column.minWidth ? `${column.minWidth}px` : undefined,
+              maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
+            })}
+            bind:this={thElements[index]}
+            >{column.label}
+            <button
+              class="table-root__resizer"
+              on:mousedown={(event) => startResize(event, index)}
+            /></th
           >
         {/each}
       </tr>
@@ -66,6 +96,19 @@
       padding: 16px;
       text-align: center;
       font-weight: 700;
+      position: relative;
+    }
+
+    &__resizer {
+      cursor: col-resize;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 100%;
+      background-color: var(--uni-primary-transparent-20);
+      border: unset;
+      padding: 0;
     }
   }
 

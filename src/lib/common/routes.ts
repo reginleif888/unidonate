@@ -5,6 +5,7 @@ export enum Route {
   Donate = "/donate",
   ConfirmDonate = "/confirm-donate",
   Explorer = "/explorer",
+  Donation = "/explorer/[donationId]",
 }
 
 export const ROUTES = [
@@ -27,5 +28,11 @@ export const ROUTES = [
     route: Route.Explorer,
     label: "Donation explorer",
     Icon: Icons.ListMagnifyingGlass,
+  },
+  {
+    route: Route.Donation,
+    label: "Donation",
+    Icon: Icons.ListMagnifyingGlass,
+    hidden: true,
   },
 ];

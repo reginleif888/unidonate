@@ -1,5 +1,9 @@
 import { AllocationCategory } from "./types";
-import type { DonationFormValues, SelectItem } from "./types";
+import type {
+  DonationFormValues,
+  MapAllocationCategoryValue,
+  SelectItem,
+} from "./types";
 
 export const DONATE_INITIAL_VALUES: DonationFormValues = {
   totalAmount: 0,
@@ -25,23 +29,31 @@ export const DONATE_INITIAL_VALUES: DonationFormValues = {
 
 export const MAP_ALLOCATION_CATEGORY: Record<
   string,
-  { label: string; color: string }
+  MapAllocationCategoryValue
 > = {
   [AllocationCategory.DesignAndDevelopment]: {
     label: "Design & Development 👨‍💻",
     color: "#008080",
+    text: "Design & Development",
+    emoji: "👨‍💻",
   },
   [AllocationCategory.LunchAndSnacks]: {
     label: "Lunch & Snacks 🥪",
     color: "#EB4D55",
+    text: "Lunch & Snacks",
+    emoji: "🥪",
   },
   [AllocationCategory.SchoolSupplies]: {
     label: "School Supplies 🎒",
     color: "#FFC107",
+    text: "School Supplies",
+    emoji: "🎒",
   },
   [AllocationCategory.TeacherSupport]: {
     label: "Teacher Support 🧑‍🏫",
     color: "#0F52BA",
+    text: "Teacher Support",
+    emoji: "🧑‍🏫",
   },
 };
 

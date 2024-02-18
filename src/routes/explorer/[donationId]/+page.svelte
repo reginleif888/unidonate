@@ -1,0 +1,1 @@
+<div>Donation info</div>

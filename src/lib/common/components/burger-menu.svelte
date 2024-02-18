@@ -11,6 +11,8 @@
   function closeBurger() {
     burgerMenuStore.set(false);
   }
+
+  let routesToRender = ROUTES.filter((route) => !route.hidden);
 </script>
 
 <Drawer position="left" open={$burgerMenuStore} onClose={closeBurger}>
@@ -25,7 +27,7 @@
 
   <nav class="menu">
     <ul class="menu__list">
-      {#each ROUTES as { route, label, Icon }}
+      {#each routesToRender as { route, label, Icon }}
         <li
           class="menu__list-item subtitle1"
           class:selected={$page.route.id === route}

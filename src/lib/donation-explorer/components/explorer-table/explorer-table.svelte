@@ -1,7 +1,10 @@
 <script lang="ts">
   import { Table, Pagination, Select, Button } from "$lib/common/components";
   import InputWithLabel from "$lib/common/components/input-with-label.svelte";
-  import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
+  import {
+    MAP_ALLOCATION_CATEGORY,
+    PAGE_SIZES_SELECT_ITEMS,
+  } from "$lib/donate/constant";
   import { MagnifyingGlass } from "phosphor-svelte";
   import { columns, orderByOptions } from "./explorer-table.constant";
   import { donationsMock } from "$lib/donation-explorer/mocks";
@@ -20,16 +23,30 @@
   </div>
 
   <div class="explorer-table__top-controls" bind:this={topControlsElement}>
-    <div class="explorer-table__order-by-select">
-      <InputWithLabel label="Order by">
-        <Select items={orderByOptions} />
-      </InputWithLabel>
-    </div>
-    <Button label="Search donation" on:click={onSearchDonation}>
-      <div slot="start-icon" class="explorer-table__magnify-glass">
-        <MagnifyingGlass size={20} />
+    <div class="explorer-table__top-controls-left">
+      <div class="explorer-table__order-by-select">
+        <InputWithLabel label="Order by">
+          <Select items={orderByOptions} />
+        </InputWithLabel>
       </div>
-    </Button>
+      <Button label="Search for donation" on:click={onSearchDonation}>
+        <div slot="start-icon" class="explorer-table__magnify-glass">
+          <MagnifyingGlass size={20} />
+        </div>
+      </Button>
+    </div>
+
+    <div class="explorer-table__top-controls-right">
+      <div class="explorer-table__allocation-legends body2">
+        {#each Object.keys(MAP_ALLOCATION_CATEGORY) as categoryKey (categoryKey)}
+          <div>
+            {MAP_ALLOCATION_CATEGORY[categoryKey].text} - {MAP_ALLOCATION_CATEGORY[
+              categoryKey
+            ].emoji}
+          </div>
+        {/each}
+      </div>
+    </div>
   </div>
 
   <div class="explorer-table__table-wrapper">
@@ -58,6 +75,19 @@
     flex-direction: column;
     flex-grow: 1;
 
+    &__allocation-legends {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      text-align: center;
+      gap: 8px;
+      width: 400px;
+      border: 1px solid var(--uni-divider-color);
+      padding: 8px;
+      border-radius: 16px;
+      box-shadow: var(--uni-shadow-paper);
+    }
+
     &__header {
       padding: 24px;
       display: flex;
@@ -65,6 +95,13 @@
       gap: 16px;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
+    }
+
+    &__top-controls-left {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      align-items: flex-end;
     }
 
     &__order-by-select {

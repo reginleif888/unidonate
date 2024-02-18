@@ -44,6 +44,8 @@
   const openBurger = () => {
     burgerMenuStore.set(true);
   };
+
+  let routesToRender = ROUTES.filter((route) => !route.hidden);
 </script>
 
 <header class:hidden-header={!showHeader}>
@@ -54,7 +56,7 @@
     <Only from="tablet">
       <div class="tabs-wrapper">
         <Tabs
-          options={ROUTES.map(({ route, label, Icon }) => ({
+          options={routesToRender.map(({ route, label, Icon }) => ({
             value: route,
             label,
             Icon: $screenWidthStore > SCREEN.desktop ? Icon : undefined,

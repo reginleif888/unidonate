@@ -8,10 +8,15 @@ export interface Row<T extends UniqueIdentifier> {
   [key: string]: any;
 }
 
+export type StickyColumnPosition = "left" | "right";
+
 export interface Column<TRow extends Row<UniqueIdentifier>> {
-  key: keyof TRow;
+  key: keyof TRow | "actions";
   label: string;
   minWidth?: number;
+  width?: number;
+  maxWidth?: number;
+  noResize?: boolean;
   align?: ColumnAlign;
   format?: (value: TRow[keyof TRow] | any, origin: TRow) => string; // Using any to bypass strict typing
   Cell?: typeof SvelteComponent<any>;

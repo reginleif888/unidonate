@@ -3,7 +3,7 @@
   import { type Row as IRow } from "./table.types";
   import type { Column as IColumn } from "./table.types";
 
-  export let value: TRow[keyof TRow];
+  export let value: TRow[keyof TRow] = "" as TRow[keyof TRow];
   export let row: TRow;
   export let column: IColumn<TRow>;
 
@@ -23,6 +23,7 @@
   class:cell--left={column.align === "left"}
   class:cell--right={column.align === "right"}
   class:cell--center={column.align === "center"}
+  class:cell--actions={column.key === "actions"}
 >
   {#if renderMethod === "format" && column.format}
     <div class="cell__inner">
@@ -37,13 +38,22 @@
   {/if}
 
   {#if renderMethod === "value"}
-    {value}
+    <div class="cell__inner">
+      {value}
+    </div>
   {/if}
 </td>
 
 <style lang="scss">
   .cell {
     text-align: center;
+    position: relative;
+    height: 80px;
+
+    &--actions {
+      width: 100px;
+      background-color: var(--uni-bg-transparent-300);
+    }
 
     &--left {
       text-align: left;
@@ -58,7 +68,17 @@
     }
 
     &__inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
       padding: 24px;
+      line-height: 32px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
     }
   }
 </style>

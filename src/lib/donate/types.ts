@@ -86,3 +86,10 @@ export enum AllocationCategory {
   DesignAndDevelopment = "DesignAndDevelopment",
   TeacherSupport = "TeacherSupport",
 }
+
+export type MapAllocationCategoryValue = {
+  label: string;
+  color: string;
+  text: string;
+  emoji: string;
+};

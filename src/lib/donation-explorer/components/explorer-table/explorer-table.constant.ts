@@ -1,6 +1,7 @@
 import type { IColumn } from "$lib/common/components";
 import { MAP_ALLOCATION_CATEGORY } from "$lib/donate/constant";
 import type { FormDonation } from "$lib/donation-explorer/types";
+import { ActionCell } from "./components";
 
 export const orderByOptions = [
   {
@@ -33,15 +34,24 @@ export const columns: Array<IColumn<FormDonation>> = [
   },
   {
     key: "allocations",
-    label: "Payment address",
+    label: "Allocations",
     format: (value: FormDonation["allocations"]): string => {
       const allocations = value;
 
       return Object.entries(allocations)
         .map(
-          ([key, value]) => `${MAP_ALLOCATION_CATEGORY[key].label}: ${value}%`
+          ([key, value]) => `${MAP_ALLOCATION_CATEGORY[key].emoji}: ${value}%`
         )
         .join(", ");
     },
+  },
+  {
+    key: "actions",
+    noResize: true,
+    minWidth: 100,
+    width: 100,
+    maxWidth: 100,
+    label: "",
+    Cell: ActionCell,
   },
 ];
