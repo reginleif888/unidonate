@@ -1,9 +1,18 @@
-<script>
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import { Route } from "$lib/common/routes";
+  import type { FormDonation } from "$lib/donation-explorer/types";
   import { ArrowSquareOut } from "phosphor-svelte";
+
+  export let origin: FormDonation;
+
+  const goToDonation = () => {
+    goto(Route.Donation.replace("[donationId]", origin.id));
+  };
 </script>
 
 <div>
-  <button>
+  <button on:click={goToDonation}>
     <ArrowSquareOut size={32} />
   </button>
 </div>

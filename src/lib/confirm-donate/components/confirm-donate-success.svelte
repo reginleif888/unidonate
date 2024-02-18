@@ -3,11 +3,15 @@
   import { Button, Divider } from "$lib/common/components";
   import AnimatedCheckmark from "./animated-checkmark.svelte";
 
-  export let onConfirm: () => void = () => null;
+  export let onView: (donationId: string) => void = () => null;
 
   export let dti: string;
   export let txid: string;
   export let rootElement: HTMLDivElement | null = null;
+
+  function handleView() {
+    onView(dti);
+  }
 </script>
 
 <div class="root" bind:this={rootElement} in:fade>
@@ -31,14 +35,13 @@
     label="View donation"
     contained
     variant="secondary"
-    on:click={onConfirm}
+    on:click={handleView}
   />
 </div>
 
 <style>
   .root {
     padding: 24px;
-    /* background-color: var(--uni-bg-transparent-700); */
     border-radius: 24px;
     display: flex;
     flex-direction: column;

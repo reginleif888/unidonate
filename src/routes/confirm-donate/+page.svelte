@@ -5,6 +5,8 @@
     ConfirmDonateForm,
     ConfirmDonateSuccess,
   } from "$lib/confirm-donate/components";
+  import { goto } from "$app/navigation";
+  import { Route } from "$lib/common/routes";
 
   let outerEl: HTMLElement;
 
@@ -12,14 +14,18 @@
 
   let success: boolean;
 
-  let handleConfirm = () => {
+  function handleConfirm() {
     fireworks = true;
     success = true;
-  };
+  }
 
-  let handleFireworksFinish = () => {
+  function handleFireworksFinish() {
     fireworks = false;
-  };
+  }
+
+  function onViewDonation(donationId: string) {
+    goto(Route.Donation.replace("[donationId]", donationId));
+  }
 </script>
 
 <Page>
@@ -32,6 +38,7 @@
       <ConfirmDonateSuccess
         txid="26773abc30f245ffee9cfc5f207e4766da31274e0ee1603ba5658a893dc18747"
         dti="26773abc30f245ffee9cfc5f207e4766da31274e0ee1603ba5658a893dc18747"
+        onView={onViewDonation}
       />
     {/if}
 

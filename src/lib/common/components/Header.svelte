@@ -7,7 +7,7 @@
   } from "$lib/common/stores";
   import LogoFull from "./logo-full.svelte";
   import Tabs from "./tabs.svelte";
-  import { ROUTES } from "../routes";
+  import { ROUTES, Route } from "../routes";
   import Only from "./only.svelte";
   import { MODES, SCREEN } from "../constant";
   import { page } from "$app/stores";
@@ -46,6 +46,15 @@
   };
 
   let routesToRender = ROUTES.filter((route) => !route.hidden);
+
+  let selectedRoute = $page.route.id;
+  $: {
+    selectedRoute = $page.route.id;
+
+    if (selectedRoute === Route.Donation) {
+      selectedRoute = Route.Explorer;
+    }
+  }
 </script>
 
 <header class:hidden-header={!showHeader}>
@@ -63,7 +72,7 @@
           }))}
           fullWidth
           onChange={goto}
-          selected={$page.route.id}
+          selected={selectedRoute}
         />
       </div>
     </Only>
