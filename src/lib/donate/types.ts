@@ -1,6 +1,5 @@
+import type { UniqueIdentifier } from "$lib/common/types";
 import type { SvelteComponent } from "svelte";
-
-export type UniqueIdentifier = string;
 
 export interface SelectItem {
   value: UniqueIdentifier;

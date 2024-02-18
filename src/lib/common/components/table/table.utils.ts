@@ -1,9 +1,15 @@
-import type { Column } from "./table.types";
+import type { UniqueIdentifier } from "$lib/common/types";
+import type { Column, Row } from "./table.types";
 
-export function columnsToMap(columns: Array<Column>) {
-  return columns.reduce((acc: Record<string, Column>, column) => {
-    acc[column.key] = column;
+export function columnsToMap<TRow extends Row<UniqueIdentifier>>(
+  columns: Array<Column<TRow>>
+) {
+  return columns.reduce(
+    (acc, column) => {
+      acc[column.key] = column;
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {} as Record<keyof TRow, Column<TRow>>
+  );
 }

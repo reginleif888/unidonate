@@ -1,11 +1,12 @@
-<script lang="ts" generics="T extends UniqueIdentifier">
+<script lang="ts" generics="T extends UniqueIdentifier, TRow extends IRow<T>">
   import { type UniqueIdentifier } from "$lib/common/types";
   import type { Column, Row as IRow } from "./table.types";
   import Row from "./row.svelte";
   import { columnsToMap } from "./table.utils";
 
-  export let columns: Array<Column> = [];
-  export let rows: Array<IRow<T>> = [];
+  export let rows: Array<TRow>;
+  export let columns: Array<Column<TRow>>;
+
   export let stickyHead: boolean = false;
   export let stickyTop: number = 0;
 
@@ -63,6 +64,7 @@
     &__head-cell {
       padding: 16px;
       text-align: center;
+      font-weight: 700;
 
       &--left {
         text-align: left;

@@ -1,18 +1,22 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   import { Page } from "$lib/common/components";
   import { ExplorerTable } from "$lib/donation-explorer/components";
 </script>
 
 <Page>
-  <div class="root">
+  <div class="root" in:fade>
     <ExplorerTable />
   </div>
 </Page>
 
 <style>
   .root {
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: var(--uni-bg-transparent-700);
+    width: 100%;
+
+    /* margin: 0 200px; */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 </style>

@@ -1,8 +1,11 @@
-<script lang="ts">
+<script lang="ts" generics="TRow extends IRow<UniqueIdentifier>">
+  import { type UniqueIdentifier } from "$lib/common/types";
+  import { type Row as IRow } from "./table.types";
   import type { Column as IColumn } from "./table.types";
 
-  export let value: string;
-  export let column: IColumn;
+  export let value: TRow[keyof TRow];
+  export let row: TRow;
+  export let column: IColumn<TRow>;
 
   let renderMethod: "value" | "format" | "component" = "value";
 
@@ -23,13 +26,13 @@
 >
   {#if renderMethod === "format" && column.format}
     <div class="cell__inner">
-      {column.format(value)}
+      {column.format(value, row)}
     </div>
   {/if}
 
   {#if renderMethod === "component" && column.Cell}
     <div class="cell__inner">
-      <svelte:component this={column.Cell} {value} {column} />
+      <svelte:component this={column.Cell} {value} {column} origin={row} />
     </div>
   {/if}
 

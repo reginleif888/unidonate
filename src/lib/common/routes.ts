@@ -19,13 +19,13 @@ export const ROUTES = [
     Icon: Icons.HandHeart,
   },
   {
-    route: Route.Explorer,
-    label: "Donation explorer",
-    Icon: Icons.ListMagnifyingGlass,
-  },
-  {
     route: Route.ConfirmDonate,
     label: "Confirm donate",
     Icon: Icons.ListChecks,
+  },
+  {
+    route: Route.Explorer,
+    label: "Donation explorer",
+    Icon: Icons.ListMagnifyingGlass,
   },
 ];
