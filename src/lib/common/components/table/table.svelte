@@ -54,7 +54,7 @@
     &__head {
       border-bottom: 1px solid var(--uni-divider-color);
       background-color: var(--uni-secondary);
-      box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--uni-shadow-table-head);
 
       &--sticky {
         position: sticky;

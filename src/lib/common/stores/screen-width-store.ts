@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { SCREEN } from "../constant";
 
 function createScreenWidthStore() {
   const { subscribe, set } = writable(window.innerWidth);
@@ -16,7 +17,7 @@ function createScreenWidthStore() {
 
 export const screenWidth =
   typeof window === "undefined"
-    ? writable<number>(undefined)
+    ? writable<number>(SCREEN.largeDesktop)
     : createScreenWidthStore();
 
 export default screenWidth;

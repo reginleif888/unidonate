@@ -6,6 +6,8 @@
   import { columns, orderByOptions } from "./explorer-table.constant";
   import { donationsMock } from "$lib/donation-explorer/mocks";
 
+  export let onSearchDonation: () => void = () => null;
+
   let topControlsElement: HTMLElement | null = null;
 </script>
 
@@ -23,7 +25,7 @@
         <Select items={orderByOptions} />
       </InputWithLabel>
     </div>
-    <Button label="Search donation">
+    <Button label="Search donation" on:click={onSearchDonation}>
       <div slot="start-icon" class="explorer-table__magnify-glass">
         <MagnifyingGlass size={20} />
       </div>

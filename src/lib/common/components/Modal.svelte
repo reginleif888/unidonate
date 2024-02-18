@@ -5,6 +5,12 @@
 
   export let open: boolean = false;
 
+  export let align: "center" | "start" = "center";
+
+  export let closeOnEscape: boolean = true;
+
+  export let closeOnOutsideClick: boolean = true;
+
   export let onClose = () => {
     open = false;
   };
@@ -16,8 +22,8 @@
     open = o;
   }}
   on:closeFocus={onClose}
-  closeOnOutsideClick={false}
-  closeOnEscape={false}
+  {closeOnOutsideClick}
+  {closeOnEscape}
 >
   <Dialog.Portal>
     <Dialog.Overlay
@@ -25,18 +31,19 @@
       transitionConfig={{ duration: 150 }}
       class="modal__overlay"
     />
-    <Dialog.Content transition={flyAndScale} class="modal__content"
-      ><slot /></Dialog.Content
+    <Dialog.Content
+      transition={flyAndScale}
+      class={`modal__content ${align === "start" ? "modal__content--start" : ""}`}
     >
+      <slot />
+    </Dialog.Content>
   </Dialog.Portal>
 </Dialog.Root>
 
 <style>
   :global(.modal__overlay) {
-    opacity: 0.5;
     background-color: var(--uni-overlay-bg);
     backdrop-filter: blur(8px);
-    filter: blur(8px);
     inset: 0;
     position: fixed;
     z-index: var(--uni-zIndex-modal);
@@ -53,6 +60,10 @@
     background-color: var(--secondary-bg);
     padding: 1.25rem;
     z-index: var(--uni-zIndex-modal-content);
+  }
+
+  :global(.modal__content--start) {
+    top: 12%;
   }
 
   :global(.modal__content:focus-visible) {

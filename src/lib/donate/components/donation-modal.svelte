@@ -46,7 +46,7 @@
   }
 </script>
 
-<Modal bind:open>
+<Modal bind:open closeOnEscape={false} closeOnOutsideClick={false}>
   <div class="donation-modal">
     <div class="donation-modal__header">
       <h4 class="h4">Donation information</h4>

@@ -338,6 +338,11 @@
         0.1
       )},
     0 2px 4px -1 #{adjust-saturation($onBackground, 0%, 0.06)};
+  --#{$lib}-shadow-table-head: 0 4px 6px -2px #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
   // -----------------------------------------------------
 
   // Fonts
