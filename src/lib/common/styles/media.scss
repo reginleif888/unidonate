@@ -5,7 +5,7 @@ $largeDesktop: 1200px;
 $extraLargeDesktop: 1400px;
 
 @mixin respond-to($breakpoint) {
-  @if $breakpoint == smallTable {
+  @if $breakpoint == smallTablet {
     @media (min-width: $smallTablet) {
       @content;
     }

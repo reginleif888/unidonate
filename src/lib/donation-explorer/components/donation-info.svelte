@@ -5,12 +5,12 @@
   import { donationsMock } from "../mocks";
   import { AllocationCategory } from "$lib/donate/types";
   import { goto } from "$app/navigation";
-  import { Route } from "$lib/common/routes";
+  import { AppRoute } from "$lib/common/routes";
 
   const donation: FormDonation = donationsMock[0];
 
   function goToExplorer() {
-    goto(Route.Explorer);
+    goto(AppRoute.Explorer);
   }
 </script>
 

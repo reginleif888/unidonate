@@ -1,7 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { Button } from "$lib/common/components";
-  import { Route } from "$lib/common/routes";
+  import { AppRoute } from "$lib/common/routes";
   import { HandHeart } from "phosphor-svelte";
 </script>
 
@@ -16,7 +16,7 @@
     label="Support schools and students directly"
     contained
     on:click={() => {
-      goto(Route.Donate);
+      goto(AppRoute.Donate);
     }}
   >
     <span slot="end-icon" class="hand-icon">

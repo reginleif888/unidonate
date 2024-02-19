@@ -1,13 +1,13 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { Route } from "$lib/common/routes";
+  import { AppRoute } from "$lib/common/routes";
   import type { FormDonation } from "$lib/donation-explorer/types";
   import { ArrowSquareOut } from "phosphor-svelte";
 
   export let origin: FormDonation;
 
   const goToDonation = () => {
-    goto(Route.Donation.replace("[donationId]", origin.id));
+    goto(AppRoute.Donation.replace("[donationId]", origin.id));
   };
 </script>
 

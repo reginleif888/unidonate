@@ -6,7 +6,7 @@
     ConfirmDonateSuccess,
   } from "$lib/confirm-donate/components";
   import { goto } from "$app/navigation";
-  import { Route } from "$lib/common/routes";
+  import { AppRoute } from "$lib/common/routes";
 
   let outerEl: HTMLElement;
 
@@ -24,7 +24,7 @@
   }
 
   function onViewDonation(donationId: string) {
-    goto(Route.Donation.replace("[donationId]", donationId));
+    goto(AppRoute.Donation.replace("[donationId]", donationId));
   }
 </script>
 

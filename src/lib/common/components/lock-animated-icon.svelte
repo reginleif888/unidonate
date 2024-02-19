@@ -5,6 +5,7 @@
   export let unlocked: boolean = true;
   export let width: number = 150;
   export let height: number = 150;
+  export let color = "currentColor";
 
   let shackleElement: SVGPathElement;
   let lineElement: SVGLineElement;
@@ -57,7 +58,7 @@
   });
 
   $: {
-    if (unlocked || !unlocked) {
+    if (unlocked || !unlocked || mounted) {
       playAnimation();
     }
   }
@@ -68,7 +69,7 @@
   height={`${height}px`}
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 256 256"
-  color={unlocked ? "var(--uni-success-color)" : "currentColor"}
+  color={unlocked ? "var(--uni-success-color)" : color}
 >
   <rect width="256" height="256" fill="none" />
   <circle

@@ -34,3 +34,9 @@ export interface Snackbar {
 }
 
 export type TooltipSide = "top" | "bottom" | "left" | "right";
+
+export interface TabRoute {
+  route: string;
+  label: string;
+  Icon: typeof SvelteComponent<any>;
+}

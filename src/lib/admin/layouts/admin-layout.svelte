@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { Header, BurgerMenu } from "$lib/common/components";
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
-  import { onMount, SvelteComponent } from "svelte";
+  import { onMount } from "svelte";
+  import { Page } from "$lib/common/components";
   import { themeStore } from "$lib/common/stores";
-
-  let StartsBg: typeof SvelteComponent<any>;
 
   const queryClient = new QueryClient();
 
@@ -18,11 +16,6 @@
       themeStore.updateTheme("light");
     }
   });
-
-  onMount(async () => {
-    const module = await import("$lib/common/components/starts-bg.svelte");
-    StartsBg = module.default;
-  });
 </script>
 
 <svelte:head>
@@ -31,12 +24,13 @@
 
 <QueryClientProvider client={queryClient}>
   <main>
-    <!-- <Header />
-    <BurgerMenu /> -->
+    <!-- <Header tabRoutes={ADMIN_TABS_ROUTES} /> -->
+    <!-- <BurgerMenu /> -->
     <!-- <Snackbar /> -->
     <div class="content">
-      <slot />
-      <svelte:component this={StartsBg} />
+      <Page>
+        <slot />
+      </Page>
     </div>
 
     <footer>

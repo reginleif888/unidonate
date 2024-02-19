@@ -11,7 +11,7 @@
   import { students, schools } from "$lib/donate/mocks";
   import { EntityPage, DonationPage } from "$lib/donate/pages";
   import { goto } from "$app/navigation";
-  import { Route } from "$lib/common/routes";
+  import { AppRoute } from "$lib/common/routes";
 
   let steps: Array<StepItem> = [
     {
@@ -54,7 +54,7 @@
   }
 
   function handleConfirm() {
-    goto(Route.ConfirmDonate);
+    goto(AppRoute.ConfirmDonate);
   }
 
   function handleSchoolSelect() {

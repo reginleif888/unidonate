@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+  import { APP_TABS_ROUTES } from "$lib/common/routes";
   import { Header, BurgerMenu } from "$lib/common/components";
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
@@ -24,7 +25,7 @@
 
 <QueryClientProvider client={queryClient}>
   <main>
-    <Header />
+    <Header tabRoutes={APP_TABS_ROUTES} />
     <BurgerMenu />
     <!-- <Snackbar /> -->
     <div class="content">

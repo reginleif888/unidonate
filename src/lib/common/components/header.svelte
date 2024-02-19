@@ -7,16 +7,19 @@
   } from "$lib/common/stores";
   import LogoFull from "./logo-full.svelte";
   import Tabs from "./tabs.svelte";
-  import { ROUTES, Route } from "../routes";
+  import { AppRoute } from "../routes";
   import Only from "./only.svelte";
   import { MODES, SCREEN } from "../constant";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { onMount, onDestroy } from "svelte";
   import { resolveAppRoute } from "../utils";
+  import type { TabRoute } from "../types";
 
-  let lastScrollY = 0;
-  let showHeader = true;
+  let lastScrollY: number = 0;
+  let showHeader: boolean = true;
+  export let tabRoutes: Array<TabRoute> = [];
+  export let hiddenNavigation: boolean = false;
 
   function handleScroll() {
     const scrollY = typeof window !== "undefined" ? window?.scrollY : 0;
@@ -46,14 +49,13 @@
     burgerMenuStore.set(true);
   };
 
-  let routesToRender = ROUTES.filter((route) => !route.hidden);
-
   let selectedRoute = resolveAppRoute($page.route.id);
+
   $: {
     selectedRoute = resolveAppRoute($page.route.id);
 
-    if (selectedRoute === Route.Donation) {
-      selectedRoute = Route.Explorer;
+    if (selectedRoute === AppRoute.Donation) {
+      selectedRoute = AppRoute.Explorer;
     }
   }
 </script>
@@ -62,26 +64,34 @@
   <div class="logo-wrapper">
     <LogoFull />
   </div>
-  <div class="inner">
-    <Only from="tablet">
-      <div class="tabs-wrapper">
-        <Tabs
-          options={routesToRender.map(({ route, label, Icon }) => ({
-            value: route,
-            label,
-            Icon: $screenWidthStore > SCREEN.desktop ? Icon : undefined,
-          }))}
-          fullWidth
-          onChange={goto}
-          selected={selectedRoute}
-        />
-      </div>
-    </Only>
 
-    <Only to="tablet">
-      <BurgerButton onlyBurger on:click={openBurger} open={$burgerMenuStore} />
-    </Only>
-  </div>
+  {#if !hiddenNavigation}
+    <div class="inner">
+      <Only from="tablet">
+        <div class="tabs-wrapper">
+          <Tabs
+            options={tabRoutes.map(({ route, label, Icon }) => ({
+              value: route,
+              label,
+              Icon: $screenWidthStore > SCREEN.desktop ? Icon : undefined,
+            }))}
+            fullWidth
+            onChange={goto}
+            selected={selectedRoute}
+          />
+        </div>
+      </Only>
+
+      <Only to="tablet">
+        <BurgerButton
+          onlyBurger
+          on:click={openBurger}
+          open={$burgerMenuStore}
+        />
+      </Only>
+    </div>
+  {/if}
+
   <Only from="tablet">
     <div class="modes-wrapper">
       <Tabs
@@ -110,9 +120,11 @@
     top: 0;
     display: flex;
     justify-content: flex-end;
+    height: 62px;
 
     @include respond-to("tablet") {
       justify-content: center;
+      height: 80px;
     }
 
     transform: translateY(0%);

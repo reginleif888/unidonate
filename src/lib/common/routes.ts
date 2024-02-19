@@ -1,6 +1,7 @@
 import * as Icons from "phosphor-svelte";
+import type { TabRoute } from "./types";
 
-export enum Route {
+export enum AppRoute {
   Home = "/",
   Donate = "/donate",
   ConfirmDonate = "/confirm-donate",
@@ -8,31 +9,45 @@ export enum Route {
   Donation = "/explorer/[donationId]",
 }
 
-export const ROUTES = [
+export enum AdminRoute {
+  Connect = "/admin/",
+  Schools = "/admin/schools",
+  Students = "/admin/schools/[schoolId]/students",
+  Owners = "/admin/owners",
+}
+
+export const APP_TABS_ROUTES: Array<TabRoute> = [
   {
-    route: Route.Home,
+    route: AppRoute.Home,
     label: "Home",
     Icon: Icons.House,
   },
   {
-    route: Route.Donate,
+    route: AppRoute.Donate,
     label: "Donate",
     Icon: Icons.HandHeart,
   },
   {
-    route: Route.ConfirmDonate,
+    route: AppRoute.ConfirmDonate,
     label: "Confirm donate",
     Icon: Icons.ListChecks,
   },
   {
-    route: Route.Explorer,
+    route: AppRoute.Explorer,
     label: "Donation explorer",
     Icon: Icons.ListMagnifyingGlass,
   },
+];
+
+export const ADMIN_TABS_ROUTES: Array<TabRoute> = [
   {
-    route: Route.Donation,
-    label: "Donation",
-    Icon: Icons.ListMagnifyingGlass,
-    hidden: true,
+    route: AdminRoute.Schools,
+    label: "Schools & Students",
+    Icon: Icons.GraduationCap,
+  },
+  {
+    route: AdminRoute.Owners,
+    label: "Owners",
+    Icon: Icons.UserCircle,
   },
 ];

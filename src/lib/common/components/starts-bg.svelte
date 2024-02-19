@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script>
   import { onMount } from "svelte";
   import anime from "animejs";

@@ -1,7 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { Button } from "$lib/common/components";
-  import { Route } from "$lib/common/routes";
+  import { AppRoute } from "$lib/common/routes";
   import { ListMagnifyingGlass } from "phosphor-svelte";
 </script>
 
@@ -27,7 +27,7 @@
     variant="secondary"
     contained
     on:click={() => {
-      goto(Route.Explorer);
+      goto(AppRoute.Explorer);
     }}
   >
     <span slot="end-icon" class="explore-donations-icon">

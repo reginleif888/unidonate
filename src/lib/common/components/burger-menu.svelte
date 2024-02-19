@@ -5,14 +5,14 @@
   import Divider from "./divider.svelte";
   import Tabs from "./tabs.svelte";
   import { page } from "$app/stores";
-  import { ROUTES } from "../routes";
+  import { APP_TABS_ROUTES } from "../routes";
   import { MODES } from "../constant";
 
   function closeBurger() {
     burgerMenuStore.set(false);
   }
 
-  let routesToRender = ROUTES.filter((route) => !route.hidden);
+  let routesToRender = APP_TABS_ROUTES.filter((route) => !route.hidden);
 </script>
 
 <Drawer position="left" open={$burgerMenuStore} onClose={closeBurger}>
