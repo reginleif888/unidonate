@@ -13,6 +13,7 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { onMount, onDestroy } from "svelte";
+  import { resolveAppRoute } from "../utils";
 
   let lastScrollY = 0;
   let showHeader = true;
@@ -47,9 +48,9 @@
 
   let routesToRender = ROUTES.filter((route) => !route.hidden);
 
-  let selectedRoute = $page.route.id;
+  let selectedRoute = resolveAppRoute($page.route.id);
   $: {
-    selectedRoute = $page.route.id;
+    selectedRoute = resolveAppRoute($page.route.id);
 
     if (selectedRoute === Route.Donation) {
       selectedRoute = Route.Explorer;

@@ -1,15 +1,15 @@
 <script lang="ts">
   import { SvelteComponent, onMount } from "svelte";
-  let ClientOnlyComponent: typeof SvelteComponent<any>;
+  let StartsBg: typeof SvelteComponent<any>;
 
   onMount(async () => {
     const module = await import("$lib/common/components/starts-bg.svelte");
-    ClientOnlyComponent = module.default;
+    StartsBg = module.default;
   });
 </script>
 
 <section>
-  <svelte:component this={ClientOnlyComponent} />
+  <svelte:component this={StartsBg} />
   <div class="inner-container">
     <div class="inner">
       <slot />
