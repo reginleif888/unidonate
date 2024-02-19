@@ -2,8 +2,10 @@
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
   import { onMount } from "svelte";
-  import { Page } from "$lib/common/components";
+  import { Page, Snackbar } from "$lib/common/components";
   import { themeStore } from "$lib/common/stores";
+  import { AdminHeader } from "../components";
+  import { ADMIN_TABS_ROUTES } from "$lib/common/routes";
 
   const queryClient = new QueryClient();
 
@@ -24,9 +26,8 @@
 
 <QueryClientProvider client={queryClient}>
   <main>
-    <!-- <Header tabRoutes={ADMIN_TABS_ROUTES} /> -->
-    <!-- <BurgerMenu /> -->
-    <!-- <Snackbar /> -->
+    <AdminHeader tabRoutes={ADMIN_TABS_ROUTES} />
+    <Snackbar />
     <div class="content">
       <Page>
         <slot />

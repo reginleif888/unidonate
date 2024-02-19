@@ -64,7 +64,11 @@
   }
 
   .heading-connected {
-    top: 26%;
+    top: 24%;
+
+    @include respond-to("smallTablet") {
+      top: 26%;
+    }
   }
 
   .heading-fake-space {

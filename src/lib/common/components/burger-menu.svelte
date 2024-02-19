@@ -5,14 +5,14 @@
   import Divider from "./divider.svelte";
   import Tabs from "./tabs.svelte";
   import { page } from "$app/stores";
-  import { APP_TABS_ROUTES } from "../routes";
   import { MODES } from "../constant";
+  import type { TabRoute } from "../types";
+
+  export let tabRoutes: Array<TabRoute> = [];
 
   function closeBurger() {
     burgerMenuStore.set(false);
   }
-
-  let routesToRender = APP_TABS_ROUTES.filter((route) => !route.hidden);
 </script>
 
 <Drawer position="left" open={$burgerMenuStore} onClose={closeBurger}>
@@ -27,7 +27,7 @@
 
   <nav class="menu">
     <ul class="menu__list">
-      {#each routesToRender as { route, label, Icon }}
+      {#each tabRoutes as { route, label, Icon }}
         <li
           class="menu__list-item subtitle1"
           class:selected={$page.route.id === route}
