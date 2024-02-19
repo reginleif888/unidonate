@@ -9,20 +9,20 @@
   <div class="heading" class:heading-connected={connected}>
     <LockAnimatedIcon color="var(--uni-on-primary)" unlocked={connected} />
     <h1 class="h1">Uni Admin</h1>
-  </div>
-
-  {#if connected}
-    <div class="connected-buttons-wrapper">
-      <ConnectedNavCards />
-    </div>
-  {/if}
-
-  <div class="heading-fake-space"></div>
-
-  <div class="inner">
-    <p class="body1">
+    <p class="body1 heading-description">
       Manage your schools and students with unparalleled ease and efficiency.
     </p>
+  </div>
+
+  <div class="fake-buttons">
+    {#if connected}
+      <div class="connected-buttons-wrapper">
+        <ConnectedNavCards />
+      </div>
+    {/if}
+  </div>
+
+  <div class="inner">
     <div class="connect-button">
       <Button
         label={connected ? "Disconnect" : "Connect"}
@@ -57,10 +57,11 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    position: absolute;
     margin-bottom: 8px;
-    top: 34%;
-    transition: top 1000ms;
+  }
+
+  .heading-description {
+    text-align: center;
   }
 
   .heading-connected {
@@ -94,8 +95,14 @@
     width: 140px;
   }
 
-  .connected-buttons-wrapper {
-    position: absolute;
-    top: 50%;
+  .fake-buttons {
+    height: 136px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    @include respond-to("smallTablet") {
+      height: 60px;
+    }
   }
 </style>

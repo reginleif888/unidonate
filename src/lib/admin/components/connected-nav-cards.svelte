@@ -28,7 +28,8 @@
     on:click={goToOwners}
     transition:fly={{ x: 200, duration: 1000, opacity: 0 }}
   >
-    Owners <div class="icon-wrapper">
+    Owners
+    <div class="icon-wrapper">
       <ArrowRight />
     </div>
   </button>
@@ -41,9 +42,11 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    height: 136px;
 
     @include respond-to("smallTablet") {
       flex-direction: row;
+      height: 60px;
     }
   }
 
