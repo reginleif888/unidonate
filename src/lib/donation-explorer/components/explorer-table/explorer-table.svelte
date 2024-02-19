@@ -89,10 +89,10 @@
     }
 
     &__header {
-      padding: 24px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 8px;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
     }
@@ -112,7 +112,7 @@
     &__top-controls {
       position: sticky;
       top: 0;
-      padding: 24px;
+      padding: 16px;
       background-color: var(--uni-bg);
       border-bottom: 1px solid var(--uni-divider-color);
       z-index: 2;
@@ -126,7 +126,7 @@
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
-      padding: 24px;
+      padding: 16px;
       gap: 16px;
       position: sticky;
       bottom: 0;

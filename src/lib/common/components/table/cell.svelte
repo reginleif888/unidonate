@@ -25,30 +25,30 @@
   class:cell--center={column.align === "center"}
   class:cell--actions={column.key === "actions"}
 >
-  {#if renderMethod === "format" && column.format}
-    <div class="cell__inner">
+  <div
+    class="cell__inner"
+    class:cell__inner--left={column.align === "left"}
+    class:cell__inner--right={column.align === "right"}
+    class:cell__inner--center={column.align === "center"}
+    class:cell__inner--actions={column.key === "actions"}
+  >
+    {#if renderMethod === "format" && column.format}
       {column.format(value, row)}
-    </div>
-  {/if}
-
-  {#if renderMethod === "component" && column.Cell}
-    <div class="cell__inner">
+    {/if}
+    {#if renderMethod === "component" && column.Cell}
       <svelte:component this={column.Cell} {value} {column} origin={row} />
-    </div>
-  {/if}
-
-  {#if renderMethod === "value"}
-    <div class="cell__inner">
+    {/if}
+    {#if renderMethod === "value"}
       {value}
-    </div>
-  {/if}
+    {/if}
+  </div>
 </td>
 
 <style lang="scss">
   .cell {
     text-align: center;
     position: relative;
-    height: 80px;
+    height: 60px;
 
     &--actions {
       width: 100px;
@@ -73,12 +73,27 @@
       left: 0;
       bottom: 0;
       right: 0;
-      padding: 24px;
-      line-height: 32px;
+      padding: 8px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &--left {
+        justify-content: flex-start;
+      }
+
+      &--right {
+        justify-content: flex-end;
+      }
+
+      &--center {
+        justify-content: center;
+      }
     }
   }
 </style>

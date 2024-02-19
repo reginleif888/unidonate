@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { FormAdminSchool } from "$lib/admin/types";
   import { Tooltip } from "$lib/common/components";
-  import { Pencil, ArrowSquareOut } from "phosphor-svelte";
+  import { Pencil } from "phosphor-svelte";
 
   export let origin: FormAdminSchool;
 </script>
@@ -11,13 +11,7 @@
     <button slot="trigger" class="trigger">
       <Pencil size={24} />
     </button>
-    <div slot="content">Edit school</div>
-  </Tooltip>
-  <Tooltip side="left" closeDelay={0}>
-    <button slot="trigger" class="trigger">
-      <ArrowSquareOut size={24} />
-    </button>
-    <div slot="content">Show students</div>
+    <div slot="content">Edit Student</div>
   </Tooltip>
 </div>
 
@@ -26,8 +20,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    gap: 16px;
+    justify-content: center;
   }
 
   .trigger {

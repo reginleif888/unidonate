@@ -93,7 +93,7 @@
     }
 
     &__head-cell {
-      padding: 16px;
+      padding: 8px;
       text-align: center;
       font-weight: 700;
       position: relative;

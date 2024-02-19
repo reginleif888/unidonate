@@ -6,20 +6,6 @@ export interface SelectItem {
   label: string;
 }
 
-export interface School {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  studentsCount: string;
-}
-
-export interface Student {
-  id: string;
-  name: string;
-  age: string;
-}
-
 export interface GridItem {
   id: string;
   name: string;

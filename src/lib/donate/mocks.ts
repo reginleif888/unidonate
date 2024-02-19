@@ -1,4 +1,4 @@
-import type { FormStudent, FormSchool, School } from "./types";
+import type { FormStudent, FormSchool } from "./types";
 
 export const schools: Array<FormSchool> = [
   {

@@ -1,34 +1,31 @@
 <script lang="ts">
-  import {
-    Table,
-    Pagination,
-    Select,
-    Button,
-    Input,
-  } from "$lib/common/components";
+  import { Table, Pagination, Select, Input } from "$lib/common/components";
   import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
-  import { MagnifyingGlass } from "phosphor-svelte";
+
   import { columns } from "./schools-table.constant";
   import { adminSchoolsMock } from "$lib/admin/mocks";
-
-  export let onSearchDonation: () => void = () => null;
+  import { MagnifyingGlass } from "phosphor-svelte";
 
   let topControlsElement: HTMLElement | null = null;
 </script>
 
-<div class="explorer-table">
-  <div class="explorer-table__top-controls" bind:this={topControlsElement}>
-    <div class="explorer-table__top-controls-left">
-      <div class="explorer-table__order-by-select">
+<div class="schools-table">
+  <div class="schools-table__top-controls" bind:this={topControlsElement}>
+    <div class="schools-table__top-controls-left">
+      <div class="schools-table__order-by-select">
         <InputWithLabel label="Search">
-          <Input placeholder="Your school..." />
+          <Input placeholder="Your school...">
+            <span slot="end-icon" class="schools-table__magnify-glass">
+              <MagnifyingGlass size={20} />
+            </span>
+          </Input>
         </InputWithLabel>
       </div>
     </div>
   </div>
 
-  <div class="explorer-table__table-wrapper">
+  <div class="schools-table__table-wrapper">
     <Table
       {columns}
       rows={adminSchoolsMock}
@@ -37,8 +34,8 @@
     />
   </div>
 </div>
-<div class="explorer-table__bottom-controls">
-  <div class="explorer-table__bottom-controls-select">
+<div class="schools-table__bottom-controls">
+  <div class="schools-table__bottom-controls-select">
     <InputWithLabel label="Per page">
       <Select items={PAGE_SIZES_SELECT_ITEMS} />
     </InputWithLabel>
@@ -48,7 +45,7 @@
 </div>
 
 <style lang="scss">
-  .explorer-table {
+  .schools-table {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -91,7 +88,7 @@
     &__top-controls {
       position: sticky;
       top: 0;
-      padding: 24px;
+      padding: 16px;
       background-color: var(--uni-bg);
       border-bottom: 1px solid var(--uni-divider-color);
       z-index: 2;
@@ -105,7 +102,7 @@
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
-      padding: 24px;
+      padding: 16px;
       gap: 16px;
       position: sticky;
       bottom: 0;

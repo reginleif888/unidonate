@@ -6,3 +6,12 @@ export interface FormAdminSchool {
   location: string;
   numberOfStudents: number;
 }
+
+export interface FormAdminStudent {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  grade: string;
+  img: string;
+}
