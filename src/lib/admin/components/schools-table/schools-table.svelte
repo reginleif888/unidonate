@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { Table, Pagination, Select, Input } from "$lib/common/components";
+  import {
+    Table,
+    Pagination,
+    Select,
+    Input,
+    Switch,
+  } from "$lib/common/components";
   import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
 
@@ -16,8 +22,6 @@
   let loading: boolean = false;
 
   $: {
-    console.log("WTF????", search);
-
     loading = true;
 
     clearTimeout(timerId);
