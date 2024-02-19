@@ -5,12 +5,14 @@
 
   export let row: TRow;
 
+  export let loading: boolean = false;
+
   export let columnsMap: Record<string, IColumn<TRow>>;
 </script>
 
 <tr class="row">
   {#each Object.keys(columnsMap) as key (key)}
-    <Cell value={row[key]} {row} column={columnsMap[key]} />
+    <Cell value={row[key]} {row} column={columnsMap[key]} {loading} />
   {/each}
 </tr>
 

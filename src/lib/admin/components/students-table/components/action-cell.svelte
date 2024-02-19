@@ -11,7 +11,7 @@
     <button slot="trigger" class="trigger">
       <Pencil size={24} />
     </button>
-    <div slot="content">Edit Student</div>
+    <div slot="content">Edit</div>
   </Tooltip>
 </div>
 

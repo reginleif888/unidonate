@@ -8,6 +8,8 @@
 
   export let rows: Array<TRow>;
   export let columns: Array<Column<TRow>>;
+  export let loading: boolean = false;
+  export let loadingRowsCount: number = 10;
 
   export let stickyHead: boolean = false;
   export let stickyTop: number = 0;
@@ -32,6 +34,8 @@
     window.addEventListener("mousemove", doResize);
     window.addEventListener("mouseup", stopResize);
   }
+
+  const fakeRow: TRow = {} as TRow;
 
   $: columnsMap = columnsToMap(columns);
 </script>
@@ -64,9 +68,17 @@
       </tr>
     </thead>
     <tbody class="table-root__body">
-      {#each rows as row (row.id)}
-        <Row {row} {columnsMap} />
-      {/each}
+      {#if !loading}
+        {#each rows as row (row.id)}
+          <Row {row} {columnsMap} />
+        {/each}
+      {/if}
+
+      {#if loading}
+        {#each Array(loadingRowsCount) as _, index}
+          <Row row={fakeRow} {loading} {columnsMap} />
+        {/each}
+      {/if}
     </tbody>
   </table>
 </div>

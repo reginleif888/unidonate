@@ -7,6 +7,7 @@
 
   export let size: "small" | "medium" = "medium";
   export let error: boolean = false;
+  export let value: string = "";
 
   let focused: boolean = false;
 
@@ -40,6 +41,7 @@
     class:input-text-small={size === "small"}
     class:medium={size === "medium"}
     class:small={size === "small"}
+    bind:value
     class:error
     on:focus={handleFocus}
     on:blur={handleBlur}

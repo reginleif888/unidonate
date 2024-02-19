@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import { StudentsTable } from "../components";
 </script>
 
-<div class="root" in:fade>
+<div class="root">
   <StudentsTable />
 </div>
 

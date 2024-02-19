@@ -8,14 +8,35 @@
   import { MagnifyingGlass } from "phosphor-svelte";
 
   let topControlsElement: HTMLElement | null = null;
+
+  let search = "";
+
+  let timerId: NodeJS.Timeout;
+
+  let loading: boolean = false;
+
+  $: {
+    console.log("WTF????", search);
+
+    loading = true;
+
+    clearTimeout(timerId);
+
+    timerId = setTimeout(() => {
+      loading = false;
+    }, 1000);
+  }
 </script>
 
 <div class="schools-table">
+  <div class="schools-table__header">
+    <h4 class="h4">Schools</h4>
+  </div>
   <div class="schools-table__top-controls" bind:this={topControlsElement}>
     <div class="schools-table__top-controls-left">
       <div class="schools-table__order-by-select">
         <InputWithLabel label="Search">
-          <Input placeholder="Your school...">
+          <Input placeholder="Your school..." bind:value={search}>
             <span slot="end-icon" class="schools-table__magnify-glass">
               <MagnifyingGlass size={20} />
             </span>
@@ -26,12 +47,7 @@
   </div>
 
   <div class="schools-table__table-wrapper">
-    <Table
-      {columns}
-      rows={adminSchoolsMock}
-      stickyHead
-      stickyTop={topControlsElement?.clientHeight}
-    />
+    <Table {columns} rows={adminSchoolsMock} stickyHead {loading} />
   </div>
 </div>
 <div class="schools-table__bottom-controls">
@@ -65,10 +81,9 @@
     }
 
     &__header {
-      padding: 24px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
     }
@@ -104,8 +119,6 @@
       align-items: flex-end;
       padding: 16px;
       gap: 16px;
-      position: sticky;
-      bottom: 0;
       background-color: var(--uni-bg);
       border-top: 1px solid var(--uni-divider-color);
     }
@@ -122,6 +135,8 @@
 
     &__table-wrapper {
       flex-grow: 1;
+      height: 0;
+      overflow: scroll;
       background-color: var(--uni-bg-transparent-700);
     }
   }

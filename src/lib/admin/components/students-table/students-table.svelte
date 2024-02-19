@@ -4,12 +4,24 @@
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
   import { columns } from "./students-table-constant";
   import { adminStudentsMock } from "$lib/admin/mocks";
-  import { MagnifyingGlass } from "phosphor-svelte";
+  import { MagnifyingGlass, CaretLeft } from "phosphor-svelte";
+  import { goto } from "$app/navigation";
+  import { AdminRoute } from "$lib/common/routes";
 
   let topControlsElement: HTMLElement | null = null;
+
+  function goToSchools() {
+    goto(AdminRoute.Schools);
+  }
 </script>
 
 <div class="students-table">
+  <div class="students-table__header">
+    <button class="students-table__back-button" on:click={goToSchools}>
+      <CaretLeft size={24} />
+    </button>
+    <h4 class="h4">Students of Harvard</h4>
+  </div>
   <div class="students-table__top-controls" bind:this={topControlsElement}>
     <div class="students-table__top-controls-left">
       <div class="students-table__order-by-select">
@@ -25,14 +37,10 @@
   </div>
 
   <div class="students-table__table-wrapper">
-    <Table
-      {columns}
-      rows={adminStudentsMock}
-      stickyHead
-      stickyTop={topControlsElement?.clientHeight}
-    />
+    <Table {columns} rows={adminStudentsMock} stickyHead />
   </div>
 </div>
+
 <div class="students-table__bottom-controls">
   <div class="students-table__bottom-controls-select">
     <InputWithLabel label="Per page">
@@ -64,12 +72,24 @@
     }
 
     &__header {
-      padding: 24px;
+      padding: 16px;
       display: flex;
-      flex-direction: column;
       gap: 16px;
+      align-items: center;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
+    }
+
+    &__back-button {
+      color: var(--uni-on-bg);
+      padding: 0;
+      background-color: transparent;
+      border: unset;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--uni-primary);
+      }
     }
 
     &__top-controls-left {
@@ -121,6 +141,8 @@
 
     &__table-wrapper {
       flex-grow: 1;
+      height: 0;
+      overflow: scroll;
       background-color: var(--uni-bg-transparent-700);
     }
   }

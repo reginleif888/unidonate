@@ -17,9 +17,6 @@
 <div class="explorer-table">
   <div class="explorer-table__header">
     <h4 class="h4">Donation explorer</h4>
-    <p class="body1">
-      Here, you can explore the complete history of donations.
-    </p>
   </div>
 
   <div class="explorer-table__top-controls" bind:this={topControlsElement}>
@@ -50,12 +47,7 @@
   </div>
 
   <div class="explorer-table__table-wrapper">
-    <Table
-      {columns}
-      rows={donationsMock}
-      stickyHead
-      stickyTop={topControlsElement?.clientHeight}
-    />
+    <Table {columns} rows={donationsMock} stickyHead />
   </div>
 </div>
 <div class="explorer-table__bottom-controls">
@@ -128,8 +120,6 @@
       align-items: flex-end;
       padding: 16px;
       gap: 16px;
-      position: sticky;
-      bottom: 0;
       background-color: var(--uni-bg);
       border-top: 1px solid var(--uni-divider-color);
     }
@@ -146,6 +136,8 @@
 
     &__table-wrapper {
       flex-grow: 1;
+      height: 0;
+      overflow: scroll;
       background-color: var(--uni-bg-transparent-700);
     }
   }

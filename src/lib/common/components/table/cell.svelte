@@ -6,13 +6,14 @@
   export let value: TRow[keyof TRow] = "" as TRow[keyof TRow];
   export let row: TRow;
   export let column: IColumn<TRow>;
+  export let loading: boolean = false;
 
   let renderMethod: "value" | "format" | "component" = "value";
 
   $: {
-    if (column.Cell) {
+    if (column?.Cell) {
       renderMethod = "component";
-    } else if (column.format) {
+    } else if (column?.format) {
       renderMethod = "format";
     }
   }
@@ -32,14 +33,20 @@
     class:cell__inner--center={column.align === "center"}
     class:cell__inner--actions={column.key === "actions"}
   >
-    {#if renderMethod === "format" && column.format}
-      {column.format(value, row)}
+    {#if loading}
+      <div class="cell__cell-skeleton"></div>
     {/if}
-    {#if renderMethod === "component" && column.Cell}
-      <svelte:component this={column.Cell} {value} {column} origin={row} />
-    {/if}
-    {#if renderMethod === "value"}
-      {value}
+
+    {#if !loading}
+      {#if renderMethod === "format" && column.format}
+        {column.format(value, row)}
+      {/if}
+      {#if renderMethod === "component" && column.Cell}
+        <svelte:component this={column.Cell} {value} {column} origin={row} />
+      {/if}
+      {#if renderMethod === "value"}
+        {value}
+      {/if}
     {/if}
   </div>
 </td>
@@ -94,6 +101,13 @@
       &--center {
         justify-content: center;
       }
+    }
+
+    &__cell-skeleton {
+      width: 100%;
+      height: 80%;
+      border-radius: 16px;
+      animation: skeleton-pulse 1.5s infinite ease-in-out;
     }
   }
 </style>

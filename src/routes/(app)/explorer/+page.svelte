@@ -14,7 +14,7 @@
 </script>
 
 <Page>
-  <div class="root" in:fade>
+  <div class="root">
     <ExplorerTable onSearchDonation={handleSearchDonationModalOpen} />
   </div>
 </Page>

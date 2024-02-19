@@ -1,6 +1,6 @@
 import type { FormAdminSchool } from "$lib/admin/types";
 import type { IColumn } from "$lib/common/components";
-import { ActionCell, ImageCell } from "./components";
+import { ActionCell, ImageCell, LinkCell } from "./components";
 
 export const columns: Array<IColumn<FormAdminSchool>> = [
   {
@@ -22,6 +22,7 @@ export const columns: Array<IColumn<FormAdminSchool>> = [
   {
     key: "website",
     label: "Website",
+    Cell: LinkCell,
   },
   {
     key: "numberOfStudents",
