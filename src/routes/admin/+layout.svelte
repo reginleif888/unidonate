@@ -76,6 +76,7 @@
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    background: var(--uni-page-gradient);
   }
 
   .copy-right-line {
