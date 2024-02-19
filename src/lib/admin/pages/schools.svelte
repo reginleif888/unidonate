@@ -1,13 +1,14 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { SearchDonationModal } from "$lib/donation-explorer/components";
+  import { SchoolsTable } from "../components";
 
   let searchDonationModalOpen: boolean = false;
 </script>
 
-<div class="root" in:fade>Schools</div>
-
-<SearchDonationModal bind:open={searchDonationModalOpen} />
+<div class="root" in:fade>
+  <SchoolsTable />
+</div>
 
 <style>
   .root {
