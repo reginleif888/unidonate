@@ -20,4 +20,5 @@ export interface Column<TRow extends Row<UniqueIdentifier>> {
   align?: ColumnAlign;
   format?: (value: TRow[keyof TRow] | any, origin: TRow) => string; // Using any to bypass strict typing
   Cell?: typeof SvelteComponent<any>;
+  rowTooltipWithCopyOption?: boolean;
 }

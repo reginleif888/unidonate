@@ -18,14 +18,17 @@ export const columns: Array<IColumn<FormDonation>> = [
   {
     key: "id",
     label: "Donation transaction Id",
+    rowTooltipWithCopyOption: true,
   },
   {
     key: "transactionId",
     label: "Bitcoin transaction Id",
+    rowTooltipWithCopyOption: true,
   },
   {
     key: "paymentAddress",
     label: "Payment address",
+    rowTooltipWithCopyOption: true,
   },
   {
     key: "amount",

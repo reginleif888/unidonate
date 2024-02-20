@@ -40,13 +40,19 @@
 
     {#if !loading}
       {#if renderMethod === "format" && column.format}
-        <TruncatedText text={column.format(value, row)} />
+        <TruncatedText
+          text={column.format(value, row)}
+          withCopy={column.rowTooltipWithCopyOption}
+        />
       {/if}
       {#if renderMethod === "component" && column.Cell}
         <svelte:component this={column.Cell} {value} {column} origin={row} />
       {/if}
       {#if renderMethod === "value"}
-        <TruncatedText text={value} />
+        <TruncatedText
+          text={value}
+          withCopy={column.rowTooltipWithCopyOption}
+        />
       {/if}
     {/if}
   </div>

@@ -24,14 +24,14 @@
 
   let loading: boolean = false;
 
-  let schoolModalOpen: boolean = false;
+  let createModalOpen: boolean = false;
 
-  function openSchoolModal() {
-    schoolModalOpen = true;
+  function openCreateModal() {
+    createModalOpen = true;
   }
 
-  function closeSchoolModal() {
-    schoolModalOpen = false;
+  function closeCreateModal() {
+    createModalOpen = false;
   }
 
   $: {
@@ -63,7 +63,7 @@
       <div class="schools-table__add-button-wrapper">
         <Tooltip>
           <span slot="trigger">
-            <Button contained onlyIcon on:click={openSchoolModal}>
+            <Button contained onlyIcon on:click={openCreateModal}>
               <div slot="start-icon" class="schools-table__add-button-icon">
                 <Plus size={24} weight="bold" />
               </div>
@@ -104,7 +104,7 @@
   <Pagination count={50} />
 </div>
 
-<SchoolModal bind:open={schoolModalOpen} on:close={closeSchoolModal} />
+<SchoolModal bind:open={createModalOpen} on:close={closeCreateModal} />
 
 <style lang="scss">
   .schools-table {

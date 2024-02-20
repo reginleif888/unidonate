@@ -20,8 +20,19 @@
   } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import { AdminRoute } from "$lib/common/routes";
+  import StudentModal from "../student-modal.svelte";
 
   let topControlsElement: HTMLElement | null = null;
+
+  let createModalOpen: boolean = false;
+
+  function openCreateModal() {
+    createModalOpen = true;
+  }
+
+  function closeCreateModal() {
+    createModalOpen = false;
+  }
 
   function goToSchools() {
     goto(AdminRoute.Schools);
@@ -49,7 +60,7 @@
       <div class="students-table__add-button-wrapper">
         <Tooltip>
           <span slot="trigger">
-            <Button contained onlyIcon>
+            <Button contained onlyIcon on:click={openCreateModal}>
               <div slot="start-icon" class="students-table__add-button-icon">
                 <Plus size={24} weight="bold" />
               </div>
@@ -90,6 +101,8 @@
 
   <Pagination count={50} />
 </div>
+
+<StudentModal bind:open={createModalOpen} on:close={closeCreateModal} />
 
 <style lang="scss">
   .students-table {

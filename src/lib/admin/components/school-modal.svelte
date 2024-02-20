@@ -67,13 +67,15 @@
         </div>
       </div>
 
-      <div class="school-modal__content-row">
-        <div class="school-modal__input-with-label-wrapper">
-          <InputWithLabel label="Active" fullWidth>
-            <Switch />
-          </InputWithLabel>
+      {#if school}
+        <div class="school-modal__content-row">
+          <div class="school-modal__input-with-label-wrapper">
+            <InputWithLabel label="Active" fullWidth>
+              <Switch />
+            </InputWithLabel>
+          </div>
         </div>
-      </div>
+      {/if}
 
       <div class="school-modal__images">
         <FileUploader
