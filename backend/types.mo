@@ -2,6 +2,7 @@ import Vector "mo:vector/Class";
 import RBTree "mo:base/RBTree";
 import List "mo:base/List";
 import Nat "mo:base/Nat";
+import Principal "mo:base/Principal";
 
 import BitcoinIntegration "bitcoin-integration";
 
@@ -14,7 +15,8 @@ module {
     location : Text;
     website : Text;
     numberOfStudents : Nat;
-    imageId : ?Text;
+    imageIds : ?[Text];
+    active : Bool;
   };
 
   public type Student = {
@@ -23,18 +25,23 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
-    imageId : ?Text;
+    imageIds : ?[Text];
+    schoolId : Text;
+    active : Bool;
   };
-
-  public type SchoolsList = Vector.Vector<School>;
-  public type StudentsList = List.List<Student>;
-  public type StudentsListsMap = RBTree.RBTree<Text, StudentsList>;
 
   public type AddSchoolPayload = {
     name : Text;
     location : Text;
     website : Text;
-    imageBlob : ?Blob;
+    imageBlobs : ?[Blob];
+  };
+
+  public type UpdateSchoolPayload = {
+    name : ?Text;
+    location : ?Text;
+    website : ?Text;
+    imageBlobs : ?[Blob];
   };
 
   public type AddStudentPayload = {
@@ -42,7 +49,16 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
-    imageBlob : ?Blob;
+    imageBlobs : ?[Blob];
+  };
+
+  public type UpdateStudentPayload = {
+    firstName : ?Text;
+    lastName : ?Text;
+    grade : ?Text;
+    dateOfBirth : ?Text;
+    imageBlobs : ?[Blob];
+    active : ?Bool;
   };
 
   public type SchoolsFilters = {
@@ -97,10 +113,6 @@ module {
     status : DonationStatus;
     allocations : [AllocationCategory];
   };
-
-  public type DonationsList = Vector.Vector<Donation>;
-
-  public type DonationsMap = RBTree.RBTree<Text, Nat>;
 
   public type CreateDonationPayload = {
     schoolId : Text;
