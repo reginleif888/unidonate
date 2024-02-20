@@ -31,7 +31,7 @@
 <div class="students-table">
   <div class="students-table__header">
     <button class="students-table__back-button" on:click={goToSchools}>
-      <CaretLeft size={24} />
+      <CaretLeft size={24} weight="bold" />
     </button>
     <h4 class="h4">Students of Harvard</h4>
   </div>

@@ -6,11 +6,12 @@
   export let errorMessage: string = "";
   export let required: boolean = false;
   export let rowView: boolean = false;
+  export let fullWidth: boolean = false;
 
   setContext(INPUT_WITH_LABEL_CONTEXT_KEY, { label });
 </script>
 
-<div class:row-view={rowView}>
+<div class:row-view={rowView} class:full-width={fullWidth}>
   <label for={label} class="overline"
     >{label}
     {#if required}<span class="required">(required)</span>{/if}</label
@@ -44,5 +45,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .full-width {
+    width: 100%;
   }
 </style>

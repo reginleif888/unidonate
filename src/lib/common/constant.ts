@@ -21,3 +21,5 @@ export const MODES: Array<SelectItem> = [
     Icon: Icons.Moon,
   },
 ];
+
+export const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"];

@@ -7,6 +7,7 @@
   export let disabled: boolean = false;
   export let side: TooltipSide = "top";
   export let closeDelay: number = 300;
+  export let fullWidth: boolean = false;
 
   let open = false;
 
@@ -15,9 +16,11 @@
   });
 </script>
 
-<Tooltip.Root openDelay={0} closeOnPointerDown={false} {closeDelay} bind:open>
+<Tooltip.Root openDelay={150} closeOnPointerDown={false} {closeDelay} bind:open>
   <Tooltip.Trigger
-    class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""}`}
+    class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""} ${
+      fullWidth ? "tooltip-trigger--full-width" : ""
+    }`}
   >
     <slot name="trigger" />
   </Tooltip.Trigger>
@@ -47,6 +50,10 @@
 
   :global(.tooltip-trigger--disabled) {
     pointer-events: none;
+  }
+
+  :global(.tooltip-trigger--full-width) {
+    width: 100%;
   }
 
   :global(.tooltip-arrow-wrapper) {

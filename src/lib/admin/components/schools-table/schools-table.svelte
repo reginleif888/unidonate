@@ -14,6 +14,7 @@
   import { columns } from "./schools-table.constant";
   import { adminSchoolsMock } from "$lib/admin/mocks";
   import { MagnifyingGlass, Plus, DownloadSimple } from "phosphor-svelte";
+  import SchoolModal from "../school-modal.svelte";
 
   let topControlsElement: HTMLElement | null = null;
 
@@ -22,6 +23,16 @@
   let timerId: NodeJS.Timeout;
 
   let loading: boolean = false;
+
+  let schoolModalOpen: boolean = false;
+
+  function openSchoolModal() {
+    schoolModalOpen = true;
+  }
+
+  function closeSchoolModal() {
+    schoolModalOpen = false;
+  }
 
   $: {
     loading = true;
@@ -52,7 +63,7 @@
       <div class="schools-table__add-button-wrapper">
         <Tooltip>
           <span slot="trigger">
-            <Button contained onlyIcon>
+            <Button contained onlyIcon on:click={openSchoolModal}>
               <div slot="start-icon" class="schools-table__add-button-icon">
                 <Plus size={24} weight="bold" />
               </div>
@@ -92,6 +103,8 @@
 
   <Pagination count={50} />
 </div>
+
+<SchoolModal bind:open={schoolModalOpen} on:close={closeSchoolModal} />
 
 <style lang="scss">
   .schools-table {

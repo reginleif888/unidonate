@@ -29,3 +29,5 @@ export { default as Table, type IColumn, type IRow } from "./table";
 export { default as LockAnimatedIcon } from "./lock-animated-icon.svelte";
 export { default as BurgerButton } from "./burger-button.svelte";
 export { default as Switch } from "./switch.svelte";
+export { default as FileUploader } from "./file-uploader.svelte";
+export { default as TruncatedText } from "./truncated-text.svelte";

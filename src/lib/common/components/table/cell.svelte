@@ -1,5 +1,6 @@
 <script lang="ts" generics="TRow extends IRow<UniqueIdentifier>">
   import { type UniqueIdentifier } from "$lib/common/types";
+  import { TruncatedText } from "$lib/common/components";
   import { type Row as IRow } from "./table.types";
   import type { Column as IColumn } from "./table.types";
 
@@ -39,13 +40,13 @@
 
     {#if !loading}
       {#if renderMethod === "format" && column.format}
-        {column.format(value, row)}
+        <TruncatedText text={column.format(value, row)} />
       {/if}
       {#if renderMethod === "component" && column.Cell}
         <svelte:component this={column.Cell} {value} {column} origin={row} />
       {/if}
       {#if renderMethod === "value"}
-        {value}
+        <TruncatedText text={value} />
       {/if}
     {/if}
   </div>

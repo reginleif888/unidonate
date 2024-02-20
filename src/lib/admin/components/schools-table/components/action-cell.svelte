@@ -4,11 +4,18 @@
   import { Tooltip } from "$lib/common/components";
   import { AdminRoute } from "$lib/common/routes";
   import { Pencil, ArrowSquareOut } from "phosphor-svelte";
+  import SchoolModal from "../../school-modal.svelte";
 
   export let origin: FormAdminSchool;
 
+  export let modalOpen = false;
+
   const handleEdit = () => {
-    console.log("Edit school");
+    modalOpen = true;
+  };
+
+  const handleClose = () => {
+    modalOpen = false;
   };
 
   const handleShowStudents = () => {
@@ -30,6 +37,8 @@
     <div slot="content">Show students</div>
   </Tooltip>
 </div>
+
+<SchoolModal bind:open={modalOpen} on:close={handleClose} school={origin} />
 
 <style lang="scss">
   .root {
