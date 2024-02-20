@@ -51,8 +51,8 @@
   $: {
     selectedRoute = resolveAppRoute($page.route.id);
 
-    if (selectedRoute === AppRoute.Donation) {
-      selectedRoute = AppRoute.Explorer;
+    if (selectedRoute === AdminRoute.Students) {
+      selectedRoute = AdminRoute.Schools;
     }
   }
 </script>

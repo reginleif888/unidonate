@@ -100,19 +100,6 @@
     flex-direction: column;
     flex-grow: 1;
 
-    &__allocation-legends {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      text-align: center;
-      gap: 8px;
-      width: 400px;
-      border: 1px solid var(--uni-divider-color);
-      padding: 8px;
-      border-radius: 16px;
-      box-shadow: var(--uni-shadow-paper);
-    }
-
     &__header {
       padding: 16px;
       display: flex;
@@ -175,6 +162,10 @@
     &__bottom-controls-select {
       max-width: 120px;
       width: 100%;
+    }
+
+    &__toggle-active-wrapper {
+      margin-bottom: 6px;
     }
 
     &__magnify-glass {

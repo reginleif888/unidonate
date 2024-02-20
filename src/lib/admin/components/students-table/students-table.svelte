@@ -1,10 +1,23 @@
 <script lang="ts">
-  import { Table, Pagination, Select, Input } from "$lib/common/components";
+  import {
+    Table,
+    Pagination,
+    Select,
+    Input,
+    Tooltip,
+    Button,
+    Switch,
+  } from "$lib/common/components";
   import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
   import { columns } from "./students-table-constant";
   import { adminStudentsMock } from "$lib/admin/mocks";
-  import { MagnifyingGlass, CaretLeft } from "phosphor-svelte";
+  import {
+    MagnifyingGlass,
+    CaretLeft,
+    Plus,
+    DownloadSimple,
+  } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import { AdminRoute } from "$lib/common/routes";
 
@@ -24,7 +37,7 @@
   </div>
   <div class="students-table__top-controls" bind:this={topControlsElement}>
     <div class="students-table__top-controls-left">
-      <div class="students-table__order-by-select">
+      <div class="students-table__search">
         <InputWithLabel label="Search">
           <Input placeholder="Your student...">
             <span slot="end-icon" class="students-table__magnify-glass">
@@ -32,6 +45,33 @@
             </span>
           </Input>
         </InputWithLabel>
+      </div>
+      <div class="students-table__add-button-wrapper">
+        <Tooltip>
+          <span slot="trigger">
+            <Button contained onlyIcon>
+              <div slot="start-icon" class="students-table__add-button-icon">
+                <Plus size={24} weight="bold" />
+              </div>
+            </Button>
+          </span>
+          <span slot="content"> Add new </span>
+        </Tooltip>
+      </div>
+      <div class="students-table__toggle-active-wrapper">
+        <InputWithLabel label="Active" rowView>
+          <Switch />
+        </InputWithLabel>
+      </div>
+    </div>
+
+    <div class="students-table__top-controls-right">
+      <div class="students-table__import-wrapper">
+        <Button contained label="Import">
+          <div slot="start-icon" class="students-table__import-icon">
+            <DownloadSimple size={24} weight="bold" />
+          </div>
+        </Button>
       </div>
     </div>
   </div>
@@ -57,19 +97,6 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-
-    &__allocation-legends {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      text-align: center;
-      gap: 8px;
-      width: 400px;
-      border: 1px solid var(--uni-divider-color);
-      padding: 8px;
-      border-radius: 16px;
-      box-shadow: var(--uni-shadow-paper);
-    }
 
     &__header {
       padding: 16px;
@@ -99,9 +126,29 @@
       align-items: flex-end;
     }
 
-    &__order-by-select {
+    &__search {
       max-width: 240px;
       width: 100%;
+    }
+
+    &__add-button-wrapper {
+      color: var(--uni-on-primary);
+      display: flex;
+      align-items: center;
+    }
+
+    &__add-button-icon {
+      position: relative;
+      top: 2px;
+    }
+
+    &__import-icon {
+      position: relative;
+      top: 2px;
+    }
+
+    &__toggle-active-wrapper {
+      margin-bottom: 6px;
     }
 
     &__top-controls {

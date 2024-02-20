@@ -5,7 +5,7 @@
 </script>
 
 <div>
-  <a href={`${origin.website}`}>{origin.website}</a>
+  <a href={`${origin.website}`} target="_blank">{origin.website}</a>
 </div>
 
 <style lang="scss">
