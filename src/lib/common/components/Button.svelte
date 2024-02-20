@@ -8,6 +8,7 @@
     label?: string;
     fullWidth?: boolean;
     justify?: "left" | "center" | "right" | "between";
+    onlyIcon?: boolean;
   };
 
   export let variant: "primary" | "secondary" = "primary";
@@ -16,6 +17,7 @@
   export let label: string = "";
   export let fullWidth: boolean = false;
   export let justify: "left" | "center" | "right" | "between" = "between";
+  export let onlyIcon: boolean = false;
 </script>
 
 <button
@@ -31,6 +33,7 @@
   class:justify-center={justify === "center"}
   class:justify-right={justify === "right"}
   class:justify-between={justify === "between"}
+  class:only-icon={onlyIcon}
   on:click
   {...$$restProps}
   ><slot name="start-icon" />{label}<slot name="end-icon" /></button
@@ -47,6 +50,10 @@
     justify-content: space-between;
     gap: 8px;
     box-shadow: var(--uni-shadow-button);
+  }
+
+  .only-icon.only-icon {
+    padding: 8px;
   }
 
   .justify-left {

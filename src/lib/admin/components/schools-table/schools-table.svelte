@@ -5,13 +5,15 @@
     Select,
     Input,
     Switch,
+    Button,
+    Tooltip,
   } from "$lib/common/components";
   import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
 
   import { columns } from "./schools-table.constant";
   import { adminSchoolsMock } from "$lib/admin/mocks";
-  import { MagnifyingGlass } from "phosphor-svelte";
+  import { MagnifyingGlass, Plus, DownloadSimple } from "phosphor-svelte";
 
   let topControlsElement: HTMLElement | null = null;
 
@@ -38,7 +40,7 @@
   </div>
   <div class="schools-table__top-controls" bind:this={topControlsElement}>
     <div class="schools-table__top-controls-left">
-      <div class="schools-table__order-by-select">
+      <div class="schools-table__search-select">
         <InputWithLabel label="Search">
           <Input placeholder="Your school..." bind:value={search}>
             <span slot="end-icon" class="schools-table__magnify-glass">
@@ -46,6 +48,33 @@
             </span>
           </Input>
         </InputWithLabel>
+      </div>
+      <div class="schools-table__add-button-wrapper">
+        <Tooltip>
+          <span slot="trigger">
+            <Button contained onlyIcon>
+              <div slot="start-icon" class="schools-table__add-button-icon">
+                <Plus size={24} weight="bold" />
+              </div>
+            </Button>
+          </span>
+          <span slot="content"> Add new </span>
+        </Tooltip>
+      </div>
+      <div class="schools-table__toggle-active-wrapper">
+        <InputWithLabel label="Active" rowView>
+          <Switch />
+        </InputWithLabel>
+      </div>
+    </div>
+
+    <div class="schools-table__top-controls-right">
+      <div class="schools-table__import-wrapper">
+        <Button contained label="Import">
+          <div slot="start-icon" class="schools-table__import-icon">
+            <DownloadSimple size={24} weight="bold" />
+          </div>
+        </Button>
       </div>
     </div>
   </div>
@@ -99,9 +128,25 @@
       align-items: flex-end;
     }
 
-    &__order-by-select {
+    &__search-select {
       max-width: 240px;
       width: 100%;
+    }
+
+    &__add-button-wrapper {
+      color: var(--uni-on-primary);
+      display: flex;
+      align-items: center;
+    }
+
+    &__add-button-icon {
+      position: relative;
+      top: 2px;
+    }
+
+    &__import-icon {
+      position: relative;
+      top: 2px;
     }
 
     &__top-controls {
