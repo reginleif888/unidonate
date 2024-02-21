@@ -20,7 +20,7 @@
   } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import { AdminRoute } from "$lib/common/routes";
-  import StudentModal from "../student-modal.svelte";
+  import StudentModal from "../student-modal";
 
   let topControlsElement: HTMLElement | null = null;
 

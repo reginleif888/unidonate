@@ -5,7 +5,7 @@
 </script>
 
 <div>
-  <img src={origin.img} alt="school" />
+  <img src={origin.images[0]?.id} alt="school" />
 </div>
 
 <style lang="scss">

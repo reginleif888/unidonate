@@ -40,3 +40,16 @@ export interface TabRoute {
   label: string;
   Icon: typeof SvelteComponent<any>;
 }
+
+export interface Image {
+  id: string;
+  name: string;
+  type: string;
+  data: Array<Uint8Array>;
+}
+
+export interface UploadedFile {
+  id: string;
+  type: string;
+  name: string;
+}

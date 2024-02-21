@@ -3,13 +3,15 @@
   import Tooltip from "./tooltip.svelte";
   import { truncateFileName } from "../utils";
   import { X } from "phosphor-svelte";
+  import type { UploadedFile } from "../types";
 
+  export let maxSize: number;
   export let multiple: boolean = true;
   export let labelTitle: string = "Upload files";
   export let labelSubtitle: string = "";
   export let buttonLabel: string = "Add files";
   export let accept: Array<string> = [];
-  export let files: Array<File> = [];
+  export let files: Array<File | UploadedFile> = [];
 
   const dispatch = createEventDispatcher();
 
@@ -28,6 +30,14 @@
 
     if (target) {
       const localFiles = [...(target.files ?? [])];
+
+      let sizeError = localFiles.some((file) => file.size > maxSize);
+
+      if (sizeError) {
+        dispatch("size-error", { maxSize });
+
+        return;
+      }
 
       if (multiple) {
         files = [
@@ -72,10 +82,11 @@
     {#each files as file (file.name)}
       <div class="file-uploader__file-container">
         <Tooltip
-          disabled={!truncateFileName({ file, maxLength: 15 }).truncated}
+          disabled={!truncateFileName({ file: file.name, maxLength: 15 })
+            .truncated}
         >
           <div slot="trigger" class="file-uploader__file">
-            {truncateFileName({ file, maxLength: 15 }).name}
+            {truncateFileName({ file: file.name, maxLength: 15 }).name}
           </div>
 
           <div slot="content">

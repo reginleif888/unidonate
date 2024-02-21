@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InputWithLabel from "./../../common/components/input-with-label.svelte";
+  import InputWithLabel from "../../../common/components/input-with-label.svelte";
   import {
     Button,
     Divider,
@@ -9,9 +9,13 @@
     Switch,
   } from "$lib/common/components";
   import { X } from "phosphor-svelte";
-  import type { FormAdminSchool } from "../types";
+  import type { FormAdminSchool } from "../../types";
   import { IMAGE_EXTENSIONS } from "$lib/common/constant";
   import { createEventDispatcher } from "svelte";
+  import { createForm } from "svelte-forms-lib";
+  import { INITIAL_VALUES } from "./school-modal.constant";
+  import * as yup from "yup";
+  import { snackbarStore } from "$lib/common/stores";
 
   export let open: boolean = false;
 
@@ -21,13 +25,32 @@
 
   const dispatch = createEventDispatcher();
 
+  const { form, errors, handleSubmit } = createForm<FormAdminSchool>({
+    initialValues: school ? INITIAL_VALUES : INITIAL_VALUES,
+    validationSchema: yup.object().shape({
+      name: yup.string().required("Name is required"),
+      location: yup.string().required("Location is required"),
+      website: yup.string().url("Invalid URL").required("Website is required"),
+    }),
+    onSubmit: async () => {
+      snackbarStore.addMessage({
+        message: "School created successfully",
+        type: "success",
+      });
+    },
+  });
+
   const handleClose = () => {
     dispatch("close");
   };
+
+  $: {
+    $form.website;
+  }
 </script>
 
 <Modal bind:open onClose={handleClose}>
-  <div class="school-modal">
+  <form class="school-modal" on:submit={handleSubmit}>
     <div class="school-modal__header">
       {#if school}
         <h4 class="h4">Edit school {school.name}</h4>
@@ -47,22 +70,49 @@
     <div class="school-modal__content">
       <div class="school-modal__content-row">
         <div class="school-modal__input-with-label-wrapper">
-          <InputWithLabel label="Name" required fullWidth>
-            <Input placeholder="School name..." />
+          <InputWithLabel
+            label="Name"
+            required
+            fullWidth
+            errorMessage={$errors.name}
+          >
+            <Input
+              placeholder="School name..."
+              bind:value={$form.name}
+              error={Boolean($errors.name)}
+            />
           </InputWithLabel>
         </div>
 
         <div class="school-modal__input-with-label-wrapper">
-          <InputWithLabel label="Website" required fullWidth>
-            <Input placeholder="School website..." />
+          <InputWithLabel
+            label="Website"
+            required
+            fullWidth
+            errorMessage={$errors.website}
+          >
+            <Input
+              placeholder="School website..."
+              bind:value={$form.website}
+              error={Boolean($errors.website)}
+            />
           </InputWithLabel>
         </div>
       </div>
 
       <div class="school-modal__content-row">
         <div class="school-modal__input-with-label-wrapper">
-          <InputWithLabel label="Location" required fullWidth>
-            <Input placeholder="School location..." />
+          <InputWithLabel
+            label="Location"
+            required
+            fullWidth
+            errorMessage={$errors.location}
+          >
+            <Input
+              placeholder="School location..."
+              bind:value={$form.location}
+              error={Boolean($errors.location)}
+            />
           </InputWithLabel>
         </div>
       </div>
@@ -79,10 +129,22 @@
 
       <div class="school-modal__images">
         <FileUploader
-          bind:files
+          files={[{ id: "1", name: "image1.jpg", type: "image/jpeg" }]}
           labelTitle={"Upload images"}
           labelSubtitle={"Max image size: 2MB"}
           accept={IMAGE_EXTENSIONS}
+          maxSize={2 * 1024 * 1024}
+          on:change={(event) => {
+            files = event.detail;
+
+            console.log("=========", { files });
+          }}
+          on:size-error={(event) => {
+            snackbarStore.addMessage({
+              message: `Max file size is ${event.detail.maxSize / 1024 / 1024}MB`,
+              type: "error",
+            });
+          }}
         />
       </div>
 
@@ -102,9 +164,14 @@
         variant="secondary"
         on:click={handleClose}
       />
-      <Button fullWidth label={school ? "Update" : "Create"} contained />
+      <Button
+        fullWidth
+        label={school ? "Update" : "Create"}
+        type="submit"
+        contained
+      />
     </div>
-  </div>
+  </form>
 </Modal>
 
 <style lang="scss">

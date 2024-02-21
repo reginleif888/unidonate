@@ -19,7 +19,11 @@
         type={snackbar.type}
         message={snackbar.message}
       >
-        <div slot="end">
+        <div
+          slot="end"
+          class:circular-progress--error={snackbar.type === "error"}
+          class:circular-progress--success={snackbar.type === "success"}
+        >
           <CircularProgress duration={snackbar.timeout - 100} />
         </div>
       </InlineNotification>
@@ -37,5 +41,13 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  .circular-progress--success {
+    color: var(--uni-success-color);
+  }
+
+  .circular-progress--error {
+    color: var(--uni-error-color);
   }
 </style>

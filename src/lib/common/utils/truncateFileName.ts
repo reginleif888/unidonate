@@ -1,5 +1,5 @@
 interface TruncateFileNameParams {
-  file: File;
+  file: string;
   maxLength: number;
 }
 
@@ -12,7 +12,7 @@ export default function truncateFileName({
   file,
   maxLength,
 }: TruncateFileNameParams): TruncateFileNameReturn {
-  const fullFileName = file.name;
+  const fullFileName = file;
   const extension = fullFileName.slice(fullFileName.lastIndexOf("."));
   const nameWithoutExtension = fullFileName.substring(
     0,

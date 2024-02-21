@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InputWithLabel from "./../../common/components/input-with-label.svelte";
+  import InputWithLabel from "../../../common/components/input-with-label.svelte";
   import {
     Button,
     DatePicker,
@@ -10,15 +10,19 @@
     Switch,
   } from "$lib/common/components";
   import { X } from "phosphor-svelte";
-  import type { FormAdminStudent } from "../types";
+  import type { FormAdminStudent } from "../../types";
   import { IMAGE_EXTENSIONS } from "$lib/common/constant";
   import { createEventDispatcher } from "svelte";
+  import { createForm } from "svelte-forms-lib";
+  import { snackbarStore } from "$lib/common/stores";
 
   export let open: boolean = false;
 
   export let student: FormAdminStudent | null = null;
 
   let files: Array<File> = [];
+
+  createForm;
 
   const dispatch = createEventDispatcher();
 
@@ -31,7 +35,7 @@
   <div class="student-modal">
     <div class="student-modal__header">
       {#if student}
-        <h4 class="h4">Edit student {student.firstName}</h4>
+        <h4 class="h4">Edit student {student.firstName} {student.lastName}</h4>
       {/if}
 
       {#if !student}
@@ -90,6 +94,13 @@
           labelTitle={"Upload images"}
           labelSubtitle={"Max image size: 2MB"}
           accept={IMAGE_EXTENSIONS}
+          maxSize={2 * 1024 * 1024}
+          on:size-error={(event) => {
+            snackbarStore.addMessage({
+              message: `Max file size is ${event.detail.maxSize / 1024 / 1024}MB`,
+              type: "error",
+            });
+          }}
         />
       </div>
 

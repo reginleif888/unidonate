@@ -4,7 +4,7 @@ import { ActionCell, ImageCell } from "./components";
 
 export const columns: Array<IColumn<FormAdminStudent>> = [
   {
-    key: "img",
+    key: "images",
     label: "",
     Cell: ImageCell,
     width: 100,

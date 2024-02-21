@@ -14,7 +14,7 @@
   import { columns } from "./schools-table.constant";
   import { adminSchoolsMock } from "$lib/admin/mocks";
   import { MagnifyingGlass, Plus, DownloadSimple } from "phosphor-svelte";
-  import SchoolModal from "../school-modal.svelte";
+  import SchoolModal from "../school-modal";
 
   let topControlsElement: HTMLElement | null = null;
 

@@ -4,11 +4,11 @@
   import { Tooltip } from "$lib/common/components";
   import { AdminRoute } from "$lib/common/routes";
   import { Pencil, ArrowSquareOut } from "phosphor-svelte";
-  import SchoolModal from "../../school-modal.svelte";
+  import SchoolModal from "../../school-modal";
 
   export let origin: FormAdminSchool;
 
-  export let modalOpen = false;
+  let modalOpen = false;
 
   const handleEdit = () => {
     modalOpen = true;

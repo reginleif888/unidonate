@@ -45,7 +45,7 @@
         a 15.9155 15.9155 0 0 1 0 31.831
         a 15.9155 15.9155 0 0 1 0 -31.831"
     fill="none"
-    stroke="#4caf50"
+    stroke="currentColor"
     stroke-width="4"
     stroke-dasharray={100 - (countdown / duration) * 100 + ", 100"}
   />
