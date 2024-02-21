@@ -28,7 +28,9 @@
     createForm<FormAdminSchool>({
       initialValues: INITIAL_VALUES,
       validate: validation,
-      onSubmit: async () => {
+      onSubmit: async (values) => {
+        alert(JSON.stringify(values, null, 2));
+
         await wait(2000);
 
         dispatch("close");
@@ -122,7 +124,7 @@
         <div class="school-modal__content-row">
           <div class="school-modal__input-with-label-wrapper">
             <InputWithLabel label="Active" fullWidth>
-              <Switch />
+              <Switch bind:checked={$data.active} />
             </InputWithLabel>
           </div>
         </div>

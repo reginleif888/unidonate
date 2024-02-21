@@ -7,4 +7,5 @@ export const INITIAL_VALUES: FormAdminSchool = {
   website: "",
   numberOfStudents: 0,
   images: [],
+  active: true,
 };

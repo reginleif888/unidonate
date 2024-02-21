@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InputWithLabel from "../../../common/components/input-with-label.svelte";
+  import { CalendarDate } from "@internationalized/date";
   import {
     Button,
     DatePicker,
@@ -8,14 +8,17 @@
     Input,
     Modal,
     Switch,
+    InputWithLabel,
   } from "$lib/common/components";
   import { X } from "phosphor-svelte";
   import type { FormAdminStudent } from "../../types";
   import { IMAGE_EXTENSIONS } from "$lib/common/constant";
   import { createEventDispatcher } from "svelte";
-  import { createForm } from "svelte-forms-lib";
   import { snackbarStore } from "$lib/common/stores";
-  import * as yup from "yup";
+  import { createForm } from "felte";
+  import { INITIAL_VALUES } from "./student-modal.constant";
+  import { validation } from "./student-modal.validation";
+  import { wait } from "$lib/common/utils";
 
   export let open: boolean = false;
 
@@ -23,30 +26,34 @@
 
   let files: Array<File> = [];
 
-  createForm({
-    initialValues: {},
-    validationSchema: yup.object().shape({
-      firstName: yup.string().required("First name is required"),
-      lastName: yup.string().required("Last name is required"),
-      grade: yup.string().required("Grade is required"),
-    }),
-    onSubmit: async () => {
-      snackbarStore.addMessage({
-        message: "School created successfully",
-        type: "success",
-      });
-    },
-  });
-
   const dispatch = createEventDispatcher();
+
+  const { form, isSubmitting, setFields, handleSubmit, reset, data, errors } =
+    createForm<FormAdminStudent>({
+      initialValues: INITIAL_VALUES,
+      validate: validation,
+      onSubmit: async (values) => {
+        alert(JSON.stringify(values, null, 2));
+
+        await wait(2000);
+
+        dispatch("close");
+      },
+    });
 
   const handleClose = () => {
     dispatch("close");
   };
+
+  $: {
+    if (!open) {
+      reset();
+    }
+  }
 </script>
 
 <Modal bind:open onClose={handleClose}>
-  <div class="student-modal">
+  <form class="student-modal" use:form on:submit={handleSubmit}>
     <div class="student-modal__header">
       {#if student}
         <h4 class="h4">Edit student {student.firstName} {student.lastName}</h4>
@@ -62,32 +69,78 @@
         on:click={handleClose}><X size={32} /></button
       >
     </div>
+
     <Divider />
+
     <div class="student-modal__content">
       <div class="student-modal__content-row">
         <div class="student-modal__input-with-label-wrapper">
-          <InputWithLabel label="First name" required fullWidth>
-            <Input placeholder="First name..." />
+          <InputWithLabel
+            label="First name"
+            required
+            fullWidth
+            errorMessage={String($errors.firstName ?? "")}
+          >
+            <Input
+              placeholder="First name..."
+              bind:value={$data.firstName}
+              error={Boolean($errors.firstName)}
+            />
           </InputWithLabel>
         </div>
 
         <div class="student-modal__input-with-label-wrapper">
-          <InputWithLabel label="Last name" required fullWidth>
-            <Input placeholder="Last name..." />
+          <InputWithLabel
+            label="Last name"
+            required
+            fullWidth
+            errorMessage={String($errors.lastName ?? "")}
+          >
+            <Input
+              placeholder="Last name..."
+              bind:value={$data.lastName}
+              error={Boolean($errors.lastName)}
+            />
           </InputWithLabel>
         </div>
       </div>
 
       <div class="student-modal__content-row">
         <div class="student-modal__input-with-label-wrapper">
-          <InputWithLabel label="Date of birth" required fullWidth>
-            <DatePicker value={null} />
+          <InputWithLabel
+            label="Date of birth"
+            required
+            fullWidth
+            errorMessage={String($errors.dateOfBirth ?? "")}
+          >
+            <DatePicker
+              value={$data.dateOfBirth
+                ? new CalendarDate(
+                    $data.dateOfBirth.year,
+                    $data.dateOfBirth.month,
+                    $data.dateOfBirth.day
+                  )
+                : null}
+              on:change={({ detail }) => {
+                setFields("dateOfBirth", detail.value);
+              }}
+              error={Boolean($errors.dateOfBirth)}
+            />
           </InputWithLabel>
         </div>
 
         <div class="student-modal__input-with-label-wrapper">
-          <InputWithLabel label="Grade" required fullWidth>
-            <Input placeholder="Grade..." />
+          <InputWithLabel
+            label="Grade"
+            required
+            fullWidth
+            errorMessage={String($errors.grade ?? "")}
+          >
+            <Input
+              placeholder="Grade..."
+              bind:value={$data.grade}
+              error={Boolean($errors.grade)}
+            />
           </InputWithLabel>
         </div>
       </div>
@@ -96,7 +149,7 @@
         <div class="student-modal__content-row">
           <div class="student-modal__input-with-label-wrapper">
             <InputWithLabel label="Active" fullWidth>
-              <Switch />
+              <Switch checked={$data.active} />
             </InputWithLabel>
           </div>
         </div>
@@ -126,6 +179,7 @@
     </div>
 
     <Divider />
+
     <div class="student-modal__footer">
       <Button
         fullWidth
@@ -134,9 +188,15 @@
         variant="secondary"
         on:click={handleClose}
       />
-      <Button fullWidth label={student ? "Update" : "Create"} contained />
+      <Button
+        fullWidth
+        label={student ? "Update" : "Create"}
+        contained
+        loading={$isSubmitting}
+        notClickable={$isSubmitting}
+      />
     </div>
-  </div>
+  </form>
 </Modal>
 
 <style lang="scss">

@@ -54,7 +54,7 @@
             name: school.name,
             location: school.location,
             website: school.website,
-            images: encodedImg,
+            images: encodedImg as any,
           });
         }
       }

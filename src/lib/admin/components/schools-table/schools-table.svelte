@@ -71,6 +71,7 @@
           </Input>
         </InputWithLabel>
       </div>
+
       <div class="schools-table__add-button-wrapper">
         <Tooltip>
           <span slot="trigger">

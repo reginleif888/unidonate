@@ -1,5 +1,6 @@
 import type { FormAdminStudent } from "$lib/admin/types";
 import type { IColumn } from "$lib/common/components";
+import { formatDateValueToLocale } from "$lib/common/utils";
 import { ActionCell, ImageCell } from "./components";
 
 export const columns: Array<IColumn<FormAdminStudent>> = [
@@ -21,6 +22,7 @@ export const columns: Array<IColumn<FormAdminStudent>> = [
   {
     key: "dateOfBirth",
     label: "Date of Birth",
+    format: (value) => formatDateValueToLocale(value),
   },
   {
     key: "grade",

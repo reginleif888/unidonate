@@ -51,6 +51,7 @@
     "vitest": "^1.2.0"
   },
   "dependencies": {
+    "@internationalized/date": "^3.5.2",
     "@sveltestack/svelte-query": "^1.6.0",
     "animejs": "^3.2.2",
     "bits-ui": "^0.17.0",

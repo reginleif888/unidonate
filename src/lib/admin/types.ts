@@ -1,4 +1,5 @@
-import type { Image, UploadedFile } from "$lib/common/types";
+import type { UploadedFile } from "$lib/common/types";
+import { type DateValue } from "@internationalized/date";
 
 export interface FormAdminSchool {
   id: string;
@@ -7,13 +8,15 @@ export interface FormAdminSchool {
   location: string;
   numberOfStudents: number;
   images: Array<File & UploadedFile>;
+  active: boolean;
 }
 
 export interface FormAdminStudent {
   id: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: DateValue | null;
   grade: string;
-  images: Array<any>;
+  images: Array<File & UploadedFile>;
+  active: boolean;
 }

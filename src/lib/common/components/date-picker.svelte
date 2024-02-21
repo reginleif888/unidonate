@@ -3,20 +3,28 @@
   import { CaretLeft, CaretRight, CalendarBlank } from "phosphor-svelte";
   import { flyAndScale } from "../transitions";
   import { type DateValue } from "@internationalized/date";
+  import { createEventDispatcher } from "svelte";
 
   type $$Props = {
     value: DateValue | null;
     error?: boolean;
   };
 
+  const dispatch = createEventDispatcher();
+
   export let value: any = null;
   export let error: boolean = false;
+
+  function handleChange(value: DateValue | undefined) {
+    dispatch("change", { value });
+  }
 </script>
 
 <DatePicker.Root
   weekdayFormat="short"
   fixedWeeks={true}
   bind:value
+  onValueChange={handleChange}
   locale={window.navigator.language}
 >
   <div class="date-picker-root__inner input-text-medium">
