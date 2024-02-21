@@ -32,3 +32,4 @@ export { default as Switch } from "./switch.svelte";
 export { default as FileUploader } from "./file-uploader.svelte";
 export { default as TruncatedText } from "./truncated-text.svelte";
 export { default as DatePicker } from "./date-picker.svelte";
+export { default as Spinner } from "./spinner.svelte";

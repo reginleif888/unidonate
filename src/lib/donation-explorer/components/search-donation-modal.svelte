@@ -1,8 +1,9 @@
 <script lang="ts">
   import { flyAndScale } from "$lib/common/transitions";
-  import { Input, Modal } from "$lib/common/components";
+  import { Input, Modal, Spinner } from "$lib/common/components";
   import Button from "$lib/common/components/button.svelte";
   import { MagnifyingGlass } from "phosphor-svelte";
+  import { wait } from "$lib/common/utils";
 
   export let open: boolean = true;
 
@@ -10,7 +11,17 @@
 
   let donationFound: boolean = false;
 
-  function handleSearchExecute() {
+  let loading: boolean = false;
+
+  async function handleSearchExecute() {
+    loading = true;
+
+    donationFound = false;
+
+    await wait(3000);
+
+    loading = false;
+
     donationFound = true;
   }
 
@@ -33,8 +44,17 @@
             contained
             on:click={handleSearchExecute}
           >
-            <div slot="start-icon" class="search-donation-modal__search-icon">
-              <MagnifyingGlass size={20} />
+            <div
+              slot="start-icon"
+              class:search-donation-modal__search-icon={!loading}
+            >
+              {#if !loading}
+                <MagnifyingGlass size={20} />
+              {/if}
+
+              {#if loading}
+                <Spinner size={20} />
+              {/if}
             </div>
           </Button>
         </span>
@@ -74,11 +94,6 @@
     &__input-wrapper {
       width: 100%;
       margin-bottom: 16px;
-    }
-
-    &__search-icon {
-      position: relative;
-      top: 2px;
     }
 
     &__search-icon {

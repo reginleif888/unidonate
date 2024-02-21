@@ -1,7 +1,20 @@
 <script lang="ts">
   import { Button, Input, InputWithLabel } from "$lib/common/components";
+  import { wait } from "$lib/common/utils";
 
   export let onConfirm: () => void = () => null;
+
+  export let loading: boolean = false;
+
+  async function handleConfirm() {
+    loading = true;
+
+    await wait(3000);
+
+    onConfirm();
+
+    loading = false;
+  }
 </script>
 
 <div class="root">
@@ -18,7 +31,7 @@
   <InputWithLabel required label="Bitcoin transaction Id (TXID)">
     <Input placeholder="My TXID..." />
   </InputWithLabel>
-  <Button label="Confirm" contained on:click={onConfirm} />
+  <Button label="Confirm" contained on:click={handleConfirm} {loading} />
 </div>
 
 <style>

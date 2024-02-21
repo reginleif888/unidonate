@@ -18,6 +18,7 @@
   import { MAP_ALLOCATION_CATEGORY } from "../constant";
   import { type DoughnutChartDataItem } from "$lib/common/types";
   import { snackbarStore } from "$lib/common/stores";
+  import { wait } from "$lib/common/utils";
 
   let donutData: Array<DoughnutChartDataItem> = [
     {
@@ -64,6 +65,8 @@
 
   let stickyTopControls: boolean = false;
 
+  let loading: boolean = false;
+
   function checkStickyTopControls() {
     if (scrollRoot) {
       const scrollTop = scrollRoot.scrollTop;
@@ -72,7 +75,13 @@
     }
   }
 
-  function handleCreateDonation() {
+  async function handleCreateDonation() {
+    loading = true;
+
+    await wait(3000);
+
+    loading = false;
+
     donationModalOpen = true;
   }
 </script>
@@ -151,7 +160,12 @@
           <div slot="content">Reset all categories to 25%</div>
         </Tooltip>
       </div>
-      <Button label="Create donation" contained on:click={handleCreateDonation}>
+      <Button
+        label="Create donation"
+        contained
+        on:click={handleCreateDonation}
+        {loading}
+      >
         <span slot="end-icon" class="h6">🎉</span>
       </Button>
     </div>

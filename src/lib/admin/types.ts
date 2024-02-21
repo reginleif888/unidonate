@@ -1,4 +1,4 @@
-import type { Image } from "$lib/common/types";
+import type { Image, UploadedFile } from "$lib/common/types";
 
 export interface FormAdminSchool {
   id: string;
@@ -6,7 +6,7 @@ export interface FormAdminSchool {
   website: string;
   location: string;
   numberOfStudents: number;
-  images: Array<any>;
+  images: Array<File & UploadedFile>;
 }
 
 export interface FormAdminStudent {

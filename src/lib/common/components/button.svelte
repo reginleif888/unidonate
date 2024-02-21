@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from "svelte/elements";
+  import Spinner from "./spinner.svelte";
 
   type $$Props = HTMLButtonAttributes & {
     variant?: "primary" | "secondary";
@@ -9,6 +10,8 @@
     fullWidth?: boolean;
     justify?: "left" | "center" | "right" | "between";
     onlyIcon?: boolean;
+    loading?: boolean;
+    notClickable?: boolean;
   };
 
   export let variant: "primary" | "secondary" = "primary";
@@ -18,6 +21,8 @@
   export let fullWidth: boolean = false;
   export let justify: "left" | "center" | "right" | "between" = "between";
   export let onlyIcon: boolean = false;
+  export let loading: boolean = false;
+  export let notClickable: boolean = false;
 </script>
 
 <button
@@ -34,10 +39,14 @@
   class:justify-right={justify === "right"}
   class:justify-between={justify === "between"}
   class:only-icon={onlyIcon}
+  class:not-clickable={notClickable}
   on:click
   {...$$restProps}
-  ><slot name="start-icon" />{label}<slot name="end-icon" /></button
->
+  ><slot name="start-icon" />{label}<slot name="end-icon" />
+  {#if loading}
+    <Spinner />
+  {/if}
+</button>
 
 <style>
   button {
@@ -164,5 +173,9 @@
     background: var(--uni-secondary-contained-button-disabled-bg);
     color: var(--uni-secondary-contained-button-disabled-color);
     border: 1px solid var(--uni-secondary-contained-button-disabled-border);
+  }
+
+  .not-clickable {
+    pointer-events: none;
   }
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InputWithLabel from "../../../common/components/input-with-label.svelte";
+  import { wait } from "$lib/common/utils";
   import {
     Button,
     Divider,
@@ -7,50 +7,49 @@
     Input,
     Modal,
     Switch,
+    InputWithLabel,
   } from "$lib/common/components";
   import { X } from "phosphor-svelte";
   import type { FormAdminSchool } from "../../types";
   import { IMAGE_EXTENSIONS } from "$lib/common/constant";
   import { createEventDispatcher } from "svelte";
-  import { createForm } from "svelte-forms-lib";
   import { INITIAL_VALUES } from "./school-modal.constant";
-  import * as yup from "yup";
   import { snackbarStore } from "$lib/common/stores";
+  import { createForm } from "felte";
+  import { validation } from "./school-modal.validation";
 
   export let open: boolean = false;
 
   export let school: FormAdminSchool | null = null;
 
-  let files: Array<File> = [];
-
   const dispatch = createEventDispatcher();
 
-  const { form, errors, handleSubmit } = createForm<FormAdminSchool>({
-    initialValues: school ? INITIAL_VALUES : INITIAL_VALUES,
-    validationSchema: yup.object().shape({
-      name: yup.string().required("Name is required"),
-      location: yup.string().required("Location is required"),
-      website: yup.string().url("Invalid URL").required("Website is required"),
-    }),
-    onSubmit: async () => {
-      snackbarStore.addMessage({
-        message: "School created successfully",
-        type: "success",
-      });
-    },
-  });
+  const { form, isSubmitting, handleSubmit, reset, data, errors } =
+    createForm<FormAdminSchool>({
+      initialValues: INITIAL_VALUES,
+      validate: validation,
+      onSubmit: async () => {
+        await wait(2000);
+
+        dispatch("close");
+      },
+    });
 
   const handleClose = () => {
+    reset();
+
     dispatch("close");
   };
 
   $: {
-    $form.website;
+    if (!open) {
+      reset();
+    }
   }
 </script>
 
 <Modal bind:open onClose={handleClose}>
-  <form class="school-modal" on:submit={handleSubmit}>
+  <form class="school-modal" use:form on:submit={handleSubmit}>
     <div class="school-modal__header">
       {#if school}
         <h4 class="h4">Edit school {school.name}</h4>
@@ -66,7 +65,9 @@
         on:click={handleClose}><X size={32} /></button
       >
     </div>
+
     <Divider />
+
     <div class="school-modal__content">
       <div class="school-modal__content-row">
         <div class="school-modal__input-with-label-wrapper">
@@ -74,11 +75,11 @@
             label="Name"
             required
             fullWidth
-            errorMessage={$errors.name}
+            errorMessage={String($errors.name ?? "")}
           >
             <Input
               placeholder="School name..."
-              bind:value={$form.name}
+              bind:value={$data.name}
               error={Boolean($errors.name)}
             />
           </InputWithLabel>
@@ -89,11 +90,11 @@
             label="Website"
             required
             fullWidth
-            errorMessage={$errors.website}
+            errorMessage={String($errors.website ?? "")}
           >
             <Input
               placeholder="School website..."
-              bind:value={$form.website}
+              bind:value={$data.website}
               error={Boolean($errors.website)}
             />
           </InputWithLabel>
@@ -106,12 +107,12 @@
             label="Location"
             required
             fullWidth
-            errorMessage={$errors.location}
+            errorMessage={String($errors.location ?? "")}
           >
             <Input
               placeholder="School location..."
-              bind:value={$form.location}
-              error={Boolean($errors.location)}
+              bind:value={$data.location}
+              error={Boolean($errors.location ?? "")}
             />
           </InputWithLabel>
         </div>
@@ -129,14 +130,11 @@
 
       <div class="school-modal__images">
         <FileUploader
-          {files}
+          bind:files={$data.images}
           labelTitle={"Upload images"}
           labelSubtitle={"Max image size: 2MB"}
           accept={IMAGE_EXTENSIONS}
           maxSize={2 * 1024 * 1024}
-          on:change={(event) => {
-            files = event.detail;
-          }}
           on:size-error={(event) => {
             snackbarStore.addMessage({
               message: `Max file size is ${event.detail.maxSize / 1024 / 1024}MB`,
@@ -147,13 +145,14 @@
       </div>
 
       <div class="school-modal__blobs">
-        {#each files.map((file) => URL.createObjectURL(file)) as blob}
+        {#each $data.images.map( (file) => (file.id ? "" : URL.createObjectURL(file)) ) as blob}
           <img src={blob} alt="uploaded-img" class="school-modal__blob" />
         {/each}
       </div>
     </div>
 
     <Divider />
+
     <div class="school-modal__footer">
       <Button
         fullWidth
@@ -167,6 +166,8 @@
         label={school ? "Update" : "Create"}
         type="submit"
         contained
+        loading={$isSubmitting}
+        notClickable={$isSubmitting}
       />
     </div>
   </form>

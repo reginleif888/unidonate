@@ -15,6 +15,7 @@
   import { createEventDispatcher } from "svelte";
   import { createForm } from "svelte-forms-lib";
   import { snackbarStore } from "$lib/common/stores";
+  import * as yup from "yup";
 
   export let open: boolean = false;
 
@@ -22,7 +23,20 @@
 
   let files: Array<File> = [];
 
-  createForm;
+  createForm({
+    initialValues: {},
+    validationSchema: yup.object().shape({
+      firstName: yup.string().required("First name is required"),
+      lastName: yup.string().required("Last name is required"),
+      grade: yup.string().required("Grade is required"),
+    }),
+    onSubmit: async () => {
+      snackbarStore.addMessage({
+        message: "School created successfully",
+        type: "success",
+      });
+    },
+  });
 
   const dispatch = createEventDispatcher();
 

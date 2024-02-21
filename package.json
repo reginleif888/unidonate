@@ -54,8 +54,8 @@
     "@sveltestack/svelte-query": "^1.6.0",
     "animejs": "^3.2.2",
     "bits-ui": "^0.17.0",
+    "felte": "^1.2.14",
     "phosphor-svelte": "^1.4.2",
-    "svelte-forms-lib": "^2.0.1",
     "uuid": "^9.0.1",
     "xlsx": "^0.18.5",
     "yup": "^1.3.3"

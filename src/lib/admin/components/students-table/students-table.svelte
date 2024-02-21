@@ -153,6 +153,7 @@
     &__add-button-icon {
       position: relative;
       top: 2px;
+      padding: 0 3px;
     }
 
     &__import-icon {

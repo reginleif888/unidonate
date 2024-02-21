@@ -63,6 +63,11 @@
 
       console.log("mapped", JSON.stringify(mapped));
     } catch (error) {
+      snackbarStore.addMessage({
+        message: "Invalid file",
+        type: "error",
+      });
+
       console.error("error", error);
     }
   }
