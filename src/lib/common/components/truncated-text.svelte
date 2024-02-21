@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from "svelte";
   import { clickToCopy } from "$lib/common/actions";
   import Tooltip from "./tooltip.svelte";
-  import { Copy } from "phosphor-svelte";
+  import { Copy, Check } from "phosphor-svelte";
 
   export let text = "";
   export let withCopy: boolean = false;
@@ -11,10 +11,20 @@
   let isEllipsized = false;
   let resizeObserver: ResizeObserver | null = null;
 
+  let isCopied = false;
+
   function checkEllipsized() {
     if (textElement) {
       isEllipsized = textElement.scrollWidth > textElement.clientWidth;
     }
+  }
+
+  function handleCopySuccess() {
+    isCopied = true;
+
+    setTimeout(() => {
+      isCopied = false;
+    }, 1500);
   }
 
   onMount(() => {
@@ -41,9 +51,20 @@
   <div slot="content" class="content">
     {text}
     {#if withCopy}
-      <button class="copy-button" use:clickToCopy={text} tabindex="-1">
-        <Copy size={18} />
-      </button>
+      {#if isCopied}
+        <span class="copy-button"><Check /></span>
+      {/if}
+
+      {#if !isCopied}
+        <button
+          class="copy-button"
+          use:clickToCopy={text}
+          tabindex="-1"
+          on:copysuccess={handleCopySuccess}
+        >
+          <Copy size={18} />
+        </button>
+      {/if}
     {/if}
   </div>
 </Tooltip>
@@ -73,6 +94,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    color: var(--uni-on-bg);
 
     &:focus {
       outline: none;
