@@ -1,8 +1,52 @@
-<script>
+<script lang="ts">
   import { Button, LockAnimatedIcon } from "$lib/common/components";
   import { ConnectedNavCards } from "$lib/admin/components";
+  import { onMount } from "svelte";
+  import { authClientStore } from "$lib/common/stores";
 
-  let connected = true;
+  let connected = false;
+
+  async function connect() {
+    if ($authClientStore) {
+      if (connected) {
+        $authClientStore.logout();
+
+        connected = false;
+
+        return;
+      }
+
+      $authClientStore.login({
+        maxTimeToLive: BigInt(6 * 60 * 60 * 1000 * 1000 * 1000), // 6h
+        identityProvider:
+          process.env.DFX_NETWORK === "ic"
+            ? "https://identity.ic0.app/#authorize"
+            : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/#authorize`,
+        windowOpenerFeatures:
+          `left=${window.screen.width / 2 - 525 / 2}, ` +
+          `top=${window.screen.height / 2 - 705 / 2},` +
+          `toolbar=0,location=0,menubar=0,width=525,height=705`,
+        onSuccess: () => {
+          authClientStore.update((stored) => stored);
+        },
+        onError: (err) => {
+          console.error(err);
+        },
+      });
+    }
+  }
+
+  async function checkAuth() {
+    if ($authClientStore && (await $authClientStore.isAuthenticated())) {
+      connected = true;
+    }
+  }
+
+  $: {
+    if ($authClientStore) {
+      checkAuth();
+    }
+  }
 </script>
 
 <div class="root">
@@ -30,9 +74,7 @@
         justify="center"
         contained
         fullWidth
-        on:click={() => {
-          connected = !connected;
-        }}
+        on:click={connect}
       />
     </div>
   </div>

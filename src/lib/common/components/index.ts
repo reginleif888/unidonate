@@ -33,3 +33,4 @@ export { default as FileUploader } from "./file-uploader.svelte";
 export { default as TruncatedText } from "./truncated-text.svelte";
 export { default as DatePicker } from "./date-picker.svelte";
 export { default as Spinner } from "./spinner.svelte";
+export { default as Redirect } from "./redirect.svelte";

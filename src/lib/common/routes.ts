@@ -10,7 +10,7 @@ export enum AppRoute {
 }
 
 export enum AdminRoute {
-  Connect = "/admin/",
+  Connect = "/admin",
   Schools = "/admin/schools",
   Students = "/admin/schools/[schoolId]/students",
   Owners = "/admin/owners",
