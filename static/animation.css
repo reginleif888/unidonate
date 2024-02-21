@@ -1,0 +1,11 @@
+@keyframes skeleton-pulse {
+  0% {
+    background-color: var(--uni-skeleton-bg-main);
+  }
+  50% {
+    background-color: var(--uni-skeleton-bg-secondary);
+  }
+  100% {
+    background-color: var(--uni-skeleton-bg-main);
+  }
+}

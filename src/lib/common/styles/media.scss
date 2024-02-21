@@ -1,0 +1,29 @@
+$smallTablet: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$largeDesktop: 1200px;
+$extraLargeDesktop: 1400px;
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == smallTablet {
+    @media (min-width: $smallTablet) {
+      @content;
+    }
+  } @else if $breakpoint == tablet {
+    @media (min-width: $tablet) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $desktop) {
+      @content;
+    }
+  } @else if $breakpoint == largeDesktop {
+    @media (min-width: $largeDesktop) {
+      @content;
+    }
+  } @else if $breakpoint == extraLargeDesktop {
+    @media (min-width: $extraLargeDesktop) {
+      @content;
+    }
+  }
+}

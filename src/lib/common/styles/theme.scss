@@ -1,0 +1,400 @@
+@function adjust-color($color, $percent) {
+  $lightness: lightness($color);
+
+  @if $lightness < 50% {
+    @return lighten($color, $percent);
+  } @else {
+    @return darken($color, $percent);
+  }
+}
+
+@function adjust-saturation($color, $percent, $opacity: 1) {
+  $adjusted-color: $color;
+  $saturation: saturation($color);
+
+  @if $saturation < 50% {
+    $adjusted-color: saturate($color, $percent);
+  } @else {
+    $adjusted-color: desaturate($color, $percent);
+  }
+
+  @return rgba($adjusted-color, $opacity);
+}
+
+@function linear-gradient($direction, $colors...) {
+  $gradient: null;
+  $gradient: "linear-gradient(" + $direction;
+  @each $color in $colors {
+    $gradient: $gradient + ", " + $color;
+  }
+  $gradient: $gradient + ")";
+  @return unquote($gradient);
+}
+
+@mixin theme(
+  $lib,
+  $primary,
+  $onPrimary,
+  $secondary,
+  $onSecondary,
+  $background,
+  $onBackground
+) {
+  $divider-color: adjust-color($onBackground, 70%);
+  $focus-outline: adjust-saturation($primary, 0%, 0.75);
+
+  $error: #f44336;
+  $warning: #ff9800;
+  $info: #2196f3;
+  $success: #62c98d;
+
+  // Primary Contained Button
+  $primary-contained-button-default-bg: $primary;
+  $primary-contained-button-hover-bg: adjust-color($primary, 5%);
+  $primary-contained-button-disabled-bg: adjust-color($onBackground, 80%);
+
+  $primary-contained-button-default-color: $onPrimary;
+  $primary-contained-button-hover-color: $onPrimary;
+  $primary-contained-button-disabled-color: adjust-color($onBackground, 70%);
+
+  $primary-contained-button-default-border: $primary;
+  $primary-contained-button-hover-border: adjust-color($primary, 5%);
+  $primary-contained-button-disabled-border: adjust-color($onBackground, 70%);
+
+  // Primary Outlined Button
+  $primary-outlined-button-default-bg: transparent;
+  $primary-outlined-button-hover-bg: rgba($primary, 0.04);
+  $primary-outlined-button-disabled-bg: transparent;
+
+  $primary-outlined-button-default-color: $primary;
+  $primary-outlined-button-hover-color: adjust-color($primary, 5%);
+  $primary-outlined-button-disabled-color: adjust-color($onBackground, 70%);
+
+  $primary-outlined-button-default-border: $primary;
+  $primary-outlined-button-hover-border: adjust-color($primary, 5%);
+  $primary-outlined-button-disabled-border: adjust-color($onBackground, 70%);
+
+  // Secondary Contained Button
+  $secondary-contained-button-default-bg: $secondary;
+  $secondary-contained-button-hover-bg: adjust-color($secondary, 5%);
+  $secondary-contained-button-disabled-bg: adjust-saturation(
+    $background,
+    0%,
+    20%
+  );
+
+  $secondary-contained-button-default-color: $onSecondary;
+  $secondary-contained-button-hover-color: $onSecondary;
+  $secondary-contained-button-disabled-color: adjust-color($onBackground, 70%);
+
+  $secondary-contained-button-default-border: adjust-color($secondary, 5%);
+  $secondary-contained-button-hover-border: adjust-color($secondary, 5%);
+  $secondary-contained-button-disabled-border: adjust-color($onBackground, 70%);
+
+  // Secondary Outlined Button
+  $secondary-outlined-button-default-bg: transparent;
+  $secondary-outlined-button-hover-bg: rgba($onSecondary, 0.04);
+  $secondary-outlined-button-disabled-bg: transparent;
+
+  $secondary-outlined-button-default-color: $onSecondary;
+  $secondary-outlined-button-hover-color: adjust-color($onSecondary, 5%);
+  $secondary-outlined-button-disabled-color: adjust-color($onBackground, 70%);
+
+  $secondary-outlined-button-default-border: adjust-color($onBackground, 50%);
+  $secondary-outlined-button-hover-border: adjust-color($onBackground, 60%);
+  $secondary-outlined-button-disabled-border: adjust-color($onBackground, 70%);
+
+  // Primary
+  --#{$lib}-primary: #{$primary};
+  --#{$lib}-on-primary: #{$onPrimary};
+
+  @for $i from 1 through 10 {
+    --#{$lib}-primary-transparent-#{$i}0: #{adjust-saturation(
+        $primary,
+        0%,
+        calc($i / 10)
+      )};
+  }
+
+  @for $i from 1 through 10 {
+    --#{$lib}-primary-#{$i}00: #{adjust-saturation(
+        $primary,
+        $percent: $i * 10%
+      )};
+  }
+  @for $i from 1 through 10 {
+    --#{$lib}-on-primary-#{$i}00: #{adjust-color(
+        $onPrimary,
+        $percent: $i * 10%
+      )};
+  }
+  // -----------------------------------------------------
+
+  // Gradient
+  --#{$lib}-primary-gradient: linear-gradient(
+    to right,
+    #{$primary},
+    #{adjust-saturation($primary, 0%, 0.9)},
+    #{adjust-saturation($primary, 0%, 0.7)},
+    #{adjust-saturation($primary, 0%, 0.55)},
+    #{adjust-saturation($primary, 0%, 0.5)}
+  );
+
+  --#{$lib}-page-gradient: linear-gradient(
+    to right,
+    #{$primary},
+    #{adjust-saturation($primary, 0%, 0.9)},
+    #{adjust-saturation($primary, 0%, 0.7)}
+  );
+  // -----------------------------------------------------
+
+  // Secondary
+  --#{$lib}-secondary: #{$secondary};
+  --#{$lib}-on-secondary: #{$onSecondary};
+  // -----------------------------------------------------
+
+  // Background
+  --#{$lib}-bg: #{$background};
+  --#{$lib}-on-bg: #{$onBackground};
+
+  @for $i from 1 through 10 {
+    --#{$lib}-bg-#{$i}00: #{adjust-color($background, $percent: $i * 1%)};
+  }
+
+  @for $i from 1 through 10 {
+    --#{$lib}-bg-transparent-#{$i}00: #{adjust-saturation(
+        $background,
+        0%,
+        $opacity: $i * 10%
+      )};
+  }
+  // -----------------------------------------------------
+
+  // Divider
+  --#{$lib}-divider-color: #{$divider-color};
+  // -----------------------------------------------------
+
+  // Focus outline
+  --#{$lib}-focus-outline: #{$focus-outline};
+  //
+
+  // CSS Custom Properties for Primary Contained Button
+  --#{$lib}-primary-contained-button-default-bg: #{$primary-contained-button-default-bg};
+  --#{$lib}-primary-contained-button-hover-bg: #{$primary-contained-button-hover-bg};
+  --#{$lib}-primary-contained-button-disabled-bg: #{$primary-contained-button-disabled-bg};
+
+  --#{$lib}-primary-contained-button-default-color: #{$primary-contained-button-default-color};
+  --#{$lib}-primary-contained-button-hover-color: #{$primary-contained-button-hover-color};
+  --#{$lib}-primary-contained-button-disabled-color: #{$primary-contained-button-disabled-color};
+
+  --#{$lib}-primary-contained-button-default-border: #{$primary-contained-button-default-border};
+  --#{$lib}-primary-contained-button-hover-border: #{$primary-contained-button-hover-border};
+  --#{$lib}-primary-contained-button-disabled-border: #{$primary-contained-button-disabled-border};
+  // -----------------------------------------------------
+
+  // CSS Custom Properties for Primary Outlined Button
+  --#{$lib}-primary-outlined-button-default-bg: #{$primary-outlined-button-default-bg};
+  --#{$lib}-primary-outlined-button-hover-bg: #{$primary-outlined-button-hover-bg};
+  --#{$lib}-primary-outlined-button-disabled-bg: #{$primary-outlined-button-disabled-bg};
+
+  --#{$lib}-primary-outlined-button-default-color: #{$primary-outlined-button-default-color};
+  --#{$lib}-primary-outlined-button-hover-color: #{$primary-outlined-button-hover-color};
+  --#{$lib}-primary-outlined-button-disabled-color: #{$primary-outlined-button-disabled-color};
+
+  --#{$lib}-primary-outlined-button-default-border: #{$primary-outlined-button-default-border};
+  --#{$lib}-primary-outlined-button-hover-border: #{$primary-outlined-button-hover-border};
+  --#{$lib}-primary-outlined-button-disabled-border: #{$primary-outlined-button-disabled-border};
+  // -----------------------------------------------------
+
+  // CSS Custom Properties for Secondary Contained Button
+  --#{$lib}-secondary-contained-button-default-bg: #{$secondary-contained-button-default-bg};
+  --#{$lib}-secondary-contained-button-hover-bg: #{$secondary-contained-button-hover-bg};
+  --#{$lib}-secondary-contained-button-disabled-bg: #{$secondary-contained-button-disabled-bg};
+
+  --#{$lib}-secondary-contained-button-default-color: #{$secondary-contained-button-default-color};
+  --#{$lib}-secondary-contained-button-hover-color: #{$secondary-contained-button-hover-color};
+  --#{$lib}-secondary-contained-button-disabled-color: #{$secondary-contained-button-disabled-color};
+
+  --#{$lib}-secondary-contained-button-default-border: #{$secondary-contained-button-default-border};
+  --#{$lib}-secondary-contained-button-hover-border: #{$secondary-contained-button-hover-border};
+  --#{$lib}-secondary-contained-button-disabled-border: #{$secondary-contained-button-disabled-border};
+  // -----------------------------------------------------
+
+  // CSS Custom Properties for Secondary Outlined Button
+  --#{$lib}-secondary-outlined-button-default-bg: #{$secondary-outlined-button-default-bg};
+  --#{$lib}-secondary-outlined-button-hover-bg: #{$secondary-outlined-button-hover-bg};
+  --#{$lib}-secondary-outlined-button-disabled-bg: #{$secondary-outlined-button-disabled-bg};
+
+  --#{$lib}-secondary-outlined-button-default-color: #{$secondary-outlined-button-default-color};
+  --#{$lib}-secondary-outlined-button-hover-color: #{$secondary-outlined-button-hover-color};
+  --#{$lib}-secondary-outlined-button-disabled-color: #{$secondary-outlined-button-disabled-color};
+
+  --#{$lib}-secondary-outlined-button-default-border: #{$secondary-outlined-button-default-border};
+  --#{$lib}-secondary-outlined-button-hover-border: #{$secondary-outlined-button-hover-border};
+  --#{$lib}-secondary-outlined-button-disabled-border: #{$secondary-outlined-button-disabled-border};
+  // -----------------------------------------------------
+
+  //  Typography colors
+  --#{$lib}-text-color: #{$onBackground};
+
+  @for $i from 1 through 10 {
+    --#{$lib}-text-color-#{$i}00: #{adjust-color(
+        $onBackground,
+        $percent: $i * 10%
+      )};
+  }
+  // -----------------------------------------------------
+
+  // CSS Custom Properties for Input
+  --#{$lib}-input-border: #{$divider-color};
+  --#{$lib}-input-bg: #{$background};
+  --#{$lib}-input-color: var(--uni-text-color);
+
+  --#{$lib}-input-border-hover: #{$divider-color};
+  --#{$lib}-input-bg-hover: #{$background};
+  --#{$lib}-input-color-hover: var(--uni-text-color);
+
+  --#{$lib}-input-border-disabled: #{$divider-color};
+  --#{$lib}-input-bg-disabled: #{adjust-color($background, 5%)};
+  --#{$lib}-input-color-disabled: var(--uni-text-color);
+
+  --#{$lib}-input-border-error: #{adjust-saturation($error, 10%)};
+  --#{$lib}-input-bg-error: #{$background};
+  --#{$lib}-input-color-error: var(--uni-text-color);
+  // -----------------------------------------------------
+
+  // Status colors
+
+  // Error
+  --#{$lib}-error-color: #{adjust-saturation($error, 10%)};
+  --#{$lib}-error-bg: #{adjust-saturation($error, 0%, 0.05)};
+  --#{$lib}-error-border: #{adjust-saturation($error, 10%, 0.5)};
+
+  // Warning
+  --#{$lib}-warning-color: #{adjust-saturation($warning, 10%)};
+  --#{$lib}-warning-bg: #{adjust-saturation($warning, 0%, 0.05)};
+  --#{$lib}-warning-border: #{adjust-saturation($warning, 10%, 0.5)};
+
+  // Info
+  --#{$lib}-info-color: #{adjust-saturation($info, 10%)};
+  --#{$lib}-info-bg: #{adjust-saturation($info, 0%, 0.05)};
+  --#{$lib}-info-border: #{adjust-saturation($info, 10%, 0.5)};
+
+  // Success
+  --#{$lib}-success-color: #{adjust-saturation($success, 10%)};
+  --#{$lib}-success-bg: #{adjust-saturation($success, 0%, 0.05)};
+  --#{$lib}-success-border: #{adjust-saturation($success, 10%, 0.5)};
+  // -----------------------------------------------------
+
+  // Border radius
+  --#{$lib}-radius-button: 9px;
+  --#{$lib}-radius-input: 9px;
+  --#{$lib}-radius-paper: 9px;
+  --#{$lib}-radius-tooltip: 9px;
+  --#{$lib}-radius-popover: 9px;
+  // -----------------------------------------------------
+
+  // Padding
+  --#{$lib}-padding-button-medium: 0 21px;
+  --#{$lib}-padding-button-small: 0 12px;
+  --#{$lib}-padding-input-medium: 8px 14px;
+  --#{$lib}-padding-input-small: 8px 8px;
+  --#{$lib}-padding-paper: 9px;
+  --#{$lib}-radius-tooltip: 9px;
+  --#{$lib}-radius-popover: 9px;
+  // -----------------------------------------------------
+
+  // Height
+  --#{$lib}-height-button-medium: 48px;
+  --#{$lib}-height-input-medium: 48px;
+  --#{$lib}-height-button-small: 32px;
+  --#{$lib}-height-input-small: 32px;
+  // -----------------------------------------------------
+
+  // Shadows
+  --#{$lib}-shadow-button: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-input: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-paper: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-tooltip: 0 2px 4px 0 #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  --#{$lib}-shadow-popover: 0 2px 6px -1 #{adjust-saturation(
+        $onBackground,
+        0%,
+        0.1
+      )},
+    0 2px 4px -1 #{adjust-saturation($onBackground, 0%, 0.06)};
+  --#{$lib}-shadow-table-head: 0 4px 6px -2px #{adjust-saturation(
+      $onBackground,
+      0%,
+      0.2
+    )};
+  // -----------------------------------------------------
+
+  // Fonts
+  --#{$lib}-heading-font-family: "Montserrat", sans-serif;
+  --#{$lib}-description-font-family: "Open Sans", sans-serif;
+  // -----------------------------------------------------
+
+  // zIndex
+  --#{$lib}-zIndex-app-bar: 1100;
+  --#{$lib}-zIndex-drawer: 1200;
+  --#{$lib}-zIndex-modal: 1300;
+  --#{$lib}-zIndex-modal-content: 1301;
+  --#{$lib}-zIndex-popover: 1400;
+  --#{$lib}-zIndex-tooltip: 1500;
+  --#{$lib}-zIndex-snackbar: 1600;
+  // -----------------------------------------------------
+
+  // transitions
+  --#{$lib}-transition-default: ease 0.2s;
+
+  // Steps
+  --#{$lib}-step-active-bg: #62c98d;
+
+  // skeletons
+  --#{$lib}-skeleton-bg-main: #{adjust-color($background, 20%)};
+  --#{$lib}-skeleton-bg-secondary: #{adjust-color($background, 10%)};
+
+  // overlay
+
+  --#{$lib}-overlay-bg: #(adjust-saturation($background, 0%, 0.5));
+}
+
+:global(html.light) {
+  @include theme(
+    "uni",
+    $primary: #553dee,
+    $onPrimary: #ffffff,
+    $secondary: #e4e4e4,
+    $onSecondary: #202020,
+    $background: #ffffff,
+    $onBackground: #000000
+  );
+}
+
+:global(html.dark) {
+  @include theme(
+    "uni",
+    $primary: #8675f0,
+    $onPrimary: #ffffff,
+    $secondary: #434343,
+    $onSecondary: #c5c4c4,
+    $background: #212122,
+    $onBackground: #ffffff
+  );
+}
