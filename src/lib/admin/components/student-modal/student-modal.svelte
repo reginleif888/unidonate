@@ -149,7 +149,7 @@
         <div class="student-modal__content-row">
           <div class="student-modal__input-with-label-wrapper">
             <InputWithLabel label="Active" fullWidth>
-              <Switch checked={$data.active} />
+              <Switch bind:checked={$data.active} />
             </InputWithLabel>
           </div>
         </div>
