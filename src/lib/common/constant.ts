@@ -1,31 +1,27 @@
-import { AllocationCategory } from "./types";
+import * as Icons from "phosphor-svelte";
+import type { SelectItem } from "./types";
 
-export const Screen = {
-  sm: 576, // Small devices (landscape phones, 576px and up)
-  md: 768, // Medium devices (tablets, 768px and up)
-  lg: 992, // Large devices (desktops, 992px and up)
-  xl: 1200, // Extra large devices (large desktops, 1200px and up)
-  xxl: 1400, // Extra extra large devices (larger desktops, 1400px and up)
+export const SCREEN = {
+  smallTablet: 576, // Small devices (landscape phones, 576px and up)
+  tablet: 768, // Medium devices (tablets, 768px and up)
+  desktop: 992, // Large devices (desktops, 992px and up)
+  largeDesktop: 1200, // Extra large devices (large desktops, 1200px and up)
+  extraLargeDesktop: 1400, // Extra extra large devices (larger desktops, 1400px and up)
 } as const;
 
-export const MAP_ALLOCATION_CATEGORY: Record<
-  string,
-  { label: string; color: string }
-> = {
-  [AllocationCategory.DesignAndDevelopment]: {
-    label: "Design & Development",
-    color: "var(--success-color)",
+export const MODES: Array<SelectItem> = [
+  {
+    label: "",
+    value: "light",
+    Icon: Icons.Sun,
   },
-  [AllocationCategory.LunchAndSnacks]: {
-    label: "Lunch & Snacks",
-    color: "var(--error-color)",
+  {
+    label: "",
+    value: "dark",
+    Icon: Icons.Moon,
   },
-  [AllocationCategory.SchoolSupplies]: {
-    label: "School Supplies",
-    color: "var(--warning-color)",
-  },
-  [AllocationCategory.TeacherSupport]: {
-    label: "Teacher Support",
-    color: "var(--info-color)",
-  },
-};
+];
+
+export const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"];
+
+export const SHEET_EXTENSIONS = [".csv", ".xls", ".xlsx"];
