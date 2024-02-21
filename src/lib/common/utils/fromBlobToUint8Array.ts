@@ -1,5 +1,5 @@
 interface FormBlobToUint8ArrayParams {
-  files: Array<File>;
+  files: Array<File | Blob>;
 }
 
 export default function filesToUint8Arrays({

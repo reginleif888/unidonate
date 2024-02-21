@@ -18,6 +18,7 @@
 
 <Tooltip.Root openDelay={150} closeOnPointerDown={false} {closeDelay} bind:open>
   <Tooltip.Trigger
+    tabindex={-1}
     class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""} ${
       fullWidth ? "tooltip-trigger--full-width" : ""
     }`}

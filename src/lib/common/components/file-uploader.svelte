@@ -5,13 +5,14 @@
   import { X } from "phosphor-svelte";
   import type { UploadedFile } from "../types";
 
-  export let maxSize: number;
+  export let maxSize: number = 0;
   export let multiple: boolean = true;
   export let labelTitle: string = "Upload files";
   export let labelSubtitle: string = "";
   export let buttonLabel: string = "Add files";
   export let accept: Array<string> = [];
   export let files: Array<File | UploadedFile> = [];
+  export let maxFiles: number = 0;
 
   const dispatch = createEventDispatcher();
 
@@ -33,7 +34,13 @@
 
       let sizeError = localFiles.some((file) => file.size > maxSize);
 
-      if (sizeError) {
+      if (maxFiles && files.length + localFiles.length > maxFiles) {
+        dispatch("max-files-error", { maxFiles });
+
+        return;
+      }
+
+      if (maxSize && sizeError) {
         dispatch("size-error", { maxSize });
 
         return;

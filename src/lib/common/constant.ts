@@ -23,3 +23,5 @@ export const MODES: Array<SelectItem> = [
 ];
 
 export const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"];
+
+export const SHEET_EXTENSIONS = [".csv", ".xls", ".xlsx"];

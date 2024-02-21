@@ -15,6 +15,7 @@
   import { adminSchoolsMock } from "$lib/admin/mocks";
   import { MagnifyingGlass, Plus, DownloadSimple } from "phosphor-svelte";
   import SchoolModal from "../school-modal";
+  import SchoolImportModal from "../schools-import-modal";
 
   let topControlsElement: HTMLElement | null = null;
 
@@ -26,12 +27,22 @@
 
   let createModalOpen: boolean = false;
 
+  let importModalOpen: boolean = false;
+
   function openCreateModal() {
     createModalOpen = true;
   }
 
   function closeCreateModal() {
     createModalOpen = false;
+  }
+
+  function openImportModal() {
+    importModalOpen = true;
+  }
+
+  function closeImportModal() {
+    importModalOpen = false;
   }
 
   $: {
@@ -81,7 +92,7 @@
 
     <div class="schools-table__top-controls-right">
       <div class="schools-table__import-wrapper">
-        <Button contained label="Import">
+        <Button contained label="Import" on:click={openImportModal}>
           <div slot="start-icon" class="schools-table__import-icon">
             <DownloadSimple size={24} weight="bold" />
           </div>
@@ -105,6 +116,8 @@
 </div>
 
 <SchoolModal bind:open={createModalOpen} on:close={closeCreateModal} />
+
+<SchoolImportModal bind:open={importModalOpen} on:close={closeImportModal} />
 
 <style lang="scss">
   .schools-table {

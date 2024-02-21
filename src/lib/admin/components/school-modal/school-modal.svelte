@@ -129,15 +129,13 @@
 
       <div class="school-modal__images">
         <FileUploader
-          files={[{ id: "1", name: "image1.jpg", type: "image/jpeg" }]}
+          {files}
           labelTitle={"Upload images"}
           labelSubtitle={"Max image size: 2MB"}
           accept={IMAGE_EXTENSIONS}
           maxSize={2 * 1024 * 1024}
           on:change={(event) => {
             files = event.detail;
-
-            console.log("=========", { files });
           }}
           on:size-error={(event) => {
             snackbarStore.addMessage({
