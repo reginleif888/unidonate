@@ -7,8 +7,8 @@
     Switch,
     Button,
     Tooltip,
+    InputWithLabel,
   } from "$lib/common/components";
-  import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
 
   import { columns } from "./schools-table.constant";
@@ -51,8 +51,6 @@
   function handleResetPage() {
     page = 1;
   }
-
-  let count: number = 48;
 
   let query: GetSchoolsPayload = {
     filters: {
@@ -147,9 +145,9 @@
     </InputWithLabel>
   </div>
 
-  {#if count > Number(perPage.value)}
+  {#if Number($schoolsQuery.data?.total) > Number(perPage.value)}
     <Pagination
-      {count}
+      count={Number($schoolsQuery.data?.total)}
       bind:currentPage={page}
       perPage={Number(perPage.value)}
     />

@@ -94,10 +94,12 @@
     } catch (error) {
       loading = false;
 
-      snackbarStore.addMessage({
-        message: "Invalid file",
-        type: "error",
-      });
+      if (Object.keys(error as object).length) {
+        snackbarStore.addMessage({
+          message: "Invalid file",
+          type: "error",
+        });
+      }
 
       console.error("error", error);
     }

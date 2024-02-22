@@ -6,6 +6,7 @@
   import type { UploadedFile } from "../types";
 
   export let maxSize: number = 0;
+  export let maxTotalSize: number = 0;
   export let multiple: boolean = true;
   export let labelTitle: string = "Upload files";
   export let labelSubtitle: string = "";
@@ -26,6 +27,10 @@
     }
   }
 
+  $: sizeToUpload = (
+    [...files.filter((file) => (file as File).size)] as unknown as Array<File>
+  ).reduce((acc, file: File) => acc + file.size, 0);
+
   function handleChange(event: Event) {
     const target = event.target as HTMLInputElement | null;
 
@@ -33,6 +38,20 @@
       const localFiles = [...(target.files ?? [])];
 
       let sizeError = localFiles.some((file) => file.size > maxSize);
+
+      let totalSizeError =
+        (
+          [
+            ...localFiles,
+            ...files.filter((file) => (file as File).size),
+          ] as unknown as Array<File>
+        ).reduce((acc, file: File) => acc + file.size, 0) >= maxTotalSize;
+
+      if (maxTotalSize && totalSizeError) {
+        dispatch("total-size-error", { maxTotalSize });
+
+        return;
+      }
 
       if (maxFiles && files.length + localFiles.length > maxFiles) {
         dispatch("max-files-error", { maxFiles });
@@ -74,6 +93,12 @@
   >
 
   <span class="caption">{labelSubtitle}</span>
+
+  <span class="caption"
+    >Current total size to upload: {Number(sizeToUpload / 1024 / 1024).toFixed(
+      2
+    )}MB</span
+  >
 
   <button
     type="button"

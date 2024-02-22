@@ -164,10 +164,10 @@
           labelTitle={"Upload images"}
           labelSubtitle={"Max image size: 2MB"}
           accept={IMAGE_EXTENSIONS}
-          maxSize={2 * 1024 * 1024}
-          on:size-error={(event) => {
+          maxTotalSize={2 * 1024 * 1024}
+          on:total-size-error={(event) => {
             snackbarStore.addMessage({
-              message: `Max file size is ${event.detail.maxSize / 1024 / 1024}MB`,
+              message: `Max total size of files to upload is ${event.detail.maxTotalSize / 1024 / 1024}MB`,
               type: "error",
             });
           }}
