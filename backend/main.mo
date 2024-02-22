@@ -50,23 +50,30 @@ import BitcoinApi "bitcoin-integration/bitcoin-api";
 actor class Main(initialOwner : ?Principal) {
   type Student = Types.Student;
   type School = Types.School;
+  type Donation = Types.Donation;
+
   type ImageObject = Types.ImageObject;
   type EntityImage = Types.EntityImage;
-  type AddSchoolPayload = Types.AddSchoolPayload;
-  type UpdateSchoolPayload = Types.UpdateSchoolPayload;
-  type AddStudentPayload = Types.AddStudentPayload;
-  type UpdateStudentPayload = Types.UpdateStudentPayload;
+  type DonationStatus = Types.DonationStatus;
+
   type GetSchoolsPayload = Types.GetSchoolsPayload;
   type GetSchoolsResponse = Types.GetSchoolsResponse;
-  type GetDonationsPayload = Types.GetDonationsPayload;
-  type GetDonationsResponse = Types.GetDonationsResponse;
-  type HttpRequest = Types.HttpRequest;
-  type HttpResponse = Types.HttpResponse;
-  type Donation = Types.Donation;
+  type AddSchoolPayload = Types.AddSchoolPayload;
+  type UpdateSchoolPayload = Types.UpdateSchoolPayload;
+
+  type GetStudentsPayload = Types.GetStudentsPayload;
+  type GetStudentsResponse = Types.GetStudentsResponse;
+  type AddStudentPayload = Types.AddStudentPayload;
+  type UpdateStudentPayload = Types.UpdateStudentPayload;
+
   type CreateDonationPayload = Types.CreateDonationPayload;
   type CreateDonationResponse = Types.CreateDonationResponse;
   type VerifyDonationPayload = Types.VerifyDonationPayload;
-  type DonationStatus = Types.DonationStatus;
+  type GetDonationsPayload = Types.GetDonationsPayload;
+  type GetDonationsResponse = Types.GetDonationsResponse;
+
+  type HttpRequest = Types.HttpRequest;
+  type HttpResponse = Types.HttpResponse;
 
   type ImageData = {
     offset : Nat64;
@@ -129,6 +136,16 @@ actor class Main(initialOwner : ?Principal) {
     };
   };
 
+  public shared ({ caller }) func getOwners(principal : Principal) : async [Principal] {
+    await* assertOwnerAccess(caller);
+
+    let ownerPrincipals = ownersMap.entries()
+    |> Iter.map<(Principal, ()), Principal>(_, func((principal, _)) { principal })
+    |> Iter.toArray(_);
+
+    return ownerPrincipals;
+  };
+
   public shared ({ caller }) func addOwner(principal : Principal) : async () {
     await* assertOwnerAccess(caller);
     ownersMap.put(principal, ());
@@ -138,6 +155,8 @@ actor class Main(initialOwner : ?Principal) {
     await* assertOwnerAccess(caller);
     ownersMap.delete(principal);
   };
+
+  // --------------------------------------
 
   public query func getDonations({ filters; page; perPage } : GetDonationsPayload) : async GetDonationsResponse {
     let total = donations.size();
@@ -187,14 +206,14 @@ actor class Main(initialOwner : ?Principal) {
 
     var filteredSchoolsList = schools;
 
-    if (Text.size(filters.schoolName) > 0) {
+    if (Text.size(filters.schoolName) > 0 or filters.active) {
       filteredSchoolsList := Vector.Vector<School>();
 
       for (index in Iter.range(0, total - 1)) {
         let school = schools.get(index);
 
-        if (Text.contains(school.name, #text(filters.schoolName))) {
-          filteredSchoolsList.add(schools.get(index));
+        if (Text.contains(school.name, #text(filters.schoolName)) and (filters.active == false or (filters.active and school.active))) {
+          filteredSchoolsList.add(school);
         };
       };
     };
@@ -225,6 +244,60 @@ actor class Main(initialOwner : ?Principal) {
     return response;
   };
 
+  public query func getStudents(schoolId : Text, { filters; page; perPage } : GetStudentsPayload) : async GetStudentsResponse {
+    let studentsBySchool : Buffer.Buffer<Student> = Buffer.Buffer<Student>(0);
+    let studentsSize = students.size();
+
+    for (index in Iter.range(0, students.size())) {
+      if (students.get(index).schoolId == schoolId) {
+        studentsBySchool.put(studentsBySchool.size(), students.get(index));
+      };
+    };
+
+    let total = studentsBySchool.size();
+
+    var filteredStudentsList : Vector.Vector<Student> = Vector.fromArray(Buffer.toArray(studentsBySchool));
+
+    if (Text.size(filters.studentName) > 0 or filters.active) {
+      filteredStudentsList := Vector.Vector<Student>();
+
+      for (index in Iter.range(0, total - 1)) {
+        let student = studentsBySchool.get(index);
+
+        if (Text.contains(student.firstName # student.lastName, #text(filters.studentName)) and (filters.active == false or (filters.active and student.active))) {
+          filteredStudentsList.add(student);
+        };
+      };
+    };
+
+    let filteredSize = filteredStudentsList.size();
+
+    if (filteredSize == 0) {
+      return {
+        students = [];
+        total = filteredSize;
+      };
+    };
+
+    let startIndex = Nat.min(filteredSize - 1, page * perPage);
+    let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
+
+    let paginatedStudents = Vector.Vector<Student>();
+
+    for (index in Iter.range(startIndex, endIndex - 1)) {
+      paginatedStudents.add(filteredStudentsList.get(index));
+    };
+
+    let response : GetStudentsResponse = {
+      students = Vector.toArray(paginatedStudents);
+      total = filteredSize;
+    };
+
+    return response;
+  };
+
+  // --------------------------------------
+
   public shared ({ caller }) func addSchool(payload : AddSchoolPayload) : async () {
     await* assertOwnerAccess(caller);
 
@@ -245,7 +318,7 @@ actor class Main(initialOwner : ?Principal) {
   };
 
   public shared ({ caller }) func updateSchool(schoolId : Text, payload : UpdateSchoolPayload) : async () {
-    // await* assertOwnerAccess(caller);
+    await* assertOwnerAccess(caller);
 
     let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
     let school = schools.get(schoolIndex);
@@ -279,22 +352,10 @@ actor class Main(initialOwner : ?Principal) {
       location = Option.get(payload.location, school.location);
       website = Option.get(payload.website, school.website);
       images = Option.get<?[EntityImage]>(?images, school.images);
+      active = Option.get(payload.active, school.active);
     };
 
     schools.put(schoolIndex, updatedSchool);
-  };
-
-  public query func getStudents(schoolId : Text) : async [Student] {
-    let studentsBySchool : Buffer.Buffer<Student> = Buffer.Buffer<Student>(0);
-    let studentsSize = students.size();
-
-    for (index in Iter.range(0, students.size())) {
-      if (students.get(index).schoolId == schoolId) {
-        studentsBySchool.put(studentsBySchool.size(), students.get(index));
-      };
-    };
-
-    return Buffer.toArray(studentsBySchool);
   };
 
   public shared ({ caller }) func addStudent(schoolId : Text, payload : AddStudentPayload) : async () {
@@ -333,25 +394,11 @@ actor class Main(initialOwner : ?Principal) {
       lastName = Option.get(payload.lastName, student.lastName);
       grade = Option.get(payload.grade, student.grade);
       dateOfBirth = Option.get(payload.dateOfBirth, student.dateOfBirth);
-      active = Option.get(payload.active, student.active);
       images = Option.get<?[EntityImage]>(?images, student.images);
+      active = Option.get(payload.active, student.active);
     };
 
     students.put(studentIndex, updatedStudent);
-  };
-
-  public query func getStorageSize() : async Nat64 {
-    return ExperimentalStableMemory.size();
-  };
-
-  public func growSize() : async () {
-    let dummyBlob = Blob.fromArray([255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255]);
-    let { imageSize; shift } = ImageStorage.storeBlobImageInMemory(dummyBlob, currentMemoryOffset);
-    currentMemoryOffset += Nat64.fromNat(imageSize) + shift;
-  };
-
-  public func generateAddress(extnendedKey : Text, childIndex : Nat32) : async ?Text {
-    return BitcoinIntegration.generateNextPaymentAddress(extnendedKey, childIndex);
   };
 
   public func createDonation(payload : CreateDonationPayload) : async CreateDonationResponse {
@@ -419,13 +466,37 @@ actor class Main(initialOwner : ?Principal) {
     );
   };
 
+  // --------------------------------------
+
+  public query func http_request(request : HttpRequest) : async HttpResponse {
+    if (request.method != "GET") {
+      return Utils.http404(?"Path not found");
+    };
+
+    if (Text.contains(request.url, #text("imgId"))) {
+      let imageId = Iter.toArray(Text.tokens(request.url, #text("imgId=")))[1];
+      var picture = loadBlobImg(imageId);
+
+      switch (picture) {
+        case (null) {
+          return Utils.http404(?"No picture available");
+        };
+        case (?pic) {
+          return Utils.picture(pic);
+        };
+      };
+    };
+
+    return Utils.http404(?"Path not found");
+  };
+
+  // --------------------------------------
+
   private func assertOwnerAccess(principal : Principal) : async* () {
     if (ownersMap.get(principal) == null) {
       // throw Error.reject("No Access for this principal " # Principal.toText(principal));
     };
   };
-
-  // -------------------------------------
 
   private func generateImages(imageObjects : ?[ImageObject]) : async* ?[EntityImage] {
     switch (imageObjects) {
@@ -457,10 +528,6 @@ actor class Main(initialOwner : ?Principal) {
         ?Vector.toArray(ids);
       };
     };
-  };
-
-  public query func bumpImgData() : async [(Text, ImageData)] {
-    return Iter.toArray(imgData.entries());
   };
 
   private func scheduleImageDeletion() : async () {
@@ -510,37 +577,6 @@ actor class Main(initialOwner : ?Principal) {
     let (imageOffset, imageSize) = Option.getMapped<ImageData, (Nat64, Nat)>(imgData.get(imgId), func(data) { (data.offset, data.size) }, (0, 0));
     return ImageStorage.getBlobImageFromMemory(imageOffset, imageSize);
   };
-
-  public query func http_request(request : HttpRequest) : async HttpResponse {
-    if (request.method != "GET") {
-      return Utils.http404(?"Path not found");
-    };
-
-    if (Text.contains(request.url, #text("imgId"))) {
-      let imageId = Iter.toArray(Text.tokens(request.url, #text("imgId=")))[1];
-      var picture = loadBlobImg(imageId);
-
-      switch (picture) {
-        case (null) {
-          return Utils.http404(?"No picture available");
-        };
-        case (?pic) {
-          return Utils.picture(pic);
-        };
-      };
-    };
-
-    return Utils.http404(?"Path not found");
-  };
-
-  /// -------------------------------------
-
-  // --------------------------------------
-  // --------------------------------------
-  // --------------------------------------
-  // --------------------------------------
-  // --------------------------------------
-  // --------------------------------------
 
   // --------------------------------------
   // --------------------------------------

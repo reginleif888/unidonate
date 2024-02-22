@@ -55,6 +55,7 @@ module {
     location : ?Text;
     website : ?Text;
     images : ?[ImageObject and { id : ?Text }];
+    active : ?Bool;
   };
 
   public type AddStudentPayload = {
@@ -76,6 +77,7 @@ module {
 
   public type SchoolsFilters = {
     schoolName : Text;
+    active : Bool;
   };
 
   public type GetSchoolsPayload = {
@@ -86,6 +88,22 @@ module {
 
   public type GetSchoolsResponse = {
     schools : [School];
+    total : Nat;
+  };
+
+  public type StudentsFilters = {
+    studentName : Text;
+    active : Bool;
+  };
+
+  public type GetStudentsPayload = {
+    filters : StudentsFilters;
+    page : Nat;
+    perPage : Nat;
+  };
+
+  public type GetStudentsResponse = {
+    students : [Student];
     total : Nat;
   };
 
