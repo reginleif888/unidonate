@@ -24,6 +24,7 @@ import Nat8 "mo:base/Nat8";
 import Error "mo:base/Error";
 import Principal "mo:base/Principal";
 import ExperimentalStableMemory "mo:base/ExperimentalStableMemory";
+import Timer "mo:base/Timer";
 import Base58Check "mo:motoko-bitcoin/Base58Check";
 import Bip32 "mo:motoko-bitcoin/Bip32";
 import Jacobi "mo:motoko-bitcoin/ec/Jacobi";
@@ -72,6 +73,7 @@ actor class Main(initialOwner : ?Principal) {
     size : Nat;
     name : Text;
     mimeType : Text;
+    isDeleted : Bool;
   };
 
   let g = Source.Source();
@@ -111,6 +113,7 @@ actor class Main(initialOwner : ?Principal) {
   private stable var currentChildKeyIndex : Nat32 = 0;
 
   private stable var currentMemoryOffset : Nat64 = 2;
+  private stable var currentTimer : Timer.TimerId = 0;
 
   var imgData : RBTree.RBTree<Text, ImageData> = RBTree.RBTree<Text, ImageData>(Text.compare);
   stable var stableImgData = imgData.share();
@@ -248,6 +251,27 @@ actor class Main(initialOwner : ?Principal) {
     let school = schools.get(schoolIndex);
 
     let images : ?[EntityImage] = await* generateImages(payload.images);
+    var hasImagesToDelete = false;
+
+    for (image in Iter.fromArray(Option.get(school.images, []))) {
+      if (Array.find<ImageObject>(Option.get(payload.images, []), func(newImage) { newImage.id != null and newImage.id == ?image.id }) == null) {
+        ignore do ? {
+          imgData.put(
+            image.id,
+            {
+              imgData.get(image.id)! with
+              isDeleted = true
+            },
+          );
+        };
+
+        hasImagesToDelete := true;
+      };
+    };
+
+    if (hasImagesToDelete) {
+      ignore scheduleImageDeletion();
+    };
 
     let updatedSchool : School = {
       school with
@@ -435,10 +459,37 @@ actor class Main(initialOwner : ?Principal) {
     };
   };
 
+  public query func bumpImgData() : async [(Text, ImageData)] {
+    return Iter.toArray(imgData.entries());
+  };
+
+  private func scheduleImageDeletion() : async () {
+    if (currentTimer != 0) {
+      Timer.cancelTimer(currentTimer);
+    };
+
+    currentTimer := Timer.setTimer(#seconds(30), deleteBlobImgs);
+  };
+
+  private func deleteBlobImgs() : async () {
+    let (imageIds, imagesDataToDelete) = imgData.entries()
+    |> Iter.map<(Text, ImageData), (Text, ImageStorage.ImageData)>(_, func((imageId, imageData)) { (imageId, { offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted }) })
+    |> Iter.toArray(_)
+    |> Array.foldLeft<(Text, ImageStorage.ImageData), (List.List<Text>, List.List<ImageStorage.ImageData>)>(_, (null, null), func((imageIds, imagesDataToDelete), (imageId, imageData)) { (List.push(imageId, imageIds), List.push(imageData, imagesDataToDelete)) });
+
+    for (imageId in Iter.fromList(imageIds)) {
+      imgData.delete(imageId);
+    };
+
+    let newMemoryOffset = ImageStorage.removeBlobImagesInMemory(List.toArray(imagesDataToDelete));
+
+    currentMemoryOffset := newMemoryOffset;
+  };
+
   private func storeBlobImg(imgId : Text, imageBlob : Blob, name : Text, mimeType : Text) {
     let { imageSize; shift } = ImageStorage.storeBlobImageInMemory(imageBlob, currentMemoryOffset);
 
-    imgData.put(imgId, { offset = currentMemoryOffset; size = imageSize; name; mimeType });
+    imgData.put(imgId, { offset = currentMemoryOffset; size = imageSize; name; mimeType; isDeleted = false });
     currentMemoryOffset += Nat64.fromNat(imageSize) + shift;
   };
 
