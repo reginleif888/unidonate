@@ -472,21 +472,13 @@ actor class Main(initialOwner : ?Principal) {
   };
 
   private func deleteBlobImgs() : async () {
-    let preparedImageData = imgData.entries()
-    |> Iter.map<(Text, ImageData), ImageStorage.ImageData>(_, func((imageId, imageData)) { { id = imageId; offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted } })
-    |> Iter.toArray(_);
-
     let (imageIdsToDelete, imagesDataToProcess) = imgData.entries()
     |> Iter.map<(Text, ImageData), (Text, ImageStorage.ImageData)>(_, func((imageId, imageData)) { (imageId, { id = imageId; offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted }) })
     |> Iter.toArray(_)
-    |> Array.foldLeft<(Text, ImageStorage.ImageData), (List.List<Text>, List.List<ImageStorage.ImageData>)>(_, (null, null), func((imageIds, imagesDataToDelete), (imageId, imageData)) { (List.push(imageId, imageIds), List.push(imageData, imagesDataToDelete)) });
-
-    for (imageId in Iter.fromList(imageIdsToDelete)) {
-      imgData.delete(imageId);
-    };
+    |> Array.foldLeft<(Text, ImageStorage.ImageData), (List.List<Text>, List.List<ImageStorage.ImageData>)>(_, (null, null), func((imageIdsToDelete, imagesDataToProcess), (imageId, imageData)) { (if (imageData.isDeleted) List.push(imageId, imageIdsToDelete) else imageIdsToDelete, List.push(imageData, imagesDataToProcess)) });
 
     let newCurrentMemoryOffset = ImageStorage.processAndShiftForDeletedImagesInMemory(
-      preparedImageData,
+      List.toArray(imagesDataToProcess),
       func({ id; newOffset }) {
         ignore do ? {
           imgData.put(
@@ -499,6 +491,10 @@ actor class Main(initialOwner : ?Principal) {
         };
       },
     );
+
+    for (imageId in Iter.fromList(imageIdsToDelete)) {
+      imgData.delete(imageId);
+    };
 
     currentMemoryOffset := newCurrentMemoryOffset;
   };
