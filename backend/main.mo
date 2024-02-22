@@ -49,6 +49,8 @@ import BitcoinApi "bitcoin-integration/bitcoin-api";
 actor class Main(initialOwner : ?Principal) {
   type Student = Types.Student;
   type School = Types.School;
+  type ImageObject = Types.ImageObject;
+  type EntityImage = Types.EntityImage;
   type AddSchoolPayload = Types.AddSchoolPayload;
   type UpdateSchoolPayload = Types.UpdateSchoolPayload;
   type AddStudentPayload = Types.AddStudentPayload;
@@ -64,6 +66,13 @@ actor class Main(initialOwner : ?Principal) {
   type CreateDonationResponse = Types.CreateDonationResponse;
   type VerifyDonationPayload = Types.VerifyDonationPayload;
   type DonationStatus = Types.DonationStatus;
+
+  type ImageData = {
+    offset : Nat64;
+    size : Nat;
+    name : Text;
+    mimeType : Text;
+  };
 
   let g = Source.Source();
 
@@ -102,12 +111,20 @@ actor class Main(initialOwner : ?Principal) {
   private stable var currentChildKeyIndex : Nat32 = 0;
 
   private stable var currentMemoryOffset : Nat64 = 2;
-  var imgOffset : RBTree.RBTree<Text, Nat64> = RBTree.RBTree<Text, Nat64>(Text.compare);
-  stable var stableImgOffset = imgOffset.share();
-  var imgSize : RBTree.RBTree<Text, Nat> = RBTree.RBTree<Text, Nat>(Text.compare);
-  stable var stableImgSize = imgSize.share();
+
+  var imgData : RBTree.RBTree<Text, ImageData> = RBTree.RBTree<Text, ImageData>(Text.compare);
+  stable var stableImgData = imgData.share();
 
   // --------------------------------------
+
+  public shared ({ caller }) func isAdmin(principal : Principal) : async Bool {
+    try {
+      await* assertOwnerAccess(caller);
+      return true;
+    } catch (e) {
+      return false;
+    };
+  };
 
   public shared ({ caller }) func addOwner(principal : Principal) : async () {
     await* assertOwnerAccess(caller);
@@ -210,28 +227,13 @@ actor class Main(initialOwner : ?Principal) {
 
     let schoolId = UUID.toText(await g.new());
 
-    let imageIds : ?[Text] = switch (payload.imageBlobs) {
-      case null { null };
-      case (?blobs) {
-        let ids : Vector.Vector<Text> = Vector.Vector<Text>();
-
-        for (blob in Iter.fromArray(blobs)) {
-          let uniqueId = UUID.toText(await g.new());
-          storeBlobImg(uniqueId, blob);
-          ids.add(uniqueId);
-        };
-
-        ?Vector.toArray(ids);
-      };
-    };
-
     let newSchool : School = {
       id = schoolId;
       name = payload.name;
       location = payload.location;
       website = payload.website;
       numberOfStudents = 0;
-      imageIds;
+      images = await* generateImages(payload.images);
       active = true;
     };
 
@@ -245,27 +247,14 @@ actor class Main(initialOwner : ?Principal) {
     let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
     let school = schools.get(schoolIndex);
 
-    let imageIds : ?[Text] = switch (payload.imageBlobs) {
-      case null { null };
-      case (?blobs) {
-        let ids : Vector.Vector<Text> = Vector.Vector<Text>();
-
-        for (blob in Iter.fromArray(blobs)) {
-          let uniqueId = UUID.toText(await g.new());
-          storeBlobImg(uniqueId, blob);
-          ids.add(uniqueId);
-        };
-
-        ?Vector.toArray(ids);
-      };
-    };
+    let images : ?[EntityImage] = await* generateImages(payload.images);
 
     let updatedSchool : School = {
       school with
       name = Option.get(payload.name, school.name);
       location = Option.get(payload.location, school.location);
       website = Option.get(payload.website, school.website);
-      imageIds = Option.get<?[Text]>(?imageIds, school.imageIds);
+      images = Option.get<?[EntityImage]>(?images, school.images);
     };
 
     schools.put(schoolIndex, updatedSchool);
@@ -291,28 +280,13 @@ actor class Main(initialOwner : ?Principal) {
       throw Error.reject("School is not found by provided ID.");
     };
 
-    let imageIds : ?[Text] = switch (payload.imageBlobs) {
-      case null { null };
-      case (?blobs) {
-        let ids : Vector.Vector<Text> = Vector.Vector<Text>();
-
-        for (blob in Iter.fromArray(blobs)) {
-          let uniqueId = UUID.toText(await g.new());
-          storeBlobImg(uniqueId, blob);
-          ids.add(uniqueId);
-        };
-
-        ?Vector.toArray(ids);
-      };
-    };
-
     let newStudent : Student = {
       id = UUID.toText(await g.new());
       firstName = payload.firstName;
       lastName = payload.lastName;
       grade = payload.grade;
       dateOfBirth = payload.dateOfBirth;
-      imageIds;
+      images = await* generateImages(payload.images);
       schoolId;
       active = true;
     };
@@ -327,20 +301,7 @@ actor class Main(initialOwner : ?Principal) {
     let ?studentIndex = studentsMap.get(studentId) else throw Error.reject("Student is not found by provided ID.");
     let student = students.get(studentIndex);
 
-    let imageIds : ?[Text] = switch (payload.imageBlobs) {
-      case null { null };
-      case (?blobs) {
-        let ids : Vector.Vector<Text> = Vector.Vector<Text>();
-
-        for (blob in Iter.fromArray(blobs)) {
-          let uniqueId = UUID.toText(await g.new());
-          storeBlobImg(uniqueId, blob);
-          ids.add(uniqueId);
-        };
-
-        ?Vector.toArray(ids);
-      };
-    };
+    let images : ?[EntityImage] = await* generateImages(payload.images);
 
     let updatedStudent : Student = {
       student with
@@ -349,7 +310,7 @@ actor class Main(initialOwner : ?Principal) {
       grade = Option.get(payload.grade, student.grade);
       dateOfBirth = Option.get(payload.dateOfBirth, student.dateOfBirth);
       active = Option.get(payload.active, student.active);
-      imageIds = Option.get<?[Text]>(?imageIds, student.imageIds);
+      images = Option.get<?[EntityImage]>(?images, student.images);
     };
 
     students.put(studentIndex, updatedStudent);
@@ -442,21 +403,44 @@ actor class Main(initialOwner : ?Principal) {
 
   // -------------------------------------
 
-  private func storeBlobImg(imgId : Text, imageBlob : Blob) {
+  private func generateImages(imageObjects : ?[ImageObject]) : async* ?[EntityImage] {
+    switch (imageObjects) {
+      case (null) { null };
+      case (?images) {
+        let ids : Vector.Vector<EntityImage> = Vector.Vector<EntityImage>();
+
+        for (image in Iter.fromArray(images)) {
+          let uniqueId = UUID.toText(await g.new());
+          storeBlobImg(uniqueId, image.data, image.name, image.mimeType);
+          ids.add({
+            id = uniqueId;
+            name = image.name;
+            mimeType = image.mimeType;
+          });
+        };
+
+        ?Vector.toArray(ids);
+      };
+    };
+  };
+
+  private func storeBlobImg(imgId : Text, imageBlob : Blob, name : Text, mimeType : Text) {
     let { imageSize; shift } = ImageStorage.storeBlobImageInMemory(imageBlob, currentMemoryOffset);
 
-    imgOffset.put(imgId, currentMemoryOffset);
-    imgSize.put(imgId, imageSize);
+    imgData.put(imgId, { offset = currentMemoryOffset; size = imageSize; name; mimeType });
     currentMemoryOffset += Nat64.fromNat(imageSize) + shift;
   };
 
   private func loadBlobImg(imgId : Text) : ?Blob {
-    let imageOffset = Option.get<Nat64>(imgOffset.get(imgId), 0);
-    let imageSize = Option.get<Nat>(imgSize.get(imgId), 0);
+    let (imageOffset, imageSize) = Option.getMapped<ImageData, (Nat64, Nat)>(imgData.get(imgId), func(data) { (data.offset, data.size) }, (0, 0));
     return ImageStorage.getBlobImageFromMemory(imageOffset, imageSize);
   };
 
-  public query func httpRequest(request : HttpRequest) : async HttpResponse {
+  public query func http_request(request : HttpRequest) : async HttpResponse {
+    if (request.method != "GET") {
+      return Utils.http404(?"Path not found");
+    };
+
     if (Text.contains(request.url, #text("imgId"))) {
       let imageId = Iter.toArray(Text.tokens(request.url, #text("imgId=")))[1];
       var picture = loadBlobImg(imageId);
@@ -494,7 +478,7 @@ actor class Main(initialOwner : ?Principal) {
     stableStudentsMap := studentsMap.share();
     stableDonations := donations.share();
     stableDonationsMap := donationsMap.share();
-    stableImgOffset := imgOffset.share();
+    stableImgData := imgData.share();
     stableOwnersMap := ownersMap.share();
     stableUsedTxMap := usedTxMap.share();
   };
@@ -506,7 +490,7 @@ actor class Main(initialOwner : ?Principal) {
     studentsMap.unshare(stableStudentsMap);
     donations.unshare(stableDonations);
     donationsMap.unshare(stableDonationsMap);
-    imgOffset.unshare(stableImgOffset);
+    imgData.unshare(stableImgData);
     ownersMap.unshare(stableOwnersMap);
     usedTxMap.unshare(stableUsedTxMap);
   };

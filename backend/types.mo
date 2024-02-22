@@ -9,13 +9,19 @@ import BitcoinIntegration "bitcoin-integration";
 module {
   type Satoshi = BitcoinIntegration.Satoshi;
 
+  public type EntityImage = {
+    name : Text;
+    mimeType : Text;
+    id : Text;
+  };
+
   public type School = {
     id : Text;
     name : Text;
     location : Text;
     website : Text;
     numberOfStudents : Nat;
-    imageIds : ?[Text];
+    images : ?[EntityImage];
     active : Bool;
   };
 
@@ -25,23 +31,29 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
-    imageIds : ?[Text];
+    images : ?[EntityImage];
     schoolId : Text;
     active : Bool;
+  };
+
+  public type ImageObject = {
+    name : Text;
+    mimeType : Text;
+    data : Blob;
   };
 
   public type AddSchoolPayload = {
     name : Text;
     location : Text;
     website : Text;
-    imageBlobs : ?[Blob];
+    images : ?[ImageObject];
   };
 
   public type UpdateSchoolPayload = {
     name : ?Text;
     location : ?Text;
     website : ?Text;
-    imageBlobs : ?[Blob];
+    images : ?[ImageObject];
   };
 
   public type AddStudentPayload = {
@@ -49,7 +61,7 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
-    imageBlobs : ?[Blob];
+    images : ?[ImageObject];
   };
 
   public type UpdateStudentPayload = {
@@ -57,7 +69,7 @@ module {
     lastName : ?Text;
     grade : ?Text;
     dateOfBirth : ?Text;
-    imageBlobs : ?[Blob];
+    images : ?[ImageObject];
     active : ?Bool;
   };
 
