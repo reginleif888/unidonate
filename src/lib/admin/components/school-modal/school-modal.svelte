@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getImageLink, wait } from "$lib/common/utils";
+  import { getImageLink } from "$lib/common/utils";
   import {
     Button,
     Divider,
@@ -33,29 +33,34 @@
 
   const updateSchool = useUpdateShool();
 
-  const { form, isSubmitting, handleSubmit, reset, data, errors } =
-    createForm<FormAdminSchool>({
-      initialValues: school ? school : INITIAL_VALUES,
-      validate: validation,
-      onSubmit: async (values) => {
-        if (!school) {
-          const mapped = await mapFormSchoolToAddSchoolPayload(values);
+  const {
+    form,
+    isSubmitting,
+    setInitialValues,
+    handleSubmit,
+    reset,
+    data,
+    errors,
+  } = createForm<FormAdminSchool>({
+    initialValues: school ? school : INITIAL_VALUES,
+    validate: validation,
+    onSubmit: async (values) => {
+      if (!school) {
+        const mapped = await mapFormSchoolToAddSchoolPayload(values);
 
-          await $createSchool.mutateAsync(mapped);
-        } else {
-          const mapped = await mapFormSchoolToUpdateSchoolPayload(values);
+        await $createSchool.mutateAsync(mapped);
+      } else {
+        const mapped = await mapFormSchoolToUpdateSchoolPayload(values);
 
-          console.log("=========", { mapped });
+        await $updateSchool.mutateAsync({
+          id: school.id,
+          payload: mapped,
+        });
+      }
 
-          await $updateSchool.mutateAsync({
-            id: school.id,
-            payload: mapped,
-          });
-        }
-
-        dispatch("close");
-      },
-    });
+      dispatch("close");
+    },
+  });
 
   const handleClose = () => {
     dispatch("close");
@@ -64,6 +69,10 @@
   $: {
     if (!open) {
       reset();
+    } else {
+      if (school) {
+        setInitialValues(school);
+      }
     }
   }
 </script>

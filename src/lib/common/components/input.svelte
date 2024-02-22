@@ -42,6 +42,7 @@
     class:medium={size === "medium"}
     class:small={size === "small"}
     bind:value
+    on:input
     class:error
     on:focus={handleFocus}
     on:blur={handleBlur}

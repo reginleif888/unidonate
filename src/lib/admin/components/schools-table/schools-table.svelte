@@ -12,20 +12,21 @@
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
 
   import { columns } from "./schools-table.constant";
-  import { adminSchoolsMock } from "$lib/admin/mocks";
   import { MagnifyingGlass, Plus, DownloadSimple } from "phosphor-svelte";
   import SchoolModal from "../school-modal";
   import SchoolImportModal from "../schools-import-modal";
   import { useSchools } from "$lib/admin/queries";
   import { mapSchoolToForm } from "$lib/admin/mappers";
+  import type { GetSchoolsPayload } from "../../../../declarations/backend/backend.did";
+  import { debounce } from "$lib/common/utils";
 
   let topControlsElement: HTMLElement | null = null;
 
   let search = "";
 
-  let timerId: NodeJS.Timeout;
+  let perPage = PAGE_SIZES_SELECT_ITEMS[0];
 
-  let loading: boolean = false;
+  let page: number = 1;
 
   let createModalOpen: boolean = false;
 
@@ -47,23 +48,33 @@
     importModalOpen = false;
   }
 
-  const schoolsQuery = useSchools({
+  function handleResetPage() {
+    page = 1;
+  }
+
+  let count: number = 48;
+
+  let query: GetSchoolsPayload = {
     filters: {
       schoolName: search,
     },
-    page: 0 as unknown as bigint,
-    perPage: 50 as unknown as bigint,
-  });
+    page: (Number(page) - 1) as unknown as bigint,
+    perPage: Number(perPage.value) as unknown as bigint,
+  };
 
-  $: {
-    loading = true;
+  const [debounced] = debounce(() => {
+    query = {
+      filters: {
+        schoolName: search,
+      },
+      page: (Number(page) - 1) as unknown as bigint,
+      perPage: Number(perPage.value) as unknown as bigint,
+    };
+  }, 300);
 
-    clearTimeout(timerId);
+  $: [search, page, perPage], debounced();
 
-    timerId = setTimeout(() => {
-      loading = false;
-    }, 1000);
-  }
+  $: schoolsQuery = useSchools(query);
 </script>
 
 <div class="schools-table">
@@ -74,7 +85,11 @@
     <div class="schools-table__top-controls-left">
       <div class="schools-table__search-select">
         <InputWithLabel label="Search">
-          <Input placeholder="Your school..." bind:value={search}>
+          <Input
+            placeholder="Your school..."
+            bind:value={search}
+            on:input={handleResetPage}
+          >
             <span slot="end-icon" class="schools-table__magnify-glass">
               <MagnifyingGlass size={20} />
             </span>
@@ -117,18 +132,28 @@
       {columns}
       rows={$schoolsQuery.data?.schools.map(mapSchoolToForm) ?? []}
       stickyHead
-      loading={$schoolsQuery.isLoading}
+      loadingRowsCount={Number(perPage.label)}
     />
   </div>
 </div>
 <div class="schools-table__bottom-controls">
   <div class="schools-table__bottom-controls-select">
     <InputWithLabel label="Per page">
-      <Select items={PAGE_SIZES_SELECT_ITEMS} />
+      <Select
+        items={PAGE_SIZES_SELECT_ITEMS}
+        bind:selected={perPage}
+        on:change={handleResetPage}
+      />
     </InputWithLabel>
   </div>
 
-  <Pagination count={50} />
+  {#if count > Number(perPage.value)}
+    <Pagination
+      {count}
+      bind:currentPage={page}
+      perPage={Number(perPage.value)}
+    />
+  {/if}
 </div>
 
 <SchoolModal bind:open={createModalOpen} on:close={closeCreateModal} />

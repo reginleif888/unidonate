@@ -5,7 +5,7 @@ import type { GetSchoolsPayload } from "../../../declarations/backend/backend.di
 
 export default function useSchools(payload: GetSchoolsPayload) {
   const schoolsQuery = useQuery(
-    "schools",
+    ["schools", payload],
     async () => {
       return get(backendStore).getSchools(payload);
     },

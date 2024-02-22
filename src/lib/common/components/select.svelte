@@ -3,17 +3,24 @@
   import { flyAndScale } from "$lib/common/transitions";
   import { Check, CaretUpDown } from "phosphor-svelte";
   import { type SelectItem } from "$lib/common/types";
+  import { createEventDispatcher } from "svelte";
 
   export let items: Array<SelectItem> = [];
 
   export let multiple: boolean = false;
 
-  export let selected: Array<SelectItem> = [];
+  export let selected: Array<SelectItem> | SelectItem = [];
 
   export let placeholder: string = "Select";
+
+  const dispatch = createEventDispatcher();
+
+  function handleChange(value: Array<SelectItem> | SelectItem | undefined) {
+    dispatch("change", { value });
+  }
 </script>
 
-<Select.Root {items} bind:selected {multiple}>
+<Select.Root {items} bind:selected {multiple} onSelectedChange={handleChange}>
   <Select.Trigger
     class="uni-custom-select__trigger body2"
     aria-label="Select a theme"
