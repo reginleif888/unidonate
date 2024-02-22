@@ -24,7 +24,7 @@ module {
 
     let currentMemoryPage = ExperimentalStableMemory.size();
 
-    let newPageAfterGrow = (Nat64.toNat(memoryOffset + Nat64.fromNat(size)) / 65536);
+    let newPageAfterGrow = (Nat64.toNat(memoryOffset + Nat64.fromNat(size)) / 65536) + (if (currentMemoryPage == 0) 1 else 0);
 
     if (Nat64.toNat(currentMemoryPage) < newPageAfterGrow) {
       ignore ExperimentalStableMemory.grow(Nat64.fromNat(newPageAfterGrow) - currentMemoryPage);
