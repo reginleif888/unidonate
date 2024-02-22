@@ -410,13 +410,24 @@ actor class Main(initialOwner : ?Principal) {
         let ids : Vector.Vector<EntityImage> = Vector.Vector<EntityImage>();
 
         for (image in Iter.fromArray(images)) {
-          let uniqueId = UUID.toText(await g.new());
-          storeBlobImg(uniqueId, image.data, image.name, image.mimeType);
-          ids.add({
-            id = uniqueId;
-            name = image.name;
-            mimeType = image.mimeType;
-          });
+          if (image.id != null) {
+            ignore do ? {
+              let imageData = imgData.get(image.id!)!;
+              ids.add({
+                id = image.id!;
+                name = imageData.name;
+                mimeType = imageData.mimeType;
+              });
+            };
+          } else {
+            let uniqueId = UUID.toText(await g.new());
+            storeBlobImg(uniqueId, image.data, image.name, image.mimeType);
+            ids.add({
+              id = uniqueId;
+              name = image.name;
+              mimeType = image.mimeType;
+            });
+          };
         };
 
         ?Vector.toArray(ids);

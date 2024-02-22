@@ -37,6 +37,7 @@ module {
   };
 
   public type ImageObject = {
+    id : ?Text;
     name : Text;
     mimeType : Text;
     data : Blob;
@@ -53,7 +54,7 @@ module {
     name : ?Text;
     location : ?Text;
     website : ?Text;
-    images : ?[ImageObject];
+    images : ?[ImageObject and { id : ?Text }];
   };
 
   public type AddStudentPayload = {
@@ -69,7 +70,7 @@ module {
     lastName : ?Text;
     grade : ?Text;
     dateOfBirth : ?Text;
-    images : ?[ImageObject];
+    images : ?[ImageObject and { id : ?Text }];
     active : ?Bool;
   };
 
