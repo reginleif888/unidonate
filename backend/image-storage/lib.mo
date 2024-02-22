@@ -9,6 +9,7 @@ import Iter "mo:base/Iter";
 
 module {
   public type ImageData = {
+    id : Text;
     offset : Nat64;
     size : Nat;
     isDeleted : Bool;
@@ -35,7 +36,7 @@ module {
     return { imageSize = size; shift = MEMORY_SHIFT };
   };
 
-  public func removeBlobImagesInMemory(imagesData : [ImageData]) : Nat64 {
+  public func processAndShiftForDeletedImagesInMemory(imagesData : [ImageData], onShift : ({ id : Text; newOffset : Nat64 }) -> ()) : Nat64 {
     let imagesToDelete = imagesData
     |> Array.filter<ImageData>(_, func(data) { data.isDeleted })
     |> Array.sort<ImageData>(_, func(a, b) { Nat64.compare(a.offset, b.offset) });
@@ -50,6 +51,7 @@ module {
 
     for (imageData in Iter.fromArray(imagesToShift)) {
       ExperimentalStableMemory.storeBlob(temporaryOffset, ExperimentalStableMemory.loadBlob(imageData.offset, imageData.size));
+      onShift({ id = imageData.id; newOffset = temporaryOffset });
       temporaryOffset += Nat64.fromNat(imageData.size) + MEMORY_SHIFT;
     };
 

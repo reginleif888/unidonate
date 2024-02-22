@@ -176,7 +176,7 @@ actor class Main(initialOwner : ?Principal) {
 
     let response : GetDonationsResponse = {
       donations = Vector.toArray(paginatedDonations);
-      total = paginatedDonations.size();
+      total = filteredSize;
     };
 
     return response;
@@ -219,7 +219,7 @@ actor class Main(initialOwner : ?Principal) {
 
     let response : GetSchoolsResponse = {
       schools = Vector.toArray(paginatedSchools);
-      total = paginatedSchools.size();
+      total = filteredSize;
     };
 
     return response;
@@ -472,18 +472,35 @@ actor class Main(initialOwner : ?Principal) {
   };
 
   private func deleteBlobImgs() : async () {
-    let (imageIds, imagesDataToDelete) = imgData.entries()
-    |> Iter.map<(Text, ImageData), (Text, ImageStorage.ImageData)>(_, func((imageId, imageData)) { (imageId, { offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted }) })
+    let preparedImageData = imgData.entries()
+    |> Iter.map<(Text, ImageData), ImageStorage.ImageData>(_, func((imageId, imageData)) { { id = imageId; offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted } })
+    |> Iter.toArray(_);
+
+    let (imageIdsToDelete, imagesDataToProcess) = imgData.entries()
+    |> Iter.map<(Text, ImageData), (Text, ImageStorage.ImageData)>(_, func((imageId, imageData)) { (imageId, { id = imageId; offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted }) })
     |> Iter.toArray(_)
     |> Array.foldLeft<(Text, ImageStorage.ImageData), (List.List<Text>, List.List<ImageStorage.ImageData>)>(_, (null, null), func((imageIds, imagesDataToDelete), (imageId, imageData)) { (List.push(imageId, imageIds), List.push(imageData, imagesDataToDelete)) });
 
-    for (imageId in Iter.fromList(imageIds)) {
+    for (imageId in Iter.fromList(imageIdsToDelete)) {
       imgData.delete(imageId);
     };
 
-    let newMemoryOffset = ImageStorage.removeBlobImagesInMemory(List.toArray(imagesDataToDelete));
+    let newCurrentMemoryOffset = ImageStorage.processAndShiftForDeletedImagesInMemory(
+      preparedImageData,
+      func({ id; newOffset }) {
+        ignore do ? {
+          imgData.put(
+            id,
+            {
+              imgData.get(id)! with
+              offset = newOffset
+            },
+          );
+        };
+      },
+    );
 
-    currentMemoryOffset := newMemoryOffset;
+    currentMemoryOffset := newCurrentMemoryOffset;
   };
 
   private func storeBlobImg(imgId : Text, imageBlob : Blob, name : Text, mimeType : Text) {
