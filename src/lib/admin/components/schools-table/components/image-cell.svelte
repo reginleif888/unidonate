@@ -1,11 +1,15 @@
 <script lang="ts">
   import type { FormAdminSchool } from "$lib/admin/types";
+  import { getImageLink } from "$lib/common/utils";
 
   export let origin: FormAdminSchool;
 </script>
 
 <div>
-  <img src={`http://localhost:3000/${origin.images[0]?.id}`} alt="school" />
+  <img
+    src={origin.images[0] ? getImageLink(origin.images[0].id) : ""}
+    alt="school"
+  />
 </div>
 
 <style lang="scss">

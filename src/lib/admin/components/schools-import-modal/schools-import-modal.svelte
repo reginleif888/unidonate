@@ -8,10 +8,17 @@
   import filesToUint8Arrays from "$lib/common/utils/fromBlobToUint8Array";
   import type { FormAdminSchool } from "$lib/admin/types";
   import { reduceImageSize } from "$lib/common/utils";
+  import type {
+    AddSchoolPayload,
+    ImageObject,
+  } from "../../../../declarations/backend/backend.did";
+  import { useCreateSchool } from "$lib/admin/queries";
 
   export let open: boolean = false;
 
   let files: Array<File> = [];
+
+  let loading: boolean = false;
 
   const dispatch = createEventDispatcher();
 
@@ -34,15 +41,21 @@
     },
   ];
 
+  const createSchool = useCreateSchool();
+
   async function importFile() {
     try {
+      loading = true;
+
       const data = await xlsxToJson({ file: files[0], columnMapping });
 
-      const mapped: Array<Partial<FormAdminSchool>> = [];
+      const mapped: Array<AddSchoolPayload> = [];
 
       for (const school of data) {
         if (school.name && school.img && school.location && school.website) {
           const res = await fetch(school.img);
+
+          const mimeType = res["headers"].get("content-type") || "image/jpeg";
 
           const blob = await res.blob();
 
@@ -50,19 +63,37 @@
 
           let encodedImg = await filesToUint8Arrays({ files: [reducedBlob] });
 
+          const image: ImageObject = {
+            id: [],
+            mimeType,
+            name: school.img.split("/").pop(),
+            data: encodedImg[0],
+          };
+
           mapped.push({
             name: school.name,
             location: school.location,
             website: school.website,
-            images: encodedImg as any,
+            images: [[image]],
           });
         }
       }
 
-      alert(`mapped ${JSON.stringify(mapped)}`);
+      for (const school of mapped) {
+        await $createSchool.mutateAsync(school);
+      }
 
-      console.log("mapped", JSON.stringify(mapped));
+      snackbarStore.addMessage({
+        message: `${mapped.length} schools imported successfully!`,
+        type: "success",
+      });
+
+      loading = false;
+
+      dispatch("close");
     } catch (error) {
+      loading = false;
+
       snackbarStore.addMessage({
         message: "Invalid file",
         type: "error",
@@ -115,7 +146,14 @@
         variant="secondary"
         on:click={handleClose}
       />
-      <Button fullWidth label={"Import"} on:click={importFile} contained />
+      <Button
+        fullWidth
+        label={"Import"}
+        on:click={importFile}
+        contained
+        notClickable={loading}
+        {loading}
+      />
     </div>
   </div>
 </Modal>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { wait } from "$lib/common/utils";
+  import { getImageLink, wait } from "$lib/common/utils";
   import {
     Button,
     Divider,
@@ -17,6 +17,11 @@
   import { snackbarStore } from "$lib/common/stores";
   import { createForm } from "felte";
   import { validation } from "./school-modal.validation";
+  import { useCreateSchool, useUpdateShool } from "$lib/admin/queries";
+  import {
+    mapFormSchoolToAddSchoolPayload,
+    mapFormSchoolToUpdateSchoolPayload,
+  } from "$lib/admin/mappers";
 
   export let open: boolean = false;
 
@@ -24,22 +29,35 @@
 
   const dispatch = createEventDispatcher();
 
+  const createSchool = useCreateSchool();
+
+  const updateSchool = useUpdateShool();
+
   const { form, isSubmitting, handleSubmit, reset, data, errors } =
     createForm<FormAdminSchool>({
-      initialValues: INITIAL_VALUES,
+      initialValues: school ? school : INITIAL_VALUES,
       validate: validation,
       onSubmit: async (values) => {
-        alert(JSON.stringify(values, null, 2));
+        if (!school) {
+          const mapped = await mapFormSchoolToAddSchoolPayload(values);
 
-        await wait(2000);
+          await $createSchool.mutateAsync(mapped);
+        } else {
+          const mapped = await mapFormSchoolToUpdateSchoolPayload(values);
+
+          console.log("=========", { mapped });
+
+          await $updateSchool.mutateAsync({
+            id: school.id,
+            payload: mapped,
+          });
+        }
 
         dispatch("close");
       },
     });
 
   const handleClose = () => {
-    reset();
-
     dispatch("close");
   };
 
@@ -64,6 +82,7 @@
       <button
         class="school-modal__close-button"
         tabindex="-1"
+        type="button"
         on:click={handleClose}><X size={32} /></button
       >
     </div>
@@ -147,7 +166,7 @@
       </div>
 
       <div class="school-modal__blobs">
-        {#each $data.images.map( (file) => (file.id ? "" : URL.createObjectURL(file)) ) as blob}
+        {#each $data.images.map( (file) => (file.id ? getImageLink(file.id) : URL.createObjectURL(file)) ) as blob}
           <img src={blob} alt="uploaded-img" class="school-modal__blob" />
         {/each}
       </div>
@@ -161,6 +180,7 @@
         label="Cancel"
         contained
         variant="secondary"
+        type="button"
         on:click={handleClose}
       />
       <Button

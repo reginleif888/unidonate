@@ -16,6 +16,8 @@
   import { MagnifyingGlass, Plus, DownloadSimple } from "phosphor-svelte";
   import SchoolModal from "../school-modal";
   import SchoolImportModal from "../schools-import-modal";
+  import { useSchools } from "$lib/admin/queries";
+  import { mapSchoolToForm } from "$lib/admin/mappers";
 
   let topControlsElement: HTMLElement | null = null;
 
@@ -44,6 +46,14 @@
   function closeImportModal() {
     importModalOpen = false;
   }
+
+  const schoolsQuery = useSchools({
+    filters: {
+      schoolName: search,
+    },
+    page: 0 as unknown as bigint,
+    perPage: 50 as unknown as bigint,
+  });
 
   $: {
     loading = true;
@@ -103,7 +113,12 @@
   </div>
 
   <div class="schools-table__table-wrapper">
-    <Table {columns} rows={adminSchoolsMock} stickyHead {loading} />
+    <Table
+      {columns}
+      rows={$schoolsQuery.data?.schools.map(mapSchoolToForm) ?? []}
+      stickyHead
+      loading={$schoolsQuery.isLoading}
+    />
   </div>
 </div>
 <div class="schools-table__bottom-controls">

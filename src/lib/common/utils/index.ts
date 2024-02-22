@@ -9,3 +9,4 @@ export { default as wait } from "./wait";
 export * as validation from "./validation";
 export { default as formatDateValueToLocale } from "./formatDateValueToLocale";
 export { default as formatToISODateString } from "./formatToISODateString";
+export { default as getImageLink } from "./getImageLink";
