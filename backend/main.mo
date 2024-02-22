@@ -245,18 +245,13 @@ actor class Main(initialOwner : ?Principal) {
   };
 
   public query func getStudents(schoolId : Text, { filters; page; perPage } : GetStudentsPayload) : async GetStudentsResponse {
-    let studentsBySchool : Buffer.Buffer<Student> = Buffer.Buffer<Student>(0);
-    let studentsSize = students.size();
+    let studentsBySchool = students
+    |> Vector.toArray(_)
+    |> Array.filter<Student>(_, func(student) { student.schoolId == schoolId });
 
-    for (index in Iter.range(0, students.size())) {
-      if (students.get(index).schoolId == schoolId) {
-        studentsBySchool.put(studentsBySchool.size(), students.get(index));
-      };
-    };
+    let total = Array.size(studentsBySchool);
 
-    let total = studentsBySchool.size();
-
-    var filteredStudentsList : Vector.Vector<Student> = Vector.fromArray(Buffer.toArray(studentsBySchool));
+    var filteredStudentsList : Vector.Vector<Student> = Vector.fromArray(studentsBySchool);
 
     if (Text.size(filters.studentName) > 0 or filters.active) {
       filteredStudentsList := Vector.Vector<Student>();
