@@ -20,7 +20,7 @@ module {
     name : Text;
     location : Text;
     website : Text;
-    numberOfStudents : Nat;
+    students : [Text];
     images : ?[EntityImage];
     active : Bool;
   };

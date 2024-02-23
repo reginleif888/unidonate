@@ -303,7 +303,7 @@ actor class Main(initialOwner : ?Principal) {
       name = payload.name;
       location = payload.location;
       website = payload.website;
-      numberOfStudents = 0;
+      students = [];
       images = await* generateImages(payload.images);
       active = true;
     };
@@ -360,8 +360,10 @@ actor class Main(initialOwner : ?Principal) {
       throw Error.reject("School is not found by provided ID.");
     };
 
+    let studentId = UUID.toText(await g.new());
+
     let newStudent : Student = {
-      id = UUID.toText(await g.new());
+      id = studentId;
       firstName = payload.firstName;
       lastName = payload.lastName;
       grade = payload.grade;
@@ -377,11 +379,14 @@ actor class Main(initialOwner : ?Principal) {
     let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
     let school = schools.get(schoolIndex);
 
+    let newStudents : Buffer.Buffer<Text> = Buffer.fromArray(school.students);
+    newStudents.add(studentId);
+
     schools.put(
       schoolIndex,
       {
         school with
-        numberOfStudents = school.numberOfStudents + 1
+        students = Buffer.toArray(newStudents)
       },
     );
   };
@@ -415,6 +420,8 @@ actor class Main(initialOwner : ?Principal) {
       ignore scheduleImageDeletion();
     };
 
+    let active = Option.get(payload.active, student.active);
+
     let updatedStudent : Student = {
       student with
       firstName = Option.get(payload.firstName, student.firstName);
@@ -422,10 +429,23 @@ actor class Main(initialOwner : ?Principal) {
       grade = Option.get(payload.grade, student.grade);
       dateOfBirth = Option.get(payload.dateOfBirth, student.dateOfBirth);
       images = Option.get<?[EntityImage]>(?images, student.images);
-      active = Option.get(payload.active, student.active);
+      active;
     };
 
     students.put(studentIndex, updatedStudent);
+
+    if (active == false) {
+      let ?schoolIndex = schoolsMap.get(student.schoolId) else throw Error.reject("School is not found by provided ID.");
+      let school = schools.get(schoolIndex);
+
+      schools.put(
+        schoolIndex,
+        {
+          school with
+          students = Array.filter<Text>(school.students, func(studentId) { studentId != student.id })
+        },
+      );
+    };
   };
 
   public func createDonation(payload : CreateDonationPayload) : async CreateDonationResponse {
