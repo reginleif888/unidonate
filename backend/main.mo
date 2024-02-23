@@ -373,6 +373,17 @@ actor class Main(initialOwner : ?Principal) {
 
     studentsMap.put(schoolId, students.size());
     students.add(newStudent);
+
+    let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
+    let school = schools.get(schoolIndex);
+
+    schools.put(
+      schoolIndex,
+      {
+        school with
+        numberOfStudents = school.numberOfStudents + 1
+      },
+    );
   };
 
   public shared ({ caller }) func updateStudent(studentId : Text, payload : UpdateStudentPayload) : async () {
