@@ -10,9 +10,10 @@
   export let columns: Array<Column<TRow>>;
   export let loading: boolean = false;
   export let loadingRowsCount: number = 10;
-
+  export let headerHeight: number | null = null;
   export let stickyHead: boolean = false;
   export let stickyTop: number = 0;
+  export let hiddenHeader: boolean = false;
 
   let thElements: HTMLElement[] = [];
 
@@ -42,31 +43,37 @@
 
 <div class="table-root">
   <table class="table-root__table">
-    <thead
-      class="table-root__head"
-      class:table-root__head--sticky={stickyHead}
-      style={`top: ${stickyTop}px`}
-    >
-      <tr class="table-root__row">
-        {#each columns as column, index (column.key)}
-          <th
-            class="table-root__head-cell subtitle2"
-            style={styleObjectToString({
-              textAlign: column.align,
-              width: column.width ? `${column.width}px` : undefined,
-              minWidth: column.minWidth ? `${column.minWidth}px` : undefined,
-              maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
-            })}
-            bind:this={thElements[index]}
-            >{column.label}
-            <button
-              class="table-root__resizer"
-              on:mousedown={(event) => startResize(event, index)}
-            /></th
-          >
-        {/each}
-      </tr>
-    </thead>
+    {#if !hiddenHeader}
+      <thead
+        class="table-root__head"
+        class:table-root__head--sticky={stickyHead}
+        style={styleObjectToString({
+          top: stickyTop ? `${stickyTop}px` : "0px",
+          height: headerHeight ? `${headerHeight}px` : "unset",
+        })}
+      >
+        <tr class="table-root__row">
+          {#each columns as column, index (column.key)}
+            <th
+              class="table-root__head-cell subtitle2"
+              style={styleObjectToString({
+                textAlign: column.align,
+                width: column.width ? `${column.width}px` : undefined,
+                minWidth: column.minWidth ? `${column.minWidth}px` : undefined,
+                maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
+              })}
+              bind:this={thElements[index]}
+              >{column.label}
+              <button
+                class="table-root__resizer"
+                on:mousedown={(event) => startResize(event, index)}
+              /></th
+            >
+          {/each}
+        </tr>
+      </thead>
+    {/if}
+
     <tbody class="table-root__body">
       {#if !loading}
         {#each rows as row (row.id)}

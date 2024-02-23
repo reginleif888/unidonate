@@ -1,4 +1,9 @@
-import type { FormAdminSchool, FormAdminStudent } from "./types";
+import { Principal } from "@dfinity/principal";
+import type {
+  FormAdminPrincipal,
+  FormAdminSchool,
+  FormAdminStudent,
+} from "./types";
 import { parseDate } from "@internationalized/date";
 
 export const adminSchoolsMock: Array<FormAdminSchool> = [
@@ -328,5 +333,26 @@ export const adminStudentsMock: Array<FormAdminStudent> = [
     grade: "B",
     images: [],
     active: true,
+  },
+];
+
+export const principalMock: Array<FormAdminPrincipal> = [
+  {
+    id: "j6j3u-wljnz-g2tly-352iy-ny7ka-dzdkc-ycrun-wnr3d-fl63p-ofyxf-oae",
+    principal: Principal.fromText(
+      "j6j3u-wljnz-g2tly-352iy-ny7ka-dzdkc-ycrun-wnr3d-fl63p-ofyxf-oae"
+    ),
+  },
+  {
+    id: "uj2qy-jtqgc-f356u-y6a4u-ytehk-twomg-ozfmt-cvvwn-buhk3-2mu47-cae",
+    principal: Principal.fromText(
+      "uj2qy-jtqgc-f356u-y6a4u-ytehk-twomg-ozfmt-cvvwn-buhk3-2mu47-cae"
+    ),
+  },
+  {
+    id: "3gsl5-pfwlm-ev7u4-hfhr3-jvwhx-g2iwv-opmfc-sknds-2aor5-xx5nd-sqe",
+    principal: Principal.fromText(
+      "3gsl5-pfwlm-ev7u4-hfhr3-jvwhx-g2iwv-opmfc-sknds-2aor5-xx5nd-sqe"
+    ),
   },
 ];

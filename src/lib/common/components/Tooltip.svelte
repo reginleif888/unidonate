@@ -8,6 +8,7 @@
   export let side: TooltipSide = "top";
   export let closeDelay: number = 300;
   export let fullWidth: boolean = false;
+  export let align: "left" | "center" | "right" = "center";
 
   let open = false;
 
@@ -21,7 +22,7 @@
     tabindex={-1}
     class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""} ${
       fullWidth ? "tooltip-trigger--full-width" : ""
-    }`}
+    } tooltip-trigger--${align}`}
   >
     <slot name="trigger" />
   </Tooltip.Trigger>
@@ -55,6 +56,18 @@
 
   :global(.tooltip-trigger--full-width) {
     width: 100%;
+  }
+
+  :global(.tooltip-trigger--left) {
+    text-align: left;
+  }
+
+  :global(.tooltip-trigger--right) {
+    text-align: right;
+  }
+
+  :global(.tooltip-trigger--center) {
+    text-align: center;
   }
 
   :global(.tooltip-arrow-wrapper) {

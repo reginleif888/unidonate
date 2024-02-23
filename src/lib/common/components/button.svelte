@@ -101,6 +101,7 @@
 
   button:disabled {
     cursor: default;
+    box-shadow: unset;
   }
 
   .primary {

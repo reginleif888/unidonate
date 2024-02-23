@@ -6,6 +6,7 @@
 
   export let text = "";
   export let withCopy: boolean = false;
+  export let align: "left" | "center" | "right" = "center";
 
   let textElement: HTMLDivElement | null = null;
   let isEllipsized = false;
@@ -44,7 +45,7 @@
   });
 </script>
 
-<Tooltip disabled={!isEllipsized} fullWidth>
+<Tooltip disabled={!isEllipsized} fullWidth {align}>
   <div slot="trigger" class="text-container" bind:this={textElement}>
     {text}
   </div>

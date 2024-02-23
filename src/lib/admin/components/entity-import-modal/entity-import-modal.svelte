@@ -270,16 +270,6 @@
       padding: 16px;
     }
 
-    &__content-row {
-      display: flex;
-      gap: 16px;
-    }
-
-    &__input-with-label-wrapper {
-      width: 100%;
-      min-width: 240px;
-    }
-
     &__close-button {
       background-color: transparent;
       border: none;
@@ -300,27 +290,13 @@
       min-height: 132px;
     }
 
-    &__blobs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      min-height: 110px;
-    }
-
-    &__blob {
-      width: 400px;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
     &__progress_wrapper {
       padding: 16px;
       text-align: right;
     }
 
     &__progress_text {
-      margin-bottom: 4px;
+      margin-bottom: 16px;
       white-space: pre;
       opacity: 1;
       transition: opacity var(--uni-transition-default);
