@@ -434,15 +434,26 @@ actor class Main(initialOwner : ?Principal) {
 
     students.put(studentIndex, updatedStudent);
 
-    if (active == false) {
-      let ?schoolIndex = schoolsMap.get(student.schoolId) else throw Error.reject("School is not found by provided ID.");
-      let school = schools.get(schoolIndex);
+    let ?schoolIndex = schoolsMap.get(student.schoolId) else throw Error.reject("School is not found by provided ID.");
+    let school = schools.get(schoolIndex);
 
+    if (active == false) {
       schools.put(
         schoolIndex,
         {
           school with
           students = Array.filter<Text>(school.students, func(studentId) { studentId != student.id })
+        },
+      );
+    } else {
+      let newStudents : Buffer.Buffer<Text> = Buffer.fromArray(school.students);
+      newStudents.add(studentId);
+
+      schools.put(
+        schoolIndex,
+        {
+          school with
+          students = Buffer.toArray(newStudents)
         },
       );
     };
