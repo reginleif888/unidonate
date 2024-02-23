@@ -9,7 +9,7 @@ export default function mapSchoolToForm(school: School): FormAdminSchool {
     website: school.website,
     location: school.location,
     active: school.active,
-    numberOfStudents: school.numberOfStudents as unknown as number,
+    numberOfStudents: school.students.length as unknown as number,
     images: (school.images[0] ?? []).map((image) => ({
       id: image.id,
       mimeType: image.mimeType,

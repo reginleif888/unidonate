@@ -1,40 +1,42 @@
 import { backendStore, snackbarStore } from "$lib/common/stores";
 import { useMutation, useQueryClient } from "@sveltestack/svelte-query";
 import { get } from "svelte/store";
-import type { AddSchoolPayload } from "../../../declarations/backend/backend.did";
+import type { AddStudentPayload } from "../../../declarations/backend/backend.did";
 
 interface UseCreateSchoolParams {
   withoutSuccessSnackbar?: boolean;
+  schoolId: string;
 }
 
-export default function useCreateSchool({
+export default function useCreateStudent({
   withoutSuccessSnackbar,
+  schoolId,
 }: UseCreateSchoolParams) {
   const queryClient = useQueryClient();
 
-  const createSchool = useMutation(
-    (payload: AddSchoolPayload) => {
-      return get(backendStore).addSchool(payload);
+  const createStudent = useMutation(
+    (payload: AddStudentPayload) => {
+      return get(backendStore).addStudent(schoolId, payload);
     },
     {
       onSuccess: () => {
-        queryClient.refetchQueries("schools");
+        queryClient.refetchQueries([schoolId, "students"]);
 
         if (!withoutSuccessSnackbar) {
           snackbarStore.addMessage({
             type: "success",
-            message: "School created successfully",
+            message: "Student created successfully",
           });
         }
       },
       onError: () => {
         snackbarStore.addMessage({
           type: "error",
-          message: "Failed to create school",
+          message: "Failed to create student",
         });
       },
     }
   );
 
-  return createSchool;
+  return createStudent;
 }

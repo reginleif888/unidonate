@@ -3,12 +3,33 @@ import * as XLSX from "xlsx";
 export interface ColumnMapping {
   index: number;
   fieldName: string;
+  required?: boolean;
+  img?: boolean;
 }
 
 export interface XlsxToJsonParams {
   file: File;
   columnMapping: ColumnMapping[];
 }
+
+const checkIfAllRequiredFilled = (
+  data: Record<string, string>,
+  columnMapping: Array<ColumnMapping>
+) => {
+  return Object.keys(data).every((key) => {
+    const linkedColumn = columnMapping.find((col) => col.fieldName === key);
+
+    if (!linkedColumn) {
+      return false;
+    }
+
+    if (!linkedColumn.required) {
+      return true;
+    }
+
+    return Boolean(data[key]);
+  });
+};
 
 const xlsxToJson = async ({
   file,
@@ -39,7 +60,11 @@ const xlsxToJson = async ({
           return obj;
         });
 
-        resolve(mappedData.slice(1));
+        resolve(
+          mappedData
+            .slice(1)
+            .filter((data) => checkIfAllRequiredFilled(data, columnMapping))
+        );
       } catch (error) {
         reject(error);
       }

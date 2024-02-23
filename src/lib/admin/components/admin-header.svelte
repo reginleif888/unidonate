@@ -3,7 +3,7 @@
   import { page } from "$app/stores";
   import { BurgerButton, Only, Tabs } from "$lib/common/components";
   import { MODES, SCREEN } from "$lib/common/constant";
-  import { AdminRoute, AppRoute } from "$lib/common/routes";
+  import { AdminRoute } from "$lib/common/routes";
   import {
     burgerMenuStore,
     screenWidthStore,

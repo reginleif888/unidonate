@@ -18,28 +18,52 @@
   import { createForm } from "felte";
   import { INITIAL_VALUES } from "./student-modal.constant";
   import { validation } from "./student-modal.validation";
-  import { wait } from "$lib/common/utils";
+  import { getImageLink, wait } from "$lib/common/utils";
+  import { useCreateStudent, useUpdateStudent } from "$lib/admin/queries";
+  import {
+    mapFormStudentToAddStudentPayload,
+    mapFormStudentToUpdateStudentPayload,
+  } from "$lib/admin/mappers";
+  import type { FormSchool } from "$lib/donate/types";
 
   export let open: boolean = false;
 
   export let student: FormAdminStudent | null = null;
 
-  let files: Array<File> = [];
+  export let schoolId: string;
 
   const dispatch = createEventDispatcher();
 
-  const { form, isSubmitting, setFields, handleSubmit, reset, data, errors } =
-    createForm<FormAdminStudent>({
-      initialValues: INITIAL_VALUES,
-      validate: validation,
-      onSubmit: async (values) => {
-        alert(JSON.stringify(values, null, 2));
+  const createStudent = useCreateStudent({ schoolId });
 
-        await wait(2000);
+  const updateStudent = useUpdateStudent({ schoolId });
 
-        dispatch("close");
-      },
-    });
+  const {
+    form,
+    isSubmitting,
+    setInitialValues,
+    setFields,
+    handleSubmit,
+    reset,
+    data,
+    errors,
+  } = createForm<FormAdminStudent>({
+    initialValues: INITIAL_VALUES,
+    validate: validation,
+    onSubmit: async (values) => {
+      if (!student) {
+        const mapped = await mapFormStudentToAddStudentPayload(values);
+
+        await $createStudent.mutateAsync(mapped);
+      } else {
+        const mapped = await mapFormStudentToUpdateStudentPayload(values);
+
+        await $updateStudent.mutateAsync(mapped);
+      }
+
+      dispatch("close");
+    },
+  });
 
   const handleClose = () => {
     dispatch("close");
@@ -48,6 +72,10 @@
   $: {
     if (!open) {
       reset();
+    } else {
+      if (student) {
+        setInitialValues(student);
+      }
     }
   }
 </script>
@@ -66,6 +94,7 @@
       <button
         class="student-modal__close-button"
         tabindex="-1"
+        type="button"
         on:click={handleClose}><X size={32} /></button
       >
     </div>
@@ -157,14 +186,14 @@
 
       <div class="student-modal__images">
         <FileUploader
-          bind:files
+          bind:files={$data.images}
           labelTitle={"Upload images"}
-          labelSubtitle={"Max image size: 2MB"}
+          labelSubtitle={"Max total images size to upload: 2MB"}
           accept={IMAGE_EXTENSIONS}
           maxSize={2 * 1024 * 1024}
           on:size-error={(event) => {
             snackbarStore.addMessage({
-              message: `Max file size is ${event.detail.maxSize / 1024 / 1024}MB`,
+              message: `Max total files size is ${event.detail.maxSize / 1024 / 1024}MB`,
               type: "error",
             });
           }}
@@ -172,7 +201,7 @@
       </div>
 
       <div class="student-modal__blobs">
-        {#each files.map((file) => URL.createObjectURL(file)) as blob}
+        {#each $data.images.map( (file) => (file.id ? getImageLink(file.id) : URL.createObjectURL(file)) ) as blob}
           <img src={blob} alt="uploaded-img" class="student-modal__blob" />
         {/each}
       </div>
@@ -186,11 +215,13 @@
         label="Cancel"
         contained
         variant="secondary"
+        type="button"
         on:click={handleClose}
       />
       <Button
         fullWidth
         label={student ? "Update" : "Create"}
+        type="submit"
         contained
         loading={$isSubmitting}
         notClickable={$isSubmitting}

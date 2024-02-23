@@ -14,6 +14,7 @@
   export let accept: Array<string> = [];
   export let files: Array<File | UploadedFile> = [];
   export let maxFiles: number = 0;
+  export let hiddenCurrentSizeToUpload: boolean = false;
 
   const dispatch = createEventDispatcher();
 
@@ -94,11 +95,13 @@
 
   <span class="caption">{labelSubtitle}</span>
 
-  <span class="caption"
-    >Current total size to upload: {Number(sizeToUpload / 1024 / 1024).toFixed(
-      2
-    )}MB</span
-  >
+  {#if !hiddenCurrentSizeToUpload}
+    <span class="caption"
+      >Current total size to upload: {Number(
+        sizeToUpload / 1024 / 1024
+      ).toFixed(2)}MB
+    </span>
+  {/if}
 
   <button
     type="button"

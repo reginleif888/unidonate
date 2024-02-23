@@ -17,6 +17,6 @@ export interface FormAdminStudent {
   lastName: string;
   dateOfBirth: DateValue | null;
   grade: string;
-  images: Array<File & UploadedFile>;
   active: boolean;
+  images: Array<File & UploadedFile>;
 }

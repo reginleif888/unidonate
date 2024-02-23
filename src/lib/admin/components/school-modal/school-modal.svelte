@@ -29,7 +29,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const createSchool = useCreateSchool();
+  const createSchool = useCreateSchool({ withoutSuccessSnackbar: false });
 
   const updateSchool = useUpdateShool();
 

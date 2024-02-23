@@ -2,5 +2,6 @@ export { default as mapFormSchoolToAddSchoolPayload } from "./mapFormSchoolToAdd
 export { default as mapFormSchoolToUpdateSchoolPayload } from "./mapFormSchoolToUpdateSchoolPayload";
 export { default as mapSchoolToForm } from "./mapSchoolToForm";
 
-export { default as mapStudentFormForm } from "./mapStudentFormForm";
+export { default as mapFormStudentToAddStudentPayload } from "./mapFormStudentToAddStudentPayload";
+export { default as mapFormStudentToUpdateStudentPayload } from "./mapFormStudentToUpdateStudentPayload";
 export { default as mapStudentToForm } from "./mapStudentToForm";

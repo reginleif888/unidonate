@@ -11,6 +11,8 @@
 
   export let closeOnOutsideClick: boolean = true;
 
+  export let className: string = "";
+
   export let onClose = () => {
     open = false;
   };
@@ -33,7 +35,7 @@
     />
     <Dialog.Content
       transition={flyAndScale}
-      class={`modal__content ${align === "start" ? "modal__content--start" : ""}`}
+      class={`modal__content ${align === "start" ? "modal__content--start" : ""} ${className}`}
     >
       <slot />
     </Dialog.Content>
