@@ -382,6 +382,27 @@ actor class Main(initialOwner : ?Principal) {
     let student = students.get(studentIndex);
 
     let images : ?[EntityImage] = await* generateImages(payload.images);
+    var hasImagesToDelete = false;
+
+    for (image in Iter.fromArray(Option.get(student.images, []))) {
+      if (Array.find<ImageObject>(Option.get(payload.images, []), func(newImage) { newImage.id != null and newImage.id == ?image.id }) == null) {
+        ignore do ? {
+          imgData.put(
+            image.id,
+            {
+              imgData.get(image.id)! with
+              isDeleted = true
+            },
+          );
+        };
+
+        hasImagesToDelete := true;
+      };
+    };
+
+    if (hasImagesToDelete) {
+      ignore scheduleImageDeletion();
+    };
 
     let updatedStudent : Student = {
       student with
