@@ -107,12 +107,23 @@ module {
     total : Nat;
   };
 
-  public type DonationsFilters = {
-    donationId : Text;
+  public type DonationSortingField = {
+    #verifiedAt;
+    #amount;
+  };
+
+  public type DonationSortingOrder = {
+    #ascending;
+    #descending;
+  };
+
+  public type DonationsSorting = {
+    field : DonationSortingField;
+    order : DonationSortingOrder;
   };
 
   public type GetDonationsPayload = {
-    filters : DonationsFilters;
+    sorting : ?DonationsSorting;
     page : Nat;
     perPage : Nat;
   };

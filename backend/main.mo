@@ -164,64 +164,32 @@ actor class Main(initialOwner : ?Principal) {
 
   // --------------------------------------
 
-  public query func getDonations({ filters; page; perPage } : GetDonationsPayload) : async GetDonationsResponse {
-    // let verifiedDonations = donationsVerifiedMap.entries()
-    // |> Iter.toList(_)
-    // |> List.foldLeft<(Int, List.List<Nat>), List.List<Nat>>(
-    //   _,
-    //   null,
-    //   func(acc, (_, indexes)) {
-    //     List.append(
-    //       acc,
-    //       indexes,
-    //     );
-    //   },
-    // )
-    // |> List.map<Nat, Donation>(
-    //   _,
-    //   func(index) {
-    //     donations.get(index);
-    //   },
-    // )
-    // |> List.toArray(_);
+  public query func getDonations({ sorting; page; perPage } : GetDonationsPayload) : async GetDonationsResponse {
+    let { field; order } = Option.get(sorting, { field = #verifiedAt; order = #descending });
 
-    let total = donations.size();
-
-    var filteredDonationsList = donations;
-
-    if (Text.size(filters.donationId) > 0) {
-      filteredDonationsList := Vector.Vector<Donation>();
-
-      for (index in Iter.range(0, total - 1)) {
-        let donation = donations.get(index);
-
-        if (donation.donationId == filters.donationId) {
-          filteredDonationsList.add(donation);
-        };
+    let sortedDonations = switch (field) {
+      case (#verifiedAt) {
+        Utils.mapAndSortTreeToRecords(donationsVerifiedMap, donations, order);
+      };
+      case (#amount) {
+        Utils.mapAndSortTreeToRecords(donationsAmountMap, donations, order);
       };
     };
 
-    let filteredSize = filteredDonationsList.size();
+    let size = sortedDonations.size();
 
-    if (filteredSize == 0) {
-      return {
-        donations = [];
-        total = filteredSize;
-      };
-    };
-
-    let startIndex = Nat.min(filteredSize - 1, page * perPage);
-    let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
+    let startIndex = Nat.min(size - 1, page * perPage);
+    let endIndex = Nat.min(size, (page + 1) * perPage);
 
     let paginatedDonations = Vector.Vector<Donation>();
 
     for (index in Iter.range(startIndex, endIndex - 1)) {
-      paginatedDonations.add(filteredDonationsList.get(index));
+      paginatedDonations.add(sortedDonations.get(index));
     };
 
     let response : GetDonationsResponse = {
       donations = Vector.toArray(paginatedDonations);
-      total = filteredSize;
+      total = size;
     };
 
     return response;
