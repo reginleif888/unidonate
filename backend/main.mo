@@ -112,6 +112,9 @@ actor class Main(initialOwner : ?Principal) {
   let donations : Vector.Vector<Donation> = Vector.Vector<Donation>();
   stable var stableDonations = donations.share();
 
+  let donationsAmountMap : RBTree.RBTree<BitcointIntegrationTypes.Satoshi, List.List<Nat>> = RBTree.RBTree<BitcointIntegrationTypes.Satoshi, List.List<Nat>>(Nat64.compare);
+  stable var stableDonationsAmountMap = donationsAmountMap.share();
+
   let donationsMap : RBTree.RBTree<Text, Nat> = RBTree.RBTree<Text, Nat>(Text.compare);
   stable var stableDonationsMap = donationsMap.share();
 
@@ -458,26 +461,19 @@ actor class Main(initialOwner : ?Principal) {
     let ?schoolIndex = schoolsMap.get(student.schoolId) else throw Error.reject("School is not found by provided ID.");
     let school = schools.get(schoolIndex);
 
-    if (active == false) {
-      schools.put(
-        schoolIndex,
-        {
-          school with
-          students = Array.filter<Text>(school.students, func(studentId) { studentId != student.id })
-        },
-      );
-    } else {
-      let newStudents : Buffer.Buffer<Text> = Buffer.fromArray(school.students);
-      newStudents.add(studentId);
+    let newStudents : Buffer.Buffer<Text> = Buffer.fromArray(Array.filter<Text>(school.students, func(studentId) { studentId != student.id }));
 
-      schools.put(
-        schoolIndex,
-        {
-          school with
-          students = Buffer.toArray(newStudents)
-        },
-      );
+    if (active) {
+      newStudents.add(studentId);
     };
+
+    schools.put(
+      schoolIndex,
+      {
+        school with
+        students = Buffer.toArray(newStudents)
+      },
+    );
   };
 
   public func createDonation(payload : CreateDonationPayload) : async CreateDonationResponse {
