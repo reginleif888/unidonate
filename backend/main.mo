@@ -201,6 +201,13 @@ actor class Main(initialOwner : ?Principal) {
     return response;
   };
 
+  public query func getDonationById(donationId : Text) : async Donation {
+    let ?donationIndex = donationsMap.get(donationId) else throw Error.reject("Donation is not found by provided ID.");
+    let donation = donations.get(donationIndex);
+
+    return donation;
+  };
+
   public query func getSchools({ filters; page; perPage } : GetSchoolsPayload) : async GetSchoolsResponse {
     let total = schools.size();
 
@@ -242,6 +249,13 @@ actor class Main(initialOwner : ?Principal) {
     };
 
     return response;
+  };
+
+  public query func getSchoolById(schoolId : Text) : async School {
+    let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
+    let school = schools.get(schoolIndex);
+
+    return school;
   };
 
   public query func getStudents(schoolId : Text, { filters; page; perPage } : GetStudentsPayload) : async GetStudentsResponse {
@@ -289,6 +303,13 @@ actor class Main(initialOwner : ?Principal) {
     };
 
     return response;
+  };
+
+  public query func getStudentById(schoolId : Text) : async Student {
+    let ?studentIndex = studentsMap.get(schoolId) else throw Error.reject("Student is not found by provided ID.");
+    let student = students.get(studentIndex);
+
+    return student;
   };
 
   // --------------------------------------
