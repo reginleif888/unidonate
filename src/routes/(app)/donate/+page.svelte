@@ -182,11 +182,7 @@
     {/if}
 
     {#if currentStep === DonationStep.DonationAllocation && selectedSchool}
-      <DonationPage
-        {selectedSchool}
-        {selectedStudent}
-        onConfirm={handleConfirm}
-      />
+      <DonationPage {selectedSchool} {selectedStudent} />
     {/if}
   </div>
 </Page>

@@ -22,6 +22,10 @@
   import { type DoughnutChartDataItem } from "$lib/common/types";
   import { createForm } from "felte";
   import { validateDonation } from "../utils";
+  import { mapDonationFormValuesToCreateDonationPayload } from "../mappers";
+  import { useCreateDonation } from "../queries/use-create-donation";
+  import { goto } from "$app/navigation";
+  import { AppRoute } from "$lib/common/routes";
 
   let donutData: Array<DoughnutChartDataItem> = [
     {
@@ -60,7 +64,7 @@
 
   export let donationModalOpen: boolean = false;
 
-  export let onConfirm: () => void = () => null;
+  export let btcValue: string = "";
 
   let scrollRoot: HTMLElement;
 
@@ -69,8 +73,6 @@
   let hoveredSlice: AllocationCategory | null = null;
 
   let stickyTopControls: boolean = false;
-
-  let loading: boolean = false;
 
   let error: DonationError | null = null;
 
@@ -86,10 +88,38 @@
     }
   }
 
+  const createDonation = useCreateDonation();
+
   const { handleSubmit, data } = createForm<DonationFormValues>({
     initialValues: DONATE_INITIAL_VALUES,
     onSubmit: async (values) => {
       submitted = true;
+
+      if (error && error.client) {
+        return;
+      }
+
+      try {
+        const createDonationPayload =
+          mapDonationFormValuesToCreateDonationPayload({
+            satoshi: values.satoshi,
+            categories: values.categories,
+            schoolId: selectedSchool.id,
+            studentId: selectedStudent?.id,
+          });
+
+        await $createDonation.mutateAsync(createDonationPayload);
+
+        donationModalOpen = true;
+      } catch (e) {
+        error = {
+          satoshi: false,
+          client: false,
+          message: "Something went wrong, pls try again later",
+        };
+
+        console.error(e);
+      }
     },
   });
 
@@ -107,8 +137,6 @@
   }
 
   $: error = validateDonation($data);
-
-  $: console.log("======", $data.satoshi);
 </script>
 
 <div class="root" bind:this={scrollRoot} on:scroll={checkStickyTopControls}>
@@ -132,6 +160,7 @@
           bind:currentCurrency
           bind:numberSatValue={$data.satoshi}
           bind:numberBtcValue
+          bind:btcValue
           error={submitted && error?.satoshi}
         />
       </div>
@@ -223,7 +252,8 @@
         label="Create donation"
         contained
         on:click={handleSubmit}
-        {loading}
+        loading={$createDonation.isLoading}
+        notClickable={$createDonation.isLoading}
       >
         <span slot="end-icon" class="h6">🎉</span>
       </Button>
@@ -232,11 +262,15 @@
 </div>
 
 <DonationModal
-  transactionId="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
-  btcAddress="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
-  total="0.0000011"
+  transactionId={$createDonation.data?.donationId}
+  btcAddress={$createDonation.data?.paymentAddress}
+  total={btcValue}
   bind:open={donationModalOpen}
-  {onConfirm}
+  onConfirm={() => {
+    goto(
+      `${AppRoute.ConfirmDonate}?donationId=${$createDonation.data?.donationId}`
+    );
+  }}
 />
 
 <style lang="scss">

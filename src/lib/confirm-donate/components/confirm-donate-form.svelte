@@ -1,23 +1,41 @@
 <script lang="ts">
-  import { Button, Input, InputWithLabel } from "$lib/common/components";
-  import { wait } from "$lib/common/utils";
+  import {
+    Button,
+    InlineNotification,
+    Input,
+    InputWithLabel,
+  } from "$lib/common/components";
 
   export let onConfirm: () => void = () => null;
 
   export let loading: boolean = false;
 
-  async function handleConfirm() {
-    loading = true;
+  export let donationId: string;
 
-    await wait(3000);
+  export let transactionId: string;
+
+  export let serverErrorMessage: string = "";
+
+  let submitted: boolean = false;
+
+  const handleConfirm = () => {
+    serverErrorMessage = "";
+
+    submitted = true;
+
+    if (!donationId || !transactionId) {
+      return;
+    }
 
     onConfirm();
+  };
 
-    loading = false;
+  function formPreventDefault(event: Event) {
+    event.preventDefault();
   }
 </script>
 
-<div class="root">
+<form class="root" on:submit={formPreventDefault}>
   <h1 class="h4">Confirm donation</h1>
 
   <p class="body1">
@@ -25,14 +43,50 @@
     can take some time, and if you receive an error, please try again later.
   </p>
 
-  <InputWithLabel required label="Donation transaction Id (DTI)">
-    <Input placeholder="My DTI..." />
+  {#if serverErrorMessage}
+    <InlineNotification
+      title="Ooops..."
+      message={serverErrorMessage}
+      type="error"
+    />
+  {/if}
+
+  <InputWithLabel
+    required
+    label="Donation transaction Id (DTI)"
+    errorMessage={submitted && !donationId
+      ? "Donation transaction Id is required"
+      : ""}
+  >
+    <Input
+      placeholder="My DTI..."
+      readonly={loading ? true : undefined}
+      bind:value={donationId}
+      error={submitted && !donationId}
+    />
   </InputWithLabel>
-  <InputWithLabel required label="Bitcoin transaction Id (TXID)">
-    <Input placeholder="My TXID..." />
+  <InputWithLabel
+    required
+    label="Bitcoin transaction Id (TXID)"
+    errorMessage={submitted && !donationId
+      ? "Bitcoin transaction Id is required"
+      : ""}
+  >
+    <Input
+      placeholder="My TXID..."
+      readonly={loading ? true : undefined}
+      bind:value={transactionId}
+      error={submitted && !transactionId}
+    />
   </InputWithLabel>
-  <Button label="Confirm" contained on:click={handleConfirm} {loading} />
-</div>
+  <Button
+    label="Confirm"
+    contained
+    on:click={handleConfirm}
+    {loading}
+    notClickable={loading}
+  />
+</form>
 
 <style>
   .root {

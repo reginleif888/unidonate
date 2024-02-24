@@ -38,6 +38,7 @@ export function validateDonation(
     return {
       satoshi: true,
       message: "Please enter a valid amount.",
+      client: true,
     };
   }
 
@@ -50,6 +51,7 @@ export function validateDonation(
     return {
       satoshi: false,
       message: "Please allocate 100% of the donation.",
+      client: true,
     };
   }
 
@@ -67,6 +69,7 @@ export function validateDonation(
       biggestCategory: Object.keys(values.categories).reduce((a, b) =>
         values.categories[a] > values.categories[b] ? a : b
       ) as AllocationCategory,
+      client: true,
     };
   }
 

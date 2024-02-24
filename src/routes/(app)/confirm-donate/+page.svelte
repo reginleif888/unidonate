@@ -7,6 +7,8 @@
   } from "$lib/confirm-donate/components";
   import { goto } from "$app/navigation";
   import { AppRoute } from "$lib/common/routes";
+  import { onMount } from "svelte";
+  import { useVerifyDonation } from "$lib/confirm-donate/queries";
 
   let outerEl: HTMLElement;
 
@@ -14,9 +16,28 @@
 
   let success: boolean;
 
-  function handleConfirm() {
-    fireworks = true;
-    success = true;
+  let donationId: string;
+
+  let transactionId: string;
+
+  let error: string = "";
+
+  const verifyDonation = useVerifyDonation();
+
+  async function handleConfirm() {
+    try {
+      await $verifyDonation.mutateAsync({
+        donationId,
+        transactionId,
+      });
+
+      fireworks = true;
+      success = true;
+    } catch (e) {
+      error = "Error confirming donation, please try again later.";
+
+      console.error(e);
+    }
   }
 
   function handleFireworksFinish() {
@@ -26,18 +47,36 @@
   function onViewDonation(donationId: string) {
     goto(AppRoute.Donation.replace("[donationId]", donationId));
   }
+
+  onMount(() => {
+    const params = new URLSearchParams(window.location.search);
+    const param = params.get("donationId");
+
+    donationId = param as string;
+
+    if (param) {
+      params.delete("donationId");
+      window.history.pushState({}, "", `${window.location.pathname}`);
+    }
+  });
 </script>
 
 <Page>
   <div class="outer" bind:this={outerEl} in:fade>
     {#if !success}
-      <ConfirmDonateForm onConfirm={handleConfirm} />
+      <ConfirmDonateForm
+        bind:donationId
+        bind:transactionId
+        onConfirm={handleConfirm}
+        bind:serverErrorMessage={error}
+        loading={$verifyDonation.isLoading}
+      />
     {/if}
 
     {#if success}
       <ConfirmDonateSuccess
-        txid="26773abc30f245ffee9cfc5f207e4766da31274e0ee1603ba5658a893dc18747"
-        dti="26773abc30f245ffee9cfc5f207e4766da31274e0ee1603ba5658a893dc18747"
+        dti={donationId}
+        txid={transactionId}
         onView={onViewDonation}
       />
     {/if}

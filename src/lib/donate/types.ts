@@ -71,6 +71,7 @@ export interface DonationError {
   satoshi: boolean;
   message: string;
   biggestCategory?: AllocationCategory;
+  client?: boolean;
 }
 
 export interface PaginationFilter {
