@@ -6,6 +6,7 @@
   import { columns } from "./owners-table.constant";
   import { CreateOwnerForm } from "../create-owner-form";
   import { mapOwnerToForm } from "$lib/admin/mappers";
+  import YourPrincipal from "../your-principal.svelte";
 
   let ownersQuery: ReturnType<typeof useOwners>;
 
@@ -19,6 +20,10 @@
 <div class="owners-table">
   <div class="owners-table__header">
     <h4 class="h4">Owners</h4>
+
+    <div class="owners-table__your-principal">
+      <YourPrincipal />
+    </div>
   </div>
   <div class="owners-table__top-controls">
     <div class="owners-table__top-controls-left">
@@ -48,7 +53,8 @@
     &__header {
       padding: 16px;
       display: flex;
-      flex-direction: column;
+      gap: 16px;
+      align-items: center;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
     }
@@ -80,6 +86,11 @@
       flex-direction: column;
       overflow: scroll;
       background-color: var(--uni-bg-transparent-700);
+    }
+
+    &__your-principal {
+      flex-grow: 1;
+      margin-left: auto;
     }
   }
 </style>

@@ -33,6 +33,7 @@
         fullWidth
         justify="center"
         on:click={handleCancel}
+        variant="secondary"
       />
       <Button
         label={confirmButtonText}

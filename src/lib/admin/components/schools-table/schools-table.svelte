@@ -29,6 +29,7 @@
   import { EntityImportModal } from "../entity-import-modal";
   import type { ColumnMapping } from "$lib/admin/utils";
   import { snackbarStore } from "$lib/common/stores";
+  import YourPrincipal from "../your-principal.svelte";
 
   let search = "";
 
@@ -187,6 +188,10 @@
 <div class="schools-table">
   <div class="schools-table__header">
     <h4 class="h4">Schools</h4>
+
+    <div class="schools-table__your-principal">
+      <YourPrincipal />
+    </div>
   </div>
   <div class="schools-table__top-controls">
     <div class="schools-table__top-controls-left">
@@ -301,7 +306,8 @@
     &__header {
       padding: 16px;
       display: flex;
-      flex-direction: column;
+      gap: 16px;
+      align-items: center;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
     }
@@ -399,6 +405,11 @@
       align-items: center;
       font-weight: 500;
       color: var(--uni-text-color-400);
+    }
+
+    &__your-principal {
+      flex-grow: 1;
+      margin-left: auto;
     }
   }
 </style>

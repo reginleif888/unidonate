@@ -69,11 +69,12 @@
     width: 100%;
   }
 
-  :global(.uni-custom-select__select-trigger:focus) {
-    outline: none;
-    box-shadow:
-      0 0 0 2px var(__ring-foreground),
-      0 0 0 4px var(__ring-offset-background);
+  :global(.uni-custom-select__trigger:focus-within) {
+    outline: 2px solid var(--uni-focus-outline);
+  }
+
+  :global(.uni-custom-select__trigger:focus-visible) {
+    outline: 2px solid var(--uni-focus-outline);
   }
 
   :global(.uni-custom-select__palette-icon) {

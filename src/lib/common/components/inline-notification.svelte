@@ -45,7 +45,7 @@
         class:inline-notification-root__icon--warning={type === "warning"}
         class:inline-notification-root__icon--info={type === "info"}
       >
-        <Component size={20} weight="bold" />
+        <svelte:component this={Component} weight="bold" />
       </span>
     </div>
     <span class="subtitle2">{message}</span>

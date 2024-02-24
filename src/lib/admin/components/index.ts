@@ -5,3 +5,4 @@ export { default as AdminHeader } from "./admin-header.svelte";
 export { default as SchoolsTable } from "./schools-table";
 export { default as StudentsTable } from "./students-table";
 export { default as OwnersTable } from "./owners-table";
+export { default as YourPrincipal } from "./your-principal.svelte";

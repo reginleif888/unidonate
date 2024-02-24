@@ -1,53 +1,58 @@
 <script lang="ts">
   import {
     Button,
-    Input,
     DoughnutChart,
     InlineNotification,
-    InputWithLabel,
     Tooltip,
     Divider,
   } from "$lib/common/components";
-  import { CategoryDonationCard, DonationModal } from "$lib/donate/components";
-  import { CurrencyBtc } from "phosphor-svelte";
+  import {
+    BtcInput,
+    CategoryDonationCard,
+    DonationModal,
+  } from "$lib/donate/components";
   import {
     AllocationCategory,
+    type DonationError,
+    type DonationFormValues,
     type FormSchool,
     type FormStudent,
   } from "../types";
-  import { MAP_ALLOCATION_CATEGORY } from "../constant";
+  import { DONATE_INITIAL_VALUES, MAP_ALLOCATION_CATEGORY } from "../constant";
   import { type DoughnutChartDataItem } from "$lib/common/types";
-  import { snackbarStore } from "$lib/common/stores";
-  import { wait } from "$lib/common/utils";
+  import { createForm } from "felte";
+  import { validateDonation } from "../utils";
 
   let donutData: Array<DoughnutChartDataItem> = [
     {
       color:
         MAP_ALLOCATION_CATEGORY[AllocationCategory.DesignAndDevelopment].color,
-      value: 0.0000011,
+      value: 25,
       label:
         MAP_ALLOCATION_CATEGORY[AllocationCategory.DesignAndDevelopment].label,
       id: AllocationCategory.DesignAndDevelopment,
     },
     {
       color: MAP_ALLOCATION_CATEGORY[AllocationCategory.TeacherSupport].color,
-      value: 0.0000021,
+      value: 25,
       label: MAP_ALLOCATION_CATEGORY[AllocationCategory.TeacherSupport].label,
       id: AllocationCategory.TeacherSupport,
     },
     {
       color: MAP_ALLOCATION_CATEGORY[AllocationCategory.SchoolSupplies].color,
-      value: 0.0000023,
+      value: 25,
       label: MAP_ALLOCATION_CATEGORY[AllocationCategory.SchoolSupplies].label,
       id: AllocationCategory.SchoolSupplies,
     },
     {
       color: MAP_ALLOCATION_CATEGORY[AllocationCategory.LunchAndSnacks].color,
-      value: 0.0000024,
+      value: 25,
       label: MAP_ALLOCATION_CATEGORY[AllocationCategory.LunchAndSnacks].label,
       id: AllocationCategory.LunchAndSnacks,
     },
   ];
+
+  let currentCurrency: string = "BTC";
 
   export let selectedSchool: FormSchool;
 
@@ -67,6 +72,12 @@
 
   let loading: boolean = false;
 
+  let error: DonationError | null = null;
+
+  let submitted: boolean = false;
+
+  let numberBtcValue: number = 0;
+
   function checkStickyTopControls() {
     if (scrollRoot) {
       const scrollTop = scrollRoot.scrollTop;
@@ -75,15 +86,23 @@
     }
   }
 
-  async function handleCreateDonation() {
-    loading = true;
+  const { handleSubmit, data } = createForm<DonationFormValues>({
+    initialValues: DONATE_INITIAL_VALUES,
+    onSubmit: async (values) => {
+      submitted = true;
+    },
+  });
 
-    await wait(3000);
-
-    loading = false;
-
-    donationModalOpen = true;
+  $: {
+    donutData = donutData.map((item) => {
+      return {
+        ...item,
+        value: $data.categories[item.id],
+      };
+    });
   }
+
+  $: error = validateDonation($data);
 </script>
 
 <div class="root" bind:this={scrollRoot} on:scroll={checkStickyTopControls}>
@@ -103,23 +122,44 @@
 
     <div class="top-controls" class:top-controls--scrolling={stickyTopControls}>
       <div class="budget-wrapper">
-        <InputWithLabel label="Total (BTC)">
-          <Input>
-            <span slot="start-icon" class="btc-icon"
-              ><CurrencyBtc weight="bold" /></span
-            >
-          </Input>
-        </InputWithLabel>
+        <BtcInput
+          bind:currentCurrency
+          bind:numberSatValue={$data.satoshi}
+          bind:numberBtcValue
+          error={submitted && error?.satoshi}
+        />
       </div>
     </div>
 
-    <div class="notifications-wrapper">
-      <InlineNotification
-        title="Oops..."
-        message="Something went wrong"
-        type="error"
-      />
-    </div>
+    {#if !submitted}
+      <div class="notifications-wrapper">
+        <InlineNotification
+          title="Info"
+          message="Percent sum of all categories should be equal to 100%"
+          type="info"
+        />
+      </div>
+    {/if}
+
+    {#if submitted && error}
+      <div class="notifications-wrapper">
+        <InlineNotification
+          title="Oops..."
+          message={error?.message}
+          type="error"
+        />
+      </div>
+    {/if}
+
+    {#if submitted && !error}
+      <div class="notifications-wrapper">
+        <InlineNotification
+          title="Congratulations!"
+          message="You allocated your donation correctly 🎉"
+          type="success"
+        />
+      </div>
+    {/if}
 
     <div class="categories-grid">
       {#each Object.keys(AllocationCategory) as category (category)}
@@ -127,9 +167,11 @@
           class="card-wrapper"
           class:card-wrapper--opacity={hoveredSlice &&
             hoveredSlice !== category}
+          class:card-error={submitted && error?.biggestCategory === category}
         >
           <CategoryDonationCard
             label={MAP_ALLOCATION_CATEGORY[category].label}
+            bind:numberValue={$data.categories[category]}
           />
         </div>
       {/each}
@@ -143,6 +185,15 @@
         height={240}
         data={donutData}
         bind:hoveredSlice
+        formatValue={(percent) =>
+          (
+            (currentCurrency === "BTC" ? numberBtcValue : $data.satoshi ?? 0) *
+            (percent / 100)
+          )
+            .toFixed(currentCurrency === "BTC" ? 8 : 0)
+            .replace(/0+$/, "") +
+          " " +
+          currentCurrency}
       />
     </div>
   </div>
@@ -163,7 +214,7 @@
       <Button
         label="Create donation"
         contained
-        on:click={handleCreateDonation}
+        on:click={handleSubmit}
         {loading}
       >
         <span slot="end-icon" class="h6">🎉</span>
@@ -176,7 +227,7 @@
   transactionId="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
   btcAddress="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
   total="0.0000011"
-  bind:open={donationModalOpen}
+  open
   {onConfirm}
 />
 
@@ -303,5 +354,14 @@
   .btc-icon {
     position: relative;
     top: 2px;
+  }
+
+  .currency-select-wrapper {
+    width: 90px;
+  }
+
+  .card-error {
+    outline: 2px solid var(--uni-error-color);
+    border-radius: 16px;
   }
 </style>

@@ -1,30 +1,15 @@
+import type { SelectItem } from "$lib/common/types";
 import { AllocationCategory } from "./types";
-import type {
-  DonationFormValues,
-  MapAllocationCategoryValue,
-  SelectItem,
-} from "./types";
+import type { DonationFormValues, MapAllocationCategoryValue } from "./types";
 
 export const DONATE_INITIAL_VALUES: DonationFormValues = {
-  totalAmount: 0,
-  categories: [
-    {
-      categoryId: AllocationCategory.DesignAndDevelopment,
-      percent: 25,
-    },
-    {
-      categoryId: AllocationCategory.LunchAndSnacks,
-      percent: 25,
-    },
-    {
-      categoryId: AllocationCategory.SchoolSupplies,
-      percent: 25,
-    },
-    {
-      categoryId: AllocationCategory.TeacherSupport,
-      percent: 25,
-    },
-  ],
+  satoshi: 0,
+  categories: {
+    [AllocationCategory.DesignAndDevelopment]: 25,
+    [AllocationCategory.LunchAndSnacks]: 25,
+    [AllocationCategory.SchoolSupplies]: 25,
+    [AllocationCategory.TeacherSupport]: 25,
+  },
 };
 
 export const MAP_ALLOCATION_CATEGORY: Record<
@@ -33,25 +18,27 @@ export const MAP_ALLOCATION_CATEGORY: Record<
 > = {
   [AllocationCategory.DesignAndDevelopment]: {
     label: "Design & Development 👨‍💻",
-    color: "#008080",
+
+    color: "#0F52BA",
     text: "Design & Development",
     emoji: "👨‍💻",
   },
   [AllocationCategory.LunchAndSnacks]: {
     label: "Lunch & Snacks 🥪",
-    color: "#EB4D55",
+
+    color: "#FFC107",
     text: "Lunch & Snacks",
     emoji: "🥪",
   },
   [AllocationCategory.SchoolSupplies]: {
     label: "School Supplies 🎒",
-    color: "#FFC107",
+    color: "#EB4D55",
     text: "School Supplies",
     emoji: "🎒",
   },
   [AllocationCategory.TeacherSupport]: {
     label: "Teacher Support 🧑‍🏫",
-    color: "#0F52BA",
+    color: "#008080",
     text: "Teacher Support",
     emoji: "🧑‍🏫",
   },

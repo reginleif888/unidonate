@@ -114,14 +114,6 @@
     }
   }
 
-  .heading-fake-space {
-    height: 380px;
-
-    @include respond-to("smallTablet") {
-      height: 220px;
-    }
-  }
-
   .inner {
     display: flex;
     flex-direction: column;

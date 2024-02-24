@@ -21,12 +21,6 @@
 
   export let onConfirm: () => void = () => null;
 
-  let isCopied: boolean = false;
-
-  function handleCopy() {
-    isCopied = true;
-  }
-
   function handleConfirm() {
     open = false;
 
@@ -37,12 +31,6 @@
 
   $: {
     textToCopy = `Total (BTC): ${total} \n\n BTC address: ${btcAddress} \n\n  Transaction Id: ${transactionId}`;
-  }
-
-  $: {
-    if (!open) {
-      isCopied = false;
-    }
   }
 </script>
 
@@ -74,23 +62,44 @@
         <div class="donation-modal__inputs-wrapper">
           <input class="hidden-input" />
           <InputWithLabel label="Total (BTC)">
-            <Input readOnly value={total}>
-              <span slot="start-icon" class="btc-icon">
-                <CurrencyBtc weight="bold" />
-              </span>
-            </Input>
+            <div class="donation-modal__input-wrapper">
+              <Input readonly value={total}>
+                <span slot="start-icon" class="btc-icon">
+                  <CurrencyBtc weight="bold" />
+                </span>
+              </Input>
+              <CopyButton
+                tooltipSide="right"
+                value={textToCopy}
+                withoutTooltip
+              />
+            </div>
           </InputWithLabel>
           <InputWithLabel label="BTC address">
-            <Input readOnly value={btcAddress} />
+            <div class="donation-modal__input-wrapper">
+              <Input readonly value={btcAddress} />
+              <CopyButton
+                tooltipSide="right"
+                value={textToCopy}
+                withoutTooltip
+              />
+            </div>
           </InputWithLabel>
           <InputWithLabel label="Donation transaction Id (DTI)">
-            <Input readOnly value={transactionId} />
+            <div class="donation-modal__input-wrapper">
+              <Input readonly value={transactionId} />
+              <CopyButton
+                tooltipSide="right"
+                value={textToCopy}
+                withoutTooltip
+              />
+            </div>
           </InputWithLabel>
           <CopyButton
-            onCopyFailure={handleCopy}
-            onCopySuccess={handleCopy}
             tooltipSide="right"
             value={textToCopy}
+            label="Copy all info"
+            withoutTooltip
           />
         </div>
       </div>
@@ -101,11 +110,10 @@
     <div class="donation-modal__footer">
       <div class="donation-modal__confirm-button_wrapper">
         <Button
-          label="Confirm"
+          label="I save it, confirm! 🎉"
           contained
           fullWidth
           justify="center"
-          disabled={!isCopied}
           on:click={handleConfirm}
         />
       </div>
@@ -158,15 +166,21 @@
     }
 
     &__confirm-button_wrapper {
-      max-width: 160px;
+      max-width: fit-content;
       width: 100%;
     }
 
     &__inputs-wrapper {
-      width: 400px;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 16px;
+    }
+
+    &__input-wrapper {
+      width: 100%;
+      display: flex;
+      gap: 8px;
     }
   }
 

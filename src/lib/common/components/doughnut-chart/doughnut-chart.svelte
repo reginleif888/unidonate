@@ -13,6 +13,9 @@
 
   export let hoveredSlice: UniqueIdentifier | null | SVGPathElement = null;
 
+  export let formatValue: (value: number) => string = (value) =>
+    value.toString();
+
   let total = data.reduce((acc, { value }) => acc + value, 0);
 
   $: slices = calculatePieSlices(data, total);
@@ -32,10 +35,7 @@
         ></div>
         <p>{label}</p>
         <p>:</p>
-        <p>{value}</p>
-        <p class="body1">
-          ({((value / total) * 100).toFixed(2) + "%"})
-        </p>
+        <p>{formatValue(value)}</p>
       </div>
     {/each}
   </div>
@@ -59,7 +59,7 @@
         on:mouseout={() => {
           hoveredSlice = null;
         }}
-        style={`transform-origin: 50% 50%; transition: transform 0.3s ease; ${hoveredSlice === id ? "transform: scale(1.1);" : ""}; opacity: ${hoveredSlice && hoveredSlice !== id ? 0.5 : 1}`}
+        style={`transform-origin: 50% 50%; transition: transform 0.3s ease; ${hoveredSlice === id ? "transform: scale(1.1); z-index: 2;" : ""}; opacity: ${hoveredSlice && hoveredSlice !== id ? 0.5 : 0.8}`}
         class="pie"
       />
     {/each}

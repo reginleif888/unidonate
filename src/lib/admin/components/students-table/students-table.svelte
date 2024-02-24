@@ -32,8 +32,8 @@
   import { EntityImportModal } from "../entity-import-modal";
   import { snackbarStore } from "$lib/common/stores";
   import { csvSerialDateToIso, type ColumnMapping } from "$lib/admin/utils";
-  import { onDestroy } from "svelte";
   import { useQueryClient } from "@sveltestack/svelte-query";
+  import YourPrincipal from "../your-principal.svelte";
 
   let createModalOpen: boolean = false;
 
@@ -214,6 +214,10 @@
       <CaretLeft size={24} weight="bold" />
     </button>
     <h4 class="h4">Students</h4>
+
+    <div class="students-table__your-principal">
+      <YourPrincipal />
+    </div>
   </div>
   <div class="students-table__top-controls">
     <div class="students-table__top-controls-left">
@@ -445,6 +449,11 @@
       align-items: center;
       font-weight: 500;
       color: var(--uni-text-color-400);
+    }
+
+    &__your-principal {
+      flex-grow: 1;
+      margin-left: auto;
     }
   }
 </style>

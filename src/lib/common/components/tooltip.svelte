@@ -20,25 +20,28 @@
 <Tooltip.Root openDelay={150} closeOnPointerDown={false} {closeDelay} bind:open>
   <Tooltip.Trigger
     tabindex={-1}
+    {disabled}
     class={`tooltip-trigger ${disabled ? "tooltip-trigger--disabled" : ""} ${
       fullWidth ? "tooltip-trigger--full-width" : ""
     } tooltip-trigger--${align}`}
   >
     <slot name="trigger" />
   </Tooltip.Trigger>
-  <Tooltip.Content
-    transition={flyAndScale}
-    transitionConfig={{ y: 8, duration: 150 }}
-    sideOffset={8}
-    {side}
-  >
-    <div class="tooltip-arrow-wrapper">
-      <Tooltip.Arrow class="tooltip-arrow" />
-    </div>
-    <div class="tooltip-content body2">
-      <slot name="content" />
-    </div>
-  </Tooltip.Content>
+  {#if !disabled}
+    <Tooltip.Content
+      transition={flyAndScale}
+      transitionConfig={{ y: 8, duration: 150 }}
+      sideOffset={8}
+      {side}
+    >
+      <div class="tooltip-arrow-wrapper">
+        <Tooltip.Arrow class="tooltip-arrow" />
+      </div>
+      <div class="tooltip-content body2">
+        <slot name="content" />
+      </div>
+    </Tooltip.Content>
+  {/if}
 </Tooltip.Root>
 
 <style>

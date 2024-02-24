@@ -390,11 +390,11 @@
 :global(html.dark) {
   @include theme(
     "uni",
-    $primary: #8675f0,
+    $primary: #6c57f3,
     $onPrimary: #ffffff,
     $secondary: #434343,
     $onSecondary: #c5c4c4,
-    $background: #212122,
+    $background: #2e2e2f,
     $onBackground: #ffffff
   );
 }

@@ -36,7 +36,8 @@
   {#if !loading}
     <div class="grid" in:fade={{ duration: 150 }}>
       {#each data as item (entityType + item.id)}
-        <Entity
+        <svelte:component
+          this={Entity}
           {item}
           onSelect={onSelectLocal}
           selected={selected === item.id}

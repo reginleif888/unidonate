@@ -18,6 +18,7 @@
     <div class="donate-button-wrapper">
       <Button
         label="Donate for education"
+        contained
         on:click={() => {
           goto(AppRoute.Donate);
         }}

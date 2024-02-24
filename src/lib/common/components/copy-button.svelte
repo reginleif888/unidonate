@@ -1,6 +1,6 @@
 <script lang="ts">
   import { clickToCopy } from "$lib/common/actions";
-  import { Copy } from "phosphor-svelte";
+  import { Copy, Check } from "phosphor-svelte";
   import Button from "./button.svelte";
   import Tooltip from "./tooltip.svelte";
   import type { TooltipSide } from "../types";
@@ -14,7 +14,13 @@
 
   export let tooltipSide: TooltipSide = "top";
 
+  export let label: string = "";
+
+  export let withoutTooltip: boolean = false;
+
   let copyText = "Copy";
+
+  let isCopied: boolean = false;
 
   let timer: NodeJS.Timeout | undefined = undefined;
 
@@ -23,12 +29,16 @@
 
     copyText = "Copied 🎉";
 
+    isCopied = true;
+
     if (onCopySuccess) {
       onCopySuccess();
     }
 
     timer = setTimeout(() => {
       copyText = "Copy";
+
+      isCopied = false;
     }, 3000);
   }
 
@@ -47,7 +57,7 @@
   }
 </script>
 
-<Tooltip side={tooltipSide}>
+<Tooltip side={tooltipSide} disabled={withoutTooltip}>
   <span
     slot="trigger"
     class="copy-trigger"
@@ -55,9 +65,15 @@
     on:copysuccess={handleCopySuccess}
     on:copyerror={handleCopyError}
   >
-    <Button label="" variant="secondary">
+    <Button {label} variant="secondary">
       <svelte:fragment slot="end-icon">
-        <Copy size={24} />
+        <div class="copy-inner-button-wrapper">
+          {#if withoutTooltip && isCopied}
+            <Check />
+          {:else}
+            <Copy size={24} />
+          {/if}
+        </div>
       </svelte:fragment>
     </Button>
   </span>
@@ -71,5 +87,12 @@
 
   :global(.copy-trigger path) {
     fill: var(--secondary-color);
+  }
+
+  .copy-inner-button-wrapper {
+    min-height: 24px;
+    min-width: 24px;
+    position: relative;
+    top: 2px;
   }
 </style>
