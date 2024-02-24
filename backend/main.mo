@@ -115,6 +115,9 @@ actor class Main(initialOwner : ?Principal) {
   let donationsAmountMap : RBTree.RBTree<BitcointIntegrationTypes.Satoshi, List.List<Nat>> = RBTree.RBTree<BitcointIntegrationTypes.Satoshi, List.List<Nat>>(Nat64.compare);
   stable var stableDonationsAmountMap = donationsAmountMap.share();
 
+  let donationsVerifiedMap : RBTree.RBTree<Int, List.List<Nat>> = RBTree.RBTree<Int, List.List<Nat>>(Int.compare);
+  stable var stableDonationsVerifiedMap = donationsVerifiedMap.share();
+
   let donationsMap : RBTree.RBTree<Text, Nat> = RBTree.RBTree<Text, Nat>(Text.compare);
   stable var stableDonationsMap = donationsMap.share();
 
@@ -162,6 +165,26 @@ actor class Main(initialOwner : ?Principal) {
   // --------------------------------------
 
   public query func getDonations({ filters; page; perPage } : GetDonationsPayload) : async GetDonationsResponse {
+    // let verifiedDonations = donationsVerifiedMap.entries()
+    // |> Iter.toList(_)
+    // |> List.foldLeft<(Int, List.List<Nat>), List.List<Nat>>(
+    //   _,
+    //   null,
+    //   func(acc, (_, indexes)) {
+    //     List.append(
+    //       acc,
+    //       indexes,
+    //     );
+    //   },
+    // )
+    // |> List.map<Nat, Donation>(
+    //   _,
+    //   func(index) {
+    //     donations.get(index);
+    //   },
+    // )
+    // |> List.toArray(_);
+
     let total = donations.size();
 
     var filteredDonationsList = donations;
@@ -397,7 +420,7 @@ actor class Main(initialOwner : ?Principal) {
       active = true;
     };
 
-    studentsMap.put(schoolId, students.size());
+    studentsMap.put(studentId, students.size());
     students.add(newStudent);
 
     let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
@@ -526,6 +549,15 @@ actor class Main(initialOwner : ?Principal) {
     if (isTransactionConfirmed == false) throw Error.reject("Transaction is not verified.");
 
     usedTxMap.put(payload.transactionId, ());
+
+    let verifiedAt = Time.now();
+
+    let donationVerifiedList = Option.get<List.List<Nat>>(donationsVerifiedMap.get(verifiedAt), null);
+    donationsVerifiedMap.put(verifiedAt, List.push(donationIndex, donationVerifiedList));
+
+    let donationAmountList = Option.get<List.List<Nat>>(donationsAmountMap.get(currentDonation.amount), null);
+    donationsAmountMap.put(currentDonation.amount, List.push(donations.size(), donationAmountList));
+
     donations.put(
       donationIndex,
       {
@@ -664,6 +696,8 @@ actor class Main(initialOwner : ?Principal) {
     stableStudentsMap := studentsMap.share();
     stableDonations := donations.share();
     stableDonationsMap := donationsMap.share();
+    stableDonationsAmountMap := donationsAmountMap.share();
+    stableDonationsVerifiedMap := donationsVerifiedMap.share();
     stableImgData := imgData.share();
     stableOwnersMap := ownersMap.share();
     stableUsedTxMap := usedTxMap.share();
@@ -676,6 +710,8 @@ actor class Main(initialOwner : ?Principal) {
     studentsMap.unshare(stableStudentsMap);
     donations.unshare(stableDonations);
     donationsMap.unshare(stableDonationsMap);
+    donationsAmountMap.unshare(stableDonationsAmountMap);
+    donationsVerifiedMap.unshare(stableDonationsVerifiedMap);
     imgData.unshare(stableImgData);
     ownersMap.unshare(stableOwnersMap);
     usedTxMap.unshare(stableUsedTxMap);
