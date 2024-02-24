@@ -22,9 +22,9 @@ export interface FormSchool {
   id: string;
   name: string;
   website: string;
-  img: string;
   location: string;
   numberOfStudents: number;
+  imgs: Array<string>;
 }
 
 export interface FormStudent {
@@ -33,7 +33,7 @@ export interface FormStudent {
   lastName: string;
   dateOfBirth: string;
   grade: string;
-  img: string;
+  imgs: Array<string>;
 }
 
 export enum EntityType {
@@ -71,4 +71,10 @@ export interface DonationError {
   satoshi: boolean;
   message: string;
   biggestCategory?: AllocationCategory;
+}
+
+export interface PaginationFilter {
+  search: string;
+  perPage: number;
+  page: number;
 }

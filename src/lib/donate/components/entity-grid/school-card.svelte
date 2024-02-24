@@ -1,19 +1,28 @@
 <script lang="ts">
   import { Button } from "$lib/common/components";
   import type { FormSchool } from "$lib/donate/types";
-  import { fade } from "svelte/transition";
 
   export let selected: boolean = false;
   export let item: FormSchool;
   export let onSelect: (uni: FormSchool) => void = () => null;
+
+  let imgSrc = item.imgs[0] ?? "";
+
+  const handleImgError = () => {
+    imgSrc = "images/no-image.jpg";
+  };
 
   const handleSelect = () => {
     onSelect(item);
   };
 </script>
 
-<div class="card-root" transition:fade|local>
-  <img src="images/harvard.webp" alt="school" />
+<div class="card-root">
+  <img
+    src={item.imgs[0] ?? "images/no-image.jpg"}
+    alt="school"
+    on:error={handleImgError}
+  />
   <a href={item.website} target="_blank" class="website-badge overline"
     >Website</a
   >

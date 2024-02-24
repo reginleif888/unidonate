@@ -13,14 +13,28 @@
     type FormSchool,
     EntityType,
     type EntityTypeValue,
+    type PaginationFilter,
   } from "../types";
   import { PAGE_SIZES_SELECT_ITEMS } from "../constant";
+  import { debounce } from "$lib/common/utils";
 
   export let data: Array<FormStudent> | Array<FormSchool> = [];
+
+  export let total: number = 0;
+
+  export let filter: PaginationFilter = {
+    search: "",
+    page: 1,
+    perPage: Number(PAGE_SIZES_SELECT_ITEMS[3].value),
+  };
 
   export let entityType: EntityType = EntityType.School;
 
   export let selected: string | null = null;
+
+  export let loading: boolean = false;
+
+  export let noStudents: boolean = false;
 
   export let onStudentSelect: () => void = () => null;
 
@@ -43,13 +57,11 @@
     },
   };
 
-  let currentPage = 1;
-
   let search = "";
 
-  let loading: boolean = false;
+  let perPage = PAGE_SIZES_SELECT_ITEMS[3];
 
-  let timerId: NodeJS.Timeout;
+  let page: number = 1;
 
   let scrollRoot: HTMLElement;
 
@@ -65,19 +77,21 @@
     }
   }
 
-  $: {
-    let deps = [currentPage, search];
+  filter = {
+    search,
+    page,
+    perPage: Number(perPage.value),
+  };
 
-    if (deps) {
-      clearTimeout(timerId);
+  const [debounced] = debounce(() => {
+    filter = {
+      search,
+      page,
+      perPage: Number(perPage.value),
+    };
+  }, 500);
 
-      loading = true;
-
-      timerId = setTimeout(() => {
-        loading = false;
-      }, 1000);
-    }
-  }
+  $: [search, page, perPage], debounced();
 </script>
 
 <div class="root" bind:this={scrollRoot} on:scroll={checkStickyTopControls}>
@@ -108,7 +122,7 @@
     <div class="grid-wrapper">
       <EntityGrid
         {data}
-        perPage={11}
+        perPage={Number(perPage.value)}
         bind:selected
         {onSelect}
         {loading}
@@ -121,11 +135,17 @@
     <div class="pagination-wrapper">
       <div class="select-wrapper">
         <InputWithLabel label="Per page">
-          <Select items={PAGE_SIZES_SELECT_ITEMS} />
+          <Select items={PAGE_SIZES_SELECT_ITEMS} bind:selected={perPage} />
         </InputWithLabel>
       </div>
       <div>
-        <Pagination count={50} bind:currentPage />
+        {#if Number(total) > Number(perPage.value)}
+          <Pagination
+            count={Number(total)}
+            bind:currentPage={page}
+            perPage={Number(perPage.value)}
+          />
+        {/if}
       </div>
     </div>
 
@@ -140,8 +160,11 @@
           variant="secondary"
           on:click={onDirectDonate}
         />
-        <span class="body1">Or</span>
-        <Button label="Select student" contained on:click={onStudentSelect} />
+
+        {#if !noStudents}
+          <span class="body1">Or</span>
+          <Button label="Select student" contained on:click={onStudentSelect} />
+        {/if}
       </div>
     {/if}
 

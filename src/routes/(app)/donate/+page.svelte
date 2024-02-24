@@ -3,15 +3,17 @@
     type FormSchool,
     EntityType,
     type FormStudent,
+    type PaginationFilter,
   } from "$lib/donate/types";
   import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
   import type { StepItem } from "$lib/common/types";
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
-  import { students, schools } from "$lib/donate/mocks";
   import { EntityPage, DonationPage } from "$lib/donate/pages";
   import { goto } from "$app/navigation";
   import { AppRoute } from "$lib/common/routes";
+  import { useSchools, useStudents } from "$lib/donate/queries";
+  import { schoolToForm, studentToForm } from "$lib/donate/mappers";
 
   let steps: Array<StepItem> = [
     {
@@ -63,7 +65,7 @@
 
   $: {
     if (selectedSchoolId) {
-      selectedSchool = schools.find(
+      selectedSchool = formSchools?.find(
         (school) => school.id === selectedSchoolId
       )!;
     } else {
@@ -74,7 +76,7 @@
 
   $: {
     if (selectedStudentId) {
-      selectedStudent = students.find(
+      selectedStudent = formStudents?.find(
         (student) => student.id === selectedStudentId
       )!;
     } else {
@@ -85,14 +87,14 @@
   $: {
     steps = steps.map((step) => {
       if (step.value === DonationStep.School) {
-        step.img = selectedSchool?.img;
-        step.useImgInsteadOfIcon = Boolean(selectedSchool?.img);
+        step.img = selectedSchool?.imgs[0] ?? "";
+        step.useImgInsteadOfIcon = Boolean(selectedSchool?.imgs[0]);
       }
 
       if (step.value === DonationStep.Student) {
-        step.disabled = !selectedSchoolId;
-        step.img = selectedStudent?.img;
-        step.useImgInsteadOfIcon = Boolean(selectedStudent?.img);
+        step.disabled = !selectedSchoolId || !selectedSchool?.numberOfStudents;
+        step.img = selectedStudent?.imgs[0];
+        step.useImgInsteadOfIcon = Boolean(selectedStudent?.imgs[0]);
       }
 
       if (step.value === DonationStep.DonationAllocation) {
@@ -102,6 +104,47 @@
       return step;
     });
   }
+
+  let getSchoolsPayload: PaginationFilter = {
+    search: "",
+    page: 1,
+    perPage: 10,
+  };
+
+  $: schoolsQuery = useSchools({
+    page: (getSchoolsPayload.page - 1) as unknown as bigint,
+    perPage: getSchoolsPayload.perPage as unknown as bigint,
+    filters: {
+      schoolName: getSchoolsPayload.search,
+      active: true,
+    },
+    enabled: currentStep === DonationStep.School,
+  });
+
+  let formSchools: Array<FormSchool> = [];
+
+  $: formSchools = ($schoolsQuery?.data?.schools || []).map(schoolToForm);
+
+  let getStudentsPayload: PaginationFilter = {
+    search: "",
+    page: 1,
+    perPage: 10,
+  };
+
+  $: studentsQuery = useStudents({
+    schoolId: selectedSchoolId!,
+    page: (getStudentsPayload.page - 1) as unknown as bigint,
+    perPage: getStudentsPayload.perPage as unknown as bigint,
+    filters: {
+      studentName: getStudentsPayload.search,
+      active: true,
+    },
+    enabled: currentStep === DonationStep.Student,
+  });
+
+  let formStudents: Array<FormStudent> = [];
+
+  $: formStudents = ($studentsQuery?.data?.students || []).map(studentToForm);
 </script>
 
 <Page>
@@ -113,20 +156,28 @@
     {#if currentStep === DonationStep.School}
       <EntityPage
         entityType={EntityType.School}
-        data={schools}
+        data={formSchools}
+        total={Number($schoolsQuery?.data?.total) || 0}
+        loading={$schoolsQuery?.isLoading}
+        bind:filter={getSchoolsPayload}
         bind:selected={selectedSchoolId}
         onDirectDonate={goToAllocation}
         onStudentSelect={goToStudent}
         onSelect={handleSchoolSelect}
+        noStudents={!selectedSchool?.numberOfStudents}
       />
     {/if}
 
     {#if currentStep === DonationStep.Student}
       <EntityPage
         entityType={EntityType.Student}
-        data={students}
+        data={formStudents}
+        total={Number($studentsQuery?.data?.total) || 0}
+        loading={$studentsQuery?.isLoading}
+        bind:filter={getStudentsPayload}
         bind:selected={selectedStudentId}
         onDirectDonate={goToAllocation}
+        noStudents={!selectedSchool?.numberOfStudents}
       />
     {/if}
 

@@ -1,13 +1,14 @@
 <script lang="ts">
   import { Button } from "$lib/common/components";
+  import { formatDateValueToLocale } from "$lib/common/utils";
   import type { FormStudent } from "$lib/donate/types";
-  import { fade } from "svelte/transition";
+  import { parseDate } from "@internationalized/date";
 
   export let selected: boolean = false;
   export let item: FormStudent;
   export let onSelect: (item: FormStudent) => void = () => null;
 
-  let imgSrc = item.img;
+  let imgSrc = item.imgs[0] ?? "images/no-image.jpg";
 
   const handleImgError = () => {
     imgSrc = "images/no-image.jpg";
@@ -18,7 +19,7 @@
   };
 </script>
 
-<div class="card-root" transition:fade|local>
+<div class="card-root">
   <img src={imgSrc} alt="student" on:error={handleImgError} />
   <div class="description body2">
     <div>
@@ -31,7 +32,7 @@
     </div>
     <div>
       <b class="attribute-label">Date of birth:</b>
-      <span>{item.dateOfBirth}</span>
+      <span>{formatDateValueToLocale(parseDate(item.dateOfBirth))}</span>
     </div>
     <div>
       <b class="attribute-label">Grade:</b>

@@ -93,6 +93,10 @@
     },
   });
 
+  function handleCategoriesAllocationReset() {
+    $data.categories = DONATE_INITIAL_VALUES["categories"];
+  }
+
   $: {
     donutData = donutData.map((item) => {
       return {
@@ -103,6 +107,8 @@
   }
 
   $: error = validateDonation($data);
+
+  $: console.log("======", $data.satoshi);
 </script>
 
 <div class="root" bind:this={scrollRoot} on:scroll={checkStickyTopControls}>
@@ -171,6 +177,7 @@
         >
           <CategoryDonationCard
             label={MAP_ALLOCATION_CATEGORY[category].label}
+            value={String($data.categories[category])}
             bind:numberValue={$data.categories[category]}
           />
         </div>
@@ -191,7 +198,7 @@
             (percent / 100)
           )
             .toFixed(currentCurrency === "BTC" ? 8 : 0)
-            .replace(/0+$/, "") +
+            .replace(currentCurrency === "BTC" ? /0+$/ : "", "") +
           " " +
           currentCurrency}
       />
@@ -207,6 +214,7 @@
             contained
             variant="secondary"
             slot="trigger"
+            on:click={handleCategoriesAllocationReset}
           />
           <div slot="content">Reset all categories to 25%</div>
         </Tooltip>
@@ -227,7 +235,7 @@
   transactionId="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
   btcAddress="90aa443e5ccc10f6a14708c3121731de2abf670698b2372cf20c7aed1c9b5db9"
   total="0.0000011"
-  open
+  bind:open={donationModalOpen}
   {onConfirm}
 />
 
