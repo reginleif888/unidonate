@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { APP_TABS_ROUTES, AppRoute } from "$lib/common/routes";
-  import { Header, BurgerMenu, Only } from "$lib/common/components";
+  import { APP_TABS_ROUTES } from "$lib/common/routes";
+  import { Header, BurgerMenu } from "$lib/common/components";
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
   import { onMount } from "svelte";
-  import { screenWidthStore, themeStore } from "$lib/common/stores";
-  import { page } from "$app/stores";
-  import { SCREEN } from "$lib/common/constant";
+  import { themeStore } from "$lib/common/stores";
 
   const queryClient = new QueryClient();
 

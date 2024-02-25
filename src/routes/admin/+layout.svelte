@@ -5,7 +5,7 @@
     isAdminStore,
   } from "$lib/common/stores";
   import { AdminRoute } from "$lib/common/routes";
-  import { Redirect, Spinner, Page } from "$lib/common/components";
+  import { Redirect } from "$lib/common/components";
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { AuthClient } from "@dfinity/auth-client";

@@ -6,10 +6,10 @@
 
   let imgSrc = origin.images[0]
     ? getImageLink(origin.images[0].id)
-    : "/images/no-image.jpg";
+    : "/images/no-image.webp";
 
   function handleError() {
-    imgSrc = "/images/no-image.jpg";
+    imgSrc = "/images/no-image.webp";
   }
 </script>
 

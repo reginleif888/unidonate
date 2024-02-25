@@ -1,4 +1,4 @@
-import getDecimalSeparator from "./getDecimalSeparator";
+import getDecimalSeparator from "./get-decimal-separator";
 
 export default function btcToSatsString(btc: string) {
   let [whole, fractional] = btc.split(getDecimalSeparator());

@@ -27,7 +27,6 @@
   function handleFocus() {
     focused = true;
   }
-
   function handleBlur() {
     focused = false;
   }

@@ -23,7 +23,6 @@ export const orderByOptions: Array<SelectItem> = [
     value: OrderByOption.AmountAsc,
   },
 ];
-
 export const columns: Array<IColumn<FormDonation>> = [
   {
     key: "id",
@@ -70,53 +69,4 @@ export const columns: Array<IColumn<FormDonation>> = [
     label: "",
     Cell: ActionCell,
   },
-];
-
-// id: string;
-// transactionId: string;
-// paymentAddress: string;
-// allocations: Record<AllocationCategory, string>;
-// amount: string;
-// verifiedAt: string;
-
-export const donationMockData: Array<FormDonation> = [
-  {
-    id: "1",
-    transactionId: "1fasdafsdadfsafdasfadfafadfadfsdsf",
-    paymentAddress: "asdfasdfasdfasdfasdfadsffadsasdfasdffasd1",
-    amount: "10",
-    verifiedAt: "01/01/2021",
-    allocations: {
-      [AllocationCategory.DesignAndDevelopment]: "1",
-      [AllocationCategory.LunchAndSnacks]: "1",
-      [AllocationCategory.SchoolSupplies]: "1",
-      [AllocationCategory.TeacherSupport]: "1",
-    },
-  },
-  {
-    id: "2",
-    transactionId: "",
-    paymentAddress: "1sadfsdfsadafsafdsadfsfasdfasdfasdfasdf",
-    amount: "10",
-    verifiedAt: "01/01/2021",
-    allocations: {
-      [AllocationCategory.DesignAndDevelopment]: "1",
-      [AllocationCategory.LunchAndSnacks]: "1",
-      [AllocationCategory.SchoolSupplies]: "1",
-      [AllocationCategory.TeacherSupport]: "1",
-    },
-  },
-  ...Array.from({ length: 10 }, (_, i) => ({
-    id: `${i + 3}`,
-    transactionId: `1fasdafsdadfsafdasfadfafadfadfsdsf${i}`,
-    paymentAddress: `asdfasdfasdfasdfasdfadsffadsasdfasdffasd${i}`,
-    amount: "10",
-    verifiedAt: "01/01/2021",
-    allocations: {
-      [AllocationCategory.DesignAndDevelopment]: "1",
-      [AllocationCategory.LunchAndSnacks]: "1",
-      [AllocationCategory.SchoolSupplies]: "1",
-      [AllocationCategory.TeacherSupport]: "1",
-    },
-  })),
 ];

@@ -16,10 +16,11 @@
   import { resolveAppRoute } from "../utils";
   import type { TabRoute } from "../types";
 
-  let lastScrollY: number = 0;
-  let showHeader: boolean = true;
   export let tabRoutes: Array<TabRoute> = [];
   export let hiddenNavigation: boolean = false;
+
+  let lastScrollY: number = 0;
+  let showHeader: boolean = true;
 
   function handleScroll() {
     const scrollY = typeof window !== "undefined" ? window?.scrollY : 0;
@@ -45,9 +46,9 @@
     }
   });
 
-  const openBurger = () => {
+  function openBurger() {
     burgerMenuStore.set(true);
-  };
+  }
 
   let selectedRoute = resolveAppRoute($page.route.id);
 

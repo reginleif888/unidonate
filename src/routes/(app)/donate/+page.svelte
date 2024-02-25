@@ -10,12 +10,15 @@
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
   import { EntityPage, DonationPage } from "$lib/donate/pages";
-  import { goto } from "$app/navigation";
-  import { AppRoute } from "$lib/common/routes";
   import { useSchools, useStudents } from "$lib/donate/queries";
   import { mapSchoolToForm, mapStudentToForm } from "$lib/donate/mappers";
   import { toBigInt } from "$lib/common/utils";
 
+  let selectedSchoolId: string | null = null;
+  let selectedStudentId: string | null = null;
+  let currentStep = DonationStep.School;
+  let selectedSchool: FormSchool | null = null;
+  let selectedStudent: FormStudent | null = null;
   let steps: Array<StepItem> = [
     {
       label: "Select school",
@@ -38,28 +41,12 @@
     },
   ];
 
-  let selectedSchoolId: string | null = null;
-
-  let selectedStudentId: string | null = null;
-
-  let currentStep = DonationStep.School;
-
-  let selectedSchool: FormSchool | null = null;
-
-  let selectedStudent: FormStudent | null = null;
-
   function goToAllocation() {
     currentStep = DonationStep.DonationAllocation;
   }
-
   function goToStudent() {
     currentStep = DonationStep.Student;
   }
-
-  function handleConfirm() {
-    goto(AppRoute.ConfirmDonate);
-  }
-
   function handleSchoolSelect() {
     selectedStudentId = null;
   }

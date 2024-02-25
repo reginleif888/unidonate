@@ -1,11 +1,11 @@
 import { formatToISODateString } from "$lib/common/utils";
-import filesToUint8Arrays from "$lib/common/utils/fromBlobToUint8Array";
+import filesToUint8Arrays from "$lib/common/utils/from-blob-to-uint-8-array";
 import type {
   ImageObject,
   AddStudentPayload,
 } from "../../../declarations/backend/backend.did";
 import type { FormAdminStudent } from "../types";
-import changeImageExtension from "../utils/changeImageExtenstion";
+import changeImageExtension from "../utils/change-image-extenstion";
 
 export default async function mapFormStudentToAddStudentPayload(
   formStudent: FormAdminStudent

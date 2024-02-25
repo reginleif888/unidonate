@@ -1,4 +1,4 @@
-import getDecimalSeparator from "./getDecimalSeparator";
+import getDecimalSeparator from "./get-decimal-separator";
 
 export default function satsToBtcString(sats: string) {
   let satsString = sats.toString();

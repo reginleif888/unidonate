@@ -6,15 +6,10 @@
   import { calculatePieSlices } from "./doughnut-chart.utils";
 
   export let data: Array<DoughnutChartDataItem> = [];
-
   export let width: number = 100;
-
   export let height: number = 100;
-
   export let hoveredSlice: UniqueIdentifier | null | SVGPathElement = null;
-
   export let direction: "column" | "row" = "row";
-
   export let formatValue: (value: number) => string = (value) =>
     value.toString();
 

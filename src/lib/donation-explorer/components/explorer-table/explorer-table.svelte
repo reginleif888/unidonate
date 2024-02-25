@@ -28,10 +28,13 @@
   export let onSearchDonation: () => void = () => null;
 
   let currentPage: number = 1;
-
   let perPage = PAGE_SIZES_SELECT_ITEMS[3];
-
   let orderBy: SelectItem = orderByOptions[0];
+  let query: GetDonationsPayload = {
+    sorting: [],
+    page: toBigInt(Number(currentPage) - 1),
+    perPage: toBigInt(Number(perPage.value)),
+  };
 
   function getSorting(orderByOption: OrderByOption): DonationsSorting {
     if (orderByOption === OrderByOption.VerifiedAtDesc) {
@@ -87,15 +90,6 @@
       },
     };
   }
-
-  $: sorting = getSorting(orderBy.value as OrderByOption);
-
-  let query: GetDonationsPayload = {
-    sorting: [],
-    page: toBigInt(Number(currentPage) - 1),
-    perPage: toBigInt(Number(perPage.value)),
-  };
-
   const [debounced] = debounce(() => {
     query = {
       sorting: [sorting],
@@ -103,15 +97,13 @@
       perPage: toBigInt(Number(perPage.value)),
     };
   }, 300);
-
   function handleResetPage() {
     currentPage = 1;
   }
 
+  $: sorting = getSorting(orderBy.value as OrderByOption);
   $: [currentPage, perPage, sorting], debounced();
-
   $: donationsQuery = useDonations(query);
-
   $: donations = ($donationsQuery.data?.donations ?? []).map(mapDonationToForm);
 </script>
 

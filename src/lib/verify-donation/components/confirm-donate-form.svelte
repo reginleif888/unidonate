@@ -7,18 +7,14 @@
   } from "$lib/common/components";
 
   export let onConfirm: () => void = () => null;
-
   export let loading: boolean = false;
-
   export let donationId: string;
-
   export let transactionId: string;
-
   export let serverErrorMessage: string = "";
 
   let submitted: boolean = false;
 
-  const handleConfirm = () => {
+  function handleConfirm() {
     serverErrorMessage = "";
 
     submitted = true;
@@ -28,8 +24,7 @@
     }
 
     onConfirm();
-  };
-
+  }
   function formPreventDefault(event: Event) {
     event.preventDefault();
   }

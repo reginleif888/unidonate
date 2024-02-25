@@ -1,1 +1,1 @@
-export { default as mapDonationToForm } from "./mapDonationToForm";
+export { default as mapDonationToForm } from "./map-donation-to-form";

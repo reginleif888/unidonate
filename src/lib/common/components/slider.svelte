@@ -2,9 +2,7 @@
   import { Slider } from "bits-ui";
 
   export let value: Array<number> = [25];
-
   export let label: string = "";
-
   export let onChange: (value: Array<number>) => void;
 
   function handleChange(value: Array<number>) {

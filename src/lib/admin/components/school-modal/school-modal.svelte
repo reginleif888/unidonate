@@ -25,13 +25,11 @@
   import type { UploadedFile } from "$lib/common/types";
 
   export let open: boolean = false;
-
   export let school: FormAdminSchool | null = null;
 
   const dispatch = createEventDispatcher();
 
   const createSchool = useCreateSchool({ withoutSuccessSnackbar: false });
-
   const updateSchool = useUpdateShool();
 
   const {
@@ -67,7 +65,6 @@
   function handleClose() {
     dispatch("close");
   }
-
   async function handleFileChange({
     detail,
   }: CustomEvent<Array<File & UploadedFile>>) {

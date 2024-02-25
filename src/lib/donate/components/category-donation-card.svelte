@@ -15,7 +15,6 @@
 
     value = target.value;
   }
-
   function handleSlider(values: Array<number>) {
     value = String(values[0]);
   }

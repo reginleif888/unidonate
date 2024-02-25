@@ -10,15 +10,10 @@
   import { useVerifyDonation } from "$lib/verify-donation/queries";
 
   let outerEl: HTMLElement;
-
   let fireworks = false;
-
   let success: boolean;
-
   let donationId: string;
-
   let transactionId: string;
-
   let error: string = "";
 
   const verifyDonation = useVerifyDonation();
@@ -38,11 +33,9 @@
       console.error(e);
     }
   }
-
   function handleFireworksFinish() {
     fireworks = false;
   }
-
   function onViewDonation(donationId: string) {
     goto(AppRoute.Donation.replace("[donationId]", donationId));
   }

@@ -8,15 +8,15 @@
   export let item: FormStudent;
   export let onSelect: (item: FormStudent) => void = () => null;
 
-  const handleSelect = () => {
+  function handleSelect() {
     onSelect(item);
-  };
+  }
 </script>
 
 <div class="card-root">
   <div class="swiper-wrapper">
     <Swiper items={item.imgs} let:item={img}>
-      <img src={img || "/images/no-image.jpg"} alt="school" />
+      <img src={img || "/images/no-image.webp"} alt="school" />
     </Swiper>
   </div>
   <div class="description body2">

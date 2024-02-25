@@ -71,7 +71,7 @@
       z-index: -1;
       opacity: 0.5;
       object-fit: scale-down;
-      background-image: url("/images/digital-bg.jpg");
+      background-image: url("/images/digital-bg.webp");
     }
   }
 

@@ -4,15 +4,10 @@
   import { fade } from "svelte/transition";
 
   export let open: boolean = false;
-
   export let align: "center" | "start" = "center";
-
   export let closeOnEscape: boolean = true;
-
   export let closeOnOutsideClick: boolean = true;
-
   export let className: string = "";
-
   export let onClose = () => {
     open = false;
   };

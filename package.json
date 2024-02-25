@@ -8,7 +8,7 @@
     "internet_identity": "dfx deploy internet_identity",
     "frontend": "vite --port 3000",
     "backend": "mo-dev --generate --deploy -y",
-    "build": "vite build",
+    "build": "svelte-check --tsconfig ./tsconfig.json && vite build",
     "format": "prettier --write .",
     "sources": "mops sources",
     "postinstall": "mops install",

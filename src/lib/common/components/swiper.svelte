@@ -10,7 +10,6 @@
   function swipeRight(): void {
     currentIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
   }
-
   function swipeLeft(): void {
     currentIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
   }

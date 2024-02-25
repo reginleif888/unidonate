@@ -7,28 +7,6 @@ import type {
   GridItem,
 } from "./types";
 
-export function mapSchoolsToGridItems(schools: School[]): GridItem[] {
-  return schools.map((school) => {
-    return {
-      id: school.id,
-      name: school.name,
-      image: "",
-      description: school.website,
-    };
-  });
-}
-
-export function mapStudentsToGridItems(students: Student[]): GridItem[] {
-  return students.map((student) => {
-    return {
-      id: student.id,
-      name: student.firstName + " " + student.lastName,
-      image: "",
-      description: `Grade: ${student.grade}, ${student.dateOfBirth}`,
-    };
-  });
-}
-
 export function validateDonation(
   values: DonationFormValues
 ): DonationError | null {

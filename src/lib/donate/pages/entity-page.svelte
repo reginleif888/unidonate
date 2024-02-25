@@ -22,9 +22,7 @@
   import { SCREEN } from "$lib/common/constant";
 
   export let data: Array<FormStudent> | Array<FormSchool> = [];
-
   export let total: number = 0;
-
   export let filter: PaginationFilter = {
     search: "",
     page: 1,
@@ -33,20 +31,27 @@
         ? Number(PAGE_SIZES_SELECT_ITEMS[0].value)
         : Number(PAGE_SIZES_SELECT_ITEMS[3].value),
   };
-
   export let entityType: EntityType = EntityType.School;
-
   export let selected: string | null = null;
-
   export let loading: boolean = false;
-
   export let noStudents: boolean = false;
-
   export let onStudentSelect: () => void = () => null;
-
   export let onDirectDonate: () => void = () => null;
-
   export let onSelect: (selected: string | null) => void = () => null;
+
+  let search = "";
+
+  let perPage =
+    $screenWidthStore < SCREEN.desktop
+      ? PAGE_SIZES_SELECT_ITEMS[0]
+      : PAGE_SIZES_SELECT_ITEMS[3];
+
+  let page: number = 1;
+  let scrollRoot: HTMLElement;
+  let headingRoot: HTMLElement;
+  let stickyTopControls: boolean = false;
+  let prevScrollTop: number = 0;
+  let isScrollingBottom: boolean = false;
 
   const mapEntityType: Record<EntityType, EntityTypeValue> = {
     [EntityType.School]: {
@@ -63,29 +68,9 @@
     },
   };
 
-  let search = "";
-
-  let perPage =
-    $screenWidthStore < SCREEN.desktop
-      ? PAGE_SIZES_SELECT_ITEMS[0]
-      : PAGE_SIZES_SELECT_ITEMS[3];
-
-  let page: number = 1;
-
-  let scrollRoot: HTMLElement;
-
-  let headingRoot: HTMLElement;
-
-  let stickyTopControls: boolean = false;
-
-  let prevScrollTop: number = 0;
-
-  let isScrollingBottom: boolean = false;
-
   function handlePageReset() {
     page = 1;
   }
-
   function checkStickyTopControls() {
     if (scrollRoot) {
       const scrollTop = Math.max(scrollRoot.scrollTop, 0);

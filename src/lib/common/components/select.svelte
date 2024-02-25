@@ -6,13 +6,9 @@
   import { createEventDispatcher } from "svelte";
 
   export let items: Array<SelectItem> = [];
-
   export let multiple: boolean = false;
-
   export let selected: Array<SelectItem> | SelectItem = [];
-
   export let placeholder: string = "Select";
-
   export let size: "small" | "medium" = "medium";
 
   const dispatch = createEventDispatcher();

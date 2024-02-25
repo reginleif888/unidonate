@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { clickToCopy } from "$lib/common/actions";
   import { TruncatedText } from "$lib/common/components";
-  import { AppRoute } from "$lib/common/routes";
   import type { FormDonation } from "$lib/donation-explorer/types";
   import { Check, Copy } from "phosphor-svelte";
 

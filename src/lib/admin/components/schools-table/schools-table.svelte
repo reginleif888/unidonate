@@ -10,7 +10,6 @@
     InputWithLabel,
   } from "$lib/common/components";
   import { PAGE_SIZES_SELECT_ITEMS } from "$lib/donate/constant";
-
   import { columns } from "./schools-table.constant";
   import {
     MagnifyingGlass,
@@ -33,37 +32,26 @@
   import { SCREEN } from "$lib/common/constant";
 
   let search = "";
-
   let perPage = PAGE_SIZES_SELECT_ITEMS[3];
-
   let page: number = 1;
-
   let active: boolean = false;
-
   let createModalOpen: boolean = false;
-
   let importModalOpen: boolean = false;
-
   let progressLabel: string = "";
-
   let progress: number = 0;
 
   function openCreateModal() {
     createModalOpen = true;
   }
-
   function closeCreateModal() {
     createModalOpen = false;
   }
-
   function openImportModal() {
     importModalOpen = true;
   }
-
   function closeImportModal() {
     importModalOpen = false;
   }
-
   function handleResetPage() {
     page = 1;
   }

@@ -11,8 +11,7 @@
   import { createEventDispatcher } from "svelte";
   import { snackbarStore } from "$lib/common/stores";
   import { xlsxToJson, type ColumnMapping } from "$lib/admin/utils";
-  import filesToUint8Arrays from "$lib/common/utils/fromBlobToUint8Array";
-  import { reduceImageSize } from "$lib/common/utils";
+  import { reduceImageSize, fromBlobToUint8Array } from "$lib/common/utils";
   import type { ImageObject } from "../../../../declarations/backend/backend.did";
 
   type Row = Record<string, string> & { image?: ImageObject };
@@ -36,7 +35,6 @@
   export let progressLabel: string;
 
   let files: Array<File> = [];
-
   let loading: boolean = false;
 
   const dispatch = createEventDispatcher();
@@ -118,7 +116,7 @@
           const mimeType = res["headers"].get("content-type") || "image/jpeg";
           const blob = await res.blob();
           const reducedBlob = await reduceImageSize(blob);
-          let encodedImg = await filesToUint8Arrays({ files: [reducedBlob] });
+          let encodedImg = await fromBlobToUint8Array({ files: [reducedBlob] });
 
           const image: ImageObject = {
             id: [],
@@ -152,11 +150,11 @@
     dispatch("close");
   }
 
-  const handleClose = () => {
+  function handleClose() {
     open = false;
 
     dispatch("close");
-  };
+  }
 
   $: {
     if (!open) {

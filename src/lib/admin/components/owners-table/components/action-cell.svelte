@@ -2,15 +2,14 @@
   import { useOwners, useRemoveOwner } from "$lib/admin/queries";
   import type { FormAdminPrincipal } from "$lib/admin/types";
   import { ConfirmModal, Tooltip } from "$lib/common/components";
-  import { authClientStore } from "$lib/common/stores";
   import { Principal } from "@dfinity/principal";
   import { UserMinus } from "phosphor-svelte";
 
   export let origin: FormAdminPrincipal;
 
   let modalOpen = false;
-
   let loading: boolean = false;
+  let ownersQuery: ReturnType<typeof useOwners>;
 
   const removeOwner = useRemoveOwner();
 
@@ -35,13 +34,7 @@
     }
   }
 
-  let ownersQuery: ReturnType<typeof useOwners>;
-
-  $: {
-    if ($authClientStore) {
-      ownersQuery = useOwners();
-    }
-  }
+  $: ownersQuery = useOwners();
 
   $: disabled = Number($ownersQuery.data?.length ?? 0) <= 1;
 </script>

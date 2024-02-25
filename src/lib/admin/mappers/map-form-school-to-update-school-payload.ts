@@ -1,18 +1,17 @@
-import { formatToISODateString } from "$lib/common/utils";
-import filesToUint8Arrays from "$lib/common/utils/fromBlobToUint8Array";
+import filesToUint8Arrays from "$lib/common/utils/from-blob-to-uint-8-array";
 import type {
   ImageObject,
-  UpdateStudentPayload,
+  UpdateSchoolPayload,
 } from "../../../declarations/backend/backend.did";
-import type { FormAdminStudent } from "../types";
-import changeImageExtension from "../utils/changeImageExtenstion";
+import type { FormAdminSchool } from "../types";
+import changeImageExtension from "../utils/change-image-extenstion";
 
 export default async function mapFormSchoolToUpdateSchoolPayload(
-  formStudent: FormAdminStudent
-): Promise<UpdateStudentPayload> {
+  formSchool: FormAdminSchool
+): Promise<UpdateSchoolPayload> {
   const mappedImages: Array<ImageObject> = [];
 
-  for (const image of formStudent.images) {
+  for (const image of formSchool.images) {
     if (!image.id) {
       const [mappedImage] = await filesToUint8Arrays({ files: [image] });
 
@@ -33,11 +32,10 @@ export default async function mapFormSchoolToUpdateSchoolPayload(
   }
 
   return {
-    active: [formStudent.active],
-    firstName: [formStudent.firstName],
-    lastName: [formStudent.lastName],
-    dateOfBirth: [formatToISODateString(formStudent.dateOfBirth!)],
-    grade: [formStudent.grade],
+    active: [formSchool.active],
+    name: [formSchool.name],
+    website: [formSchool.website],
+    location: [formSchool.location],
     images: [mappedImages],
   };
 }

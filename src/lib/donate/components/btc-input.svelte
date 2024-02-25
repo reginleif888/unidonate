@@ -8,15 +8,10 @@
   import { Swap } from "phosphor-svelte";
 
   export let currentCurrency = "BTC";
-
   export let btcValue: string = "";
-
   export let satsValue: string = "";
-
   export let numberBtcValue: number | null = 0;
-
   export let numberSatValue: number | null = 0;
-
   export let error: boolean = false;
 
   let placeholder = "0.00000000 BTC";

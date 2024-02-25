@@ -13,10 +13,11 @@
   import { resolveAppRoute } from "$lib/common/utils";
   import { onMount, onDestroy } from "svelte";
 
-  let lastScrollY: number = 0;
-  let showHeader: boolean = true;
   export let tabRoutes: Array<TabRoute> = [];
   export let hiddenNavigation: boolean = false;
+
+  let lastScrollY: number = 0;
+  let showHeader: boolean = true;
 
   function handleScroll() {
     const scrollY = typeof window !== "undefined" ? window?.scrollY : 0;
@@ -35,16 +36,15 @@
       window?.addEventListener("scroll", handleScroll);
     }
   });
-
   onDestroy(() => {
     if (typeof window !== "undefined") {
       window?.removeEventListener("scroll", handleScroll);
     }
   });
 
-  const openBurger = () => {
+  function openBurger() {
     burgerMenuStore.set(true);
-  };
+  }
 
   let selectedRoute = resolveAppRoute($page.route.id);
 

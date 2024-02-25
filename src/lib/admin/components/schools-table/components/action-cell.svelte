@@ -10,13 +10,13 @@
 
   let modalOpen = false;
 
-  const handleEdit = () => {
+  function handleEdit() {
     modalOpen = true;
-  };
+  }
 
-  const handleClose = () => {
+  function handleClose() {
     modalOpen = false;
-  };
+  }
 
   const handleShowStudents = () => {
     goto(AdminRoute.Students.replace("[schoolId]", origin.id));

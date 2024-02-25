@@ -11,11 +11,10 @@
   } from "$lib/common/components";
   import { Plus } from "phosphor-svelte";
 
-  const createOwner = useCreateOwner();
-
   let value: string = "";
-
   let error: string = "";
+
+  const createOwner = useCreateOwner();
 
   async function handleCreteOwner() {
     try {

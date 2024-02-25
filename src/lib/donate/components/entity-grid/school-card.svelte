@@ -14,7 +14,7 @@
 <div class="card-root">
   <div class="swiper-wrapper">
     <Swiper items={item.imgs} let:item={img}>
-      <img src={img || "/images/no-image.jpg"} alt="school" />
+      <img src={img || "/images/no-image.webp"} alt="school" />
     </Swiper>
   </div>
 

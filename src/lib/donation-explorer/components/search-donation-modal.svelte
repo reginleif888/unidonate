@@ -8,13 +8,10 @@
   import { AppRoute } from "$lib/common/routes";
 
   export let open: boolean = true;
-
   export let search: string = "";
 
   let loading: boolean = false;
-
   let searchExecuted: boolean = false;
-
   let donation: Donation | null = null;
 
   const getDonationById = useGetDonationByIdMutation();
@@ -23,7 +20,6 @@
     searchExecuted = false;
     donation = null;
   }
-
   async function handleSearchExecute() {
     if (!search) {
       return;

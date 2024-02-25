@@ -29,6 +29,20 @@
   import { screenWidthStore } from "$lib/common/stores";
   import { SCREEN } from "$lib/common/constant";
 
+  export let selectedSchool: FormSchool;
+  export let selectedStudent: FormStudent | null = null;
+  export let donationModalOpen: boolean = false;
+  export let btcValue: string = "";
+  export let notificationElement: HTMLDivElement | null = null;
+
+  let currentCurrency: string = "BTC";
+  let scrollRoot: HTMLElement;
+  let headingRoot: HTMLElement;
+  let hoveredSlice: AllocationCategory | null = null;
+  let stickyTopControls: boolean = false;
+  let error: DonationError | null = null;
+  let submitted: boolean = false;
+  let numberBtcValue: number = 0;
   let donutData: Array<DoughnutChartDataItem> = [
     {
       color:
@@ -57,40 +71,6 @@
       id: AllocationCategory.LunchAndSnacks,
     },
   ];
-
-  let currentCurrency: string = "BTC";
-
-  export let selectedSchool: FormSchool;
-
-  export let selectedStudent: FormStudent | null = null;
-
-  export let donationModalOpen: boolean = false;
-
-  export let btcValue: string = "";
-
-  export let notificationElement: HTMLDivElement | null = null;
-
-  let scrollRoot: HTMLElement;
-
-  let headingRoot: HTMLElement;
-
-  let hoveredSlice: AllocationCategory | null = null;
-
-  let stickyTopControls: boolean = false;
-
-  let error: DonationError | null = null;
-
-  let submitted: boolean = false;
-
-  let numberBtcValue: number = 0;
-
-  function checkStickyTopControls() {
-    if (scrollRoot) {
-      const scrollTop = scrollRoot.scrollTop;
-
-      stickyTopControls = scrollTop > headingRoot.clientHeight + 48;
-    }
-  }
 
   const createDonation = useCreateDonation();
 
@@ -134,6 +114,13 @@
     },
   });
 
+  function checkStickyTopControls() {
+    if (scrollRoot) {
+      const scrollTop = scrollRoot.scrollTop;
+
+      stickyTopControls = scrollTop > headingRoot.clientHeight + 48;
+    }
+  }
   function handleCategoriesAllocationReset() {
     $data.categories = DONATE_INITIAL_VALUES["categories"];
   }

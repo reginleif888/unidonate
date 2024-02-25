@@ -3,7 +3,7 @@ import type { Principal } from "@dfinity/principal";
 import { useQueryClient, useMutation } from "@sveltestack/svelte-query";
 import { get } from "svelte/store";
 
-function useRemoveOwner() {
+export default function useRemoveOwner() {
   const queryClient = useQueryClient();
 
   const removeOwner = useMutation(
@@ -28,5 +28,3 @@ function useRemoveOwner() {
 
   return removeOwner;
 }
-
-export default useRemoveOwner;

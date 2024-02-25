@@ -4,9 +4,7 @@
   import type { Column as IColumn, Row as IRow } from "./table.types";
 
   export let row: TRow;
-
   export let loading: boolean = false;
-
   export let columnsMap: Record<string, IColumn<TRow>>;
 </script>
 

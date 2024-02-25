@@ -4,7 +4,6 @@
   import AnimatedCheckmark from "./animated-checkmark.svelte";
 
   export let onView: (donationId: string) => void = () => null;
-
   export let dti: string;
   export let txid: string;
   export let rootElement: HTMLDivElement | null = null;

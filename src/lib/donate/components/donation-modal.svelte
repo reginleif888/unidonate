@@ -14,13 +14,9 @@
   import { CurrencyBtc } from "phosphor-svelte";
 
   export let open: boolean = false;
-
   export let total: string = "";
-
   export let btcAddress: string = "";
-
   export let transactionId: string = "";
-
   export let onConfirm: () => void = () => null;
 
   function handleConfirm() {
@@ -30,6 +26,8 @@
   }
 
   let textToCopy = "";
+
+  $: btcUrl = `bitcoin:${btcAddress}?amount=${total}`;
 
   $: {
     textToCopy = `Total (BTC): ${total} \n\n BTC address: ${btcAddress} \n\n  Transaction Id: ${transactionId}`;
@@ -62,7 +60,7 @@
           <QrCode
             id="donation"
             squareSize={$screenWidthStore < SCREEN.desktop ? 200 : 300}
-            codeValue="https://www.google.de/"
+            codeValue={btcUrl}
           />
         </div>
 

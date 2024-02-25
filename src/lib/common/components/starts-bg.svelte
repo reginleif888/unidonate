@@ -10,25 +10,21 @@
     document.documentElement.clientWidth,
     window.innerWidth || 0
   );
-
   const vh = Math.max(
     document.documentElement.clientHeight,
     window.innerHeight || 0
   );
 
-  const getRandomX = () => {
+  function getRandomX() {
     return Math.floor(Math.random() * Math.floor(vw)).toString();
-  };
-
-  const getRandomY = () => {
+  }
+  function getRandomY() {
     return Math.floor(Math.random() * Math.floor(vh)).toString();
-  };
-
-  const randomRadius = () => {
+  }
+  function randomRadius() {
     return Math.random() * 0.7 + 0.6;
-  };
-
-  const starryNight = () => {
+  }
+  function starryNight() {
     anime({
       targets: ["#sky .star"],
       opacity: [
@@ -45,9 +41,9 @@
       loop: true,
       delay: (el, i) => 10 * i,
     });
-  };
+  }
 
-  const shootingStars = () => {
+  function shootingStars() {
     anime({
       targets: ["#shootingstars .wish"],
       easing: "linear",
@@ -69,7 +65,7 @@
       ],
       translateX: 350,
     });
-  };
+  }
 
   onMount(() => {
     starryNight();
