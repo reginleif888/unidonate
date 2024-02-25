@@ -30,7 +30,7 @@
   $: btcUrl = `bitcoin:${btcAddress}?amount=${total}`;
 
   $: {
-    textToCopy = `Total (BTC): ${total} \n\n BTC address: ${btcAddress} \n\n  Transaction Id: ${transactionId}`;
+    textToCopy = `Total (BTC): ${total} \n\nBTC address: ${btcAddress} \nDonation Transaction Id: ${transactionId}`;
   }
 </script>
 

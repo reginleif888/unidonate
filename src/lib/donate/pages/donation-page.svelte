@@ -369,12 +369,16 @@
 
   .card-wrapper {
     width: 100%;
-    min-width: 300px;
+    min-width: max(200px, calc(100vw - 16px));
     flex: 1 1 calc(25% - 15px);
     transition: opacity var(--uni-transition-default);
 
     &--opacity {
       opacity: 0.5;
+    }
+
+    @include respond-to("smallTablet") {
+      min-width: 300px;
     }
   }
 

@@ -27,7 +27,7 @@ import ImageStorage "image-storage";
 
 import Types "./types";
 
-actor class Main(initialOwner : ?Principal) {
+actor class Main(initialOwner : ?Principal, extendedBase58Key : Text) {
 
   let g = Source.Source();
 
@@ -69,7 +69,7 @@ actor class Main(initialOwner : ?Principal) {
   stable var stableDonationsMap = donationsMap.share();
 
   // Fot testing
-  private stable let ownerExtendedPublicKeyBase58Check : Text = "tprv8ZgxMBicQKsPdgnvFHcRWyp7VYvmPnhCpKjTCLDts5XDJYAApXiN7tCeEiprLPAFegEUr2cCoug4116oqYtPWHWTCQ9H1Qbkwu63csXJSvv";
+  private stable let ownerExtendedBase58Key : Text = extendedBase58Key;
   private stable var currentChildKeyIndex : Nat32 = 0;
 
   private stable var currentMemoryOffset : Nat64 = 2;
@@ -422,7 +422,7 @@ actor class Main(initialOwner : ?Principal) {
   public func createDonation(payload : Types.CreateDonationPayload) : async Types.CreateDonationResponse {
     if (Nat64.less(payload.amount, 1) == true) throw Error.reject("Amount must be more than 0 satoshi.");
 
-    let paymentAddress = BitcoinIntegration.generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check, currentChildKeyIndex);
+    let paymentAddress = BitcoinIntegration.generateNextPaymentAddress(ownerExtendedBase58Key, currentChildKeyIndex);
 
     switch (paymentAddress) {
       case (null) {
@@ -560,7 +560,7 @@ actor class Main(initialOwner : ?Principal) {
       Timer.cancelTimer(currentTimer);
     };
 
-    currentTimer := Timer.setTimer(#seconds(30), deleteBlobImgs);
+    currentTimer := Timer.setTimer(#seconds(5 * 60), deleteBlobImgs);
   };
 
   private func deleteBlobImgs() : async () {

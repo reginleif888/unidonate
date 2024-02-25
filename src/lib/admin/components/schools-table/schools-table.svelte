@@ -302,7 +302,6 @@
       padding: 8px;
       gap: 8px;
       align-items: center;
-      padding-bottom: 0px;
       background-color: var(--uni-bg);
 
       @include respond-to("desktop") {

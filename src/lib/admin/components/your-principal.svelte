@@ -15,6 +15,7 @@
     flex-direction: column;
     gap: 4px;
     margin-left: auto;
+    text-align: right;
 
     @include respond-to("desktop") {
       width: max-content;

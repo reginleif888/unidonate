@@ -3,7 +3,7 @@
     "backend": {
       "type": "motoko",
       "main": "backend/main.mo",
-      "init_arg": "(opt principal \"2vxsx-fae\")"
+      "init_arg": "(opt principal \"2vxsx-fae\", \"tprv8ZgxMBicQKsPdgnvFHcRWyp7VYvmPnhCpKjTCLDts5XDJYAApXiN7tCeEiprLPAFegEUr2cCoug4116oqYtPWHWTCQ9H1Qbkwu63csXJSvv\")"
     },
     "frontend": {
       "dependencies": ["backend", "internet_identity"],

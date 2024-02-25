@@ -18,8 +18,14 @@
 </div>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+  
   img {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+
+  @include respond-to("desktop") {
+      height: 40px;
+      width: 40px;
+    }
   }
 </style>

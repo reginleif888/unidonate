@@ -30,12 +30,14 @@
         class:doughnut-chart-root__legend-item--opacity={hoveredSlice &&
           hoveredSlice !== id}
       >
-        <div
-          class="doughnut-chart-root__legend-color"
-          style={`background-color: ${color};`}
-        ></div>
-        <p>{label}</p>
-        <p>:</p>
+        <div class="doughnut-chart-root__legend-label">
+          <div
+            class="doughnut-chart-root__legend-color"
+            style={`background-color: ${color};`}
+          ></div>
+          <p>{label}</p>
+          <p>:</p>
+        </div>
         <p>{formatValue(value)}</p>
       </div>
     {/each}
@@ -96,7 +98,7 @@
 
     &__legend-item {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 4px;
       padding-bottom: 4px;
       transition: opacity var(--uni-transition-default);
@@ -104,6 +106,25 @@
       &--opacity {
         opacity: 0.5;
       }
+
+      & > p {
+        padding-left: 16px;
+      }
+      
+      @include respond-to(smallTablet) {
+        flex-direction: row;
+        align-items: center;
+
+        & > p {
+          padding-left: 0;
+        }
+      }
+    }
+
+    &__legend-label {
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
     }
 
     &__legend-color {

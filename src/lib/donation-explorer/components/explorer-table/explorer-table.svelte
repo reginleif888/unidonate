@@ -282,7 +282,7 @@
     &__table-wrapper {
       flex-grow: 1;
       height: 0;
-      overflow: auto;
+      overflow: scroll;
       background-color: var(--uni-bg-transparent-700);
     }
   }

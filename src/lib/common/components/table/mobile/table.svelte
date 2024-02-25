@@ -14,9 +14,16 @@
 </div>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+  
   .table-root {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    padding: 8px;
+
+    @include respond-to("desktop") {
+      padding: 0px;
+    }
   }
 </style>

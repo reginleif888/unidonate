@@ -44,6 +44,8 @@
 </div>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
   .owners-table {
     width: 100%;
     display: flex;
@@ -51,12 +53,16 @@
     flex-grow: 1;
 
     &__header {
-      padding: 16px;
+      padding: 8px;
       display: flex;
-      gap: 16px;
+      gap: 8px;
       align-items: center;
-      padding-bottom: 0px;
       background-color: var(--uni-bg);
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+      }
     }
 
     &__top-controls-left {
@@ -69,14 +75,19 @@
     &__top-controls {
       position: sticky;
       top: 0;
-      padding: 16px;
+      padding: 8px;
       background-color: var(--uni-bg);
       border-bottom: 1px solid var(--uni-divider-color);
       z-index: 2;
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
-      gap: 16px;
+      gap: 8px;
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+      }
     }
 
     &__table-wrapper {
