@@ -254,7 +254,7 @@
 
   :global(.school-modal-root) {
     max-height: 100%;
-    overflow: scroll;
+    overflow: auto;
     padding: 8px;
     width: 100%;
     display: flex;

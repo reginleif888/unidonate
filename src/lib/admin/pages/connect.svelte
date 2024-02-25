@@ -3,6 +3,7 @@
   import { ConnectedNavCards } from "$lib/admin/components";
   import { authClientStore, isAdminStore } from "$lib/common/stores";
   import { AuthClient } from "@dfinity/auth-client";
+  import { checkIsProductionBuild } from "$lib/common/utils";
 
   async function connect() {
     if ($authClientStore) {
@@ -23,7 +24,7 @@
       $authClientStore.login({
         maxTimeToLive: BigInt(24 * 60 * 60 * 1000 * 1000 * 1000),
         identityProvider:
-          process.env.DFX_NETWORK === "ic"
+          checkIsProductionBuild()
             ? "https://identity.ic0.app/#authorize"
             : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/#authorize`,
         windowOpenerFeatures:

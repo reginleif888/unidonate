@@ -403,7 +403,7 @@
       height: 0;
       display: flex;
       flex-direction: column;
-      overflow: scroll;
+      overflow: auto;
       background-color: var(--uni-bg-transparent-700);
     }
 

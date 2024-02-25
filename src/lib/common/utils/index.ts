@@ -15,3 +15,4 @@ export { default as satsToBtcString } from "./sats-to-btc-string";
 export { default as btcToSatsString } from "./btc-to-sats-string";
 export { default as toBigInt } from "./to-big-Int";
 export { default as serializeWithBigInt } from "./serialize-with-big-int";
+export { default as checkIsProductionBuild } from "./check-is-production-build";
