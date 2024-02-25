@@ -6,6 +6,7 @@
   export let perPage: number = 10;
   export let count: number = 0;
   export let showingHidden: boolean = false;
+  export let mobile: boolean = false;
 </script>
 
 <Pagination.Root
@@ -24,18 +25,20 @@
       <CaretLeft size={16} />
     </Pagination.PrevButton>
     <div class="uni-pagination-root__pages-container">
-      {#each pages as page (page.key)}
-        {#if page.type === "ellipsis"}
-          <div class="uni-pagination-root__ellipsis">...</div>
-        {:else}
-          <Pagination.Page
-            {page}
-            class={`uni-pagination-root__page subtitle1 ${String(currentPage) === String(page.value) ? "uni-pagination-root__current-page" : ""}`}
-          >
-            {page.value}
-          </Pagination.Page>
-        {/if}
-      {/each}
+      {#if !mobile}
+        {#each pages as page (page.key)}
+          {#if page.type === "ellipsis"}
+            <div class="uni-pagination-root__ellipsis">...</div>
+          {:else}
+            <Pagination.Page
+              {page}
+              class={`uni-pagination-root__page subtitle1 ${String(currentPage) === String(page.value) ? "uni-pagination-root__current-page" : ""}`}
+            >
+              {page.value}
+            </Pagination.Page>
+          {/if}
+        {/each}
+      {/if}
     </div>
     <Pagination.NextButton class="uni-pagination-root__button">
       <CaretRight size={16} />

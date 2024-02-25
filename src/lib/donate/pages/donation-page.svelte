@@ -26,6 +26,8 @@
   import { useCreateDonation } from "../queries/use-create-donation";
   import { goto } from "$app/navigation";
   import { AppRoute } from "$lib/common/routes";
+  import { screenWidthStore } from "$lib/common/stores";
+  import { SCREEN } from "$lib/common/constant";
 
   let donutData: Array<DoughnutChartDataItem> = [
     {
@@ -66,6 +68,8 @@
 
   export let btcValue: string = "";
 
+  export let notificationElement: HTMLDivElement | null = null;
+
   let scrollRoot: HTMLElement;
 
   let headingRoot: HTMLElement;
@@ -96,6 +100,13 @@
       submitted = true;
 
       if (error && error.client) {
+        scrollRoot.scrollTo({
+          top:
+            (notificationElement?.offsetTop ?? 0) -
+            (notificationElement?.clientHeight ?? 0),
+          behavior: "smooth",
+        });
+
         return;
       }
 
@@ -167,7 +178,7 @@
     </div>
 
     {#if !submitted}
-      <div class="notifications-wrapper">
+      <div class="notifications-wrapper" bind:this={notificationElement}>
         <InlineNotification
           title="Info"
           message="Percent sum of all categories should be equal to 100%"
@@ -221,6 +232,7 @@
         height={240}
         data={donutData}
         bind:hoveredSlice
+        direction={$screenWidthStore < SCREEN.desktop ? "column" : "row"}
         formatValue={(percent) =>
           "≈" +
           (
@@ -240,7 +252,7 @@
       <div class="reset-button-wrapper">
         <Tooltip>
           <Button
-            label="Reset categories allocation"
+            label="Reset allocation"
             contained
             variant="secondary"
             slot="trigger"
@@ -255,9 +267,7 @@
         on:click={handleSubmit}
         loading={$createDonation.isLoading}
         notClickable={$createDonation.isLoading}
-      >
-        <span slot="end-icon" class="h6">🎉</span>
-      </Button>
+      />
     </div>
   </div>
 </div>
@@ -275,6 +285,7 @@
 />
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
   b {
     font-weight: 800;
   }
@@ -299,8 +310,12 @@
   }
 
   .heading-section {
-    padding: 16px;
+    padding: 8px;
     padding-bottom: 0px;
+
+    @include respond-to("desktop") {
+      padding: 16px;
+    }
   }
 
   .step-heading {
@@ -308,38 +323,61 @@
   }
 
   .step-description {
-    margin-bottom: 24px;
+    margin-bottom: 8px;
+
+    @include respond-to("desktop") {
+      margin-bottom: 24px;
+    }
   }
 
   .categories-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    padding: 0 16px;
-    margin-bottom: 24px;
+    padding: 0 8px;
+    margin-bottom: 12px;
+
+    @include respond-to("desktop") {
+      padding: 0 16px;
+      margin-bottom: 24px;
+    }
   }
 
   .top-controls {
-    margin-bottom: 24px;
     position: sticky;
     top: 0;
-    padding: 0 16px;
+    margin-bottom: 12px;
+    padding: 0 8px;
     transition: all var(--uni-transition-default);
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    z-index: 2;
+
+    @include respond-to("desktop") {
+      margin-bottom: 24px;
+      padding: 0 16px;
+    }
 
     &--scrolling {
       background-color: var(--uni-bg);
       box-shadow: var(--uni-shadow-paper);
       z-index: 2;
-      padding: 16px;
+      padding: 8px;
+
+      @include respond-to("desktop") {
+        padding: 16px;
+      }
     }
   }
 
   .budget-wrapper {
-    max-width: 50%;
+    max-width: 100%;
     width: 100%;
+
+    @include respond-to("desktop") {
+      max-width: 50%;
+    }
   }
 
   .card-wrapper {
@@ -357,37 +395,56 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 8px;
     flex-grow: 1;
+
+    @include respond-to("desktop") {
+      padding: 0 16px;
+    }
   }
 
   .controls-section {
     bottom: 0;
     position: sticky;
     background-color: var(--uni-bg);
-    padding: 16px;
+    padding: 8px;
     border-top: 1px solid var(--uni-primary-transparent-70);
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: flex-end;
     z-index: 2;
+
+    @include respond-to("desktop") {
+      padding: 16px;
+      justify-content: flex-end;
+    }
   }
 
   .controls-section-buttons {
     display: flex;
     gap: 16px;
     align-items: center;
-    justify-content: flex-end;
+
+    justify-content: space-between;
     width: 100%;
+
+    @include respond-to("desktop") {
+      justify-content: flex-end;
+    }
   }
 
   .notifications-wrapper {
-    margin-bottom: 16px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 0 16px;
+    margin-bottom: 8px;
+    padding: 0 8px;
+
+    @include respond-to("desktop") {
+      margin-bottom: 16px;
+      padding: 0 16px;
+    }
   }
 
   .reset-button-wrapper {

@@ -7,11 +7,23 @@
   import { page } from "$app/stores";
   import { MODES } from "../constant";
   import type { TabRoute } from "../types";
+  import { resolveAppRoute } from "../utils";
+  import { AppRoute } from "../routes";
 
   export let tabRoutes: Array<TabRoute> = [];
 
   function closeBurger() {
     burgerMenuStore.set(false);
+  }
+
+  let selectedRoute = resolveAppRoute($page.route.id);
+
+  $: {
+    selectedRoute = resolveAppRoute($page.route.id);
+
+    if (selectedRoute === AppRoute.Donation) {
+      selectedRoute = AppRoute.Explorer;
+    }
   }
 </script>
 
@@ -30,7 +42,7 @@
       {#each tabRoutes as { route, label, Icon }}
         <li
           class="menu__list-item subtitle1"
-          class:selected={$page.route.id === route}
+          class:selected={selectedRoute === route}
         >
           <Icon size={24} />
           <a href={route} on:click={closeBurger}>{label}</a>

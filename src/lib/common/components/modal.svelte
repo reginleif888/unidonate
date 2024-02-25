@@ -60,7 +60,6 @@
     max-width: 94%;
     transform: translate(-50%, -50%);
     background-color: var(--secondary-bg);
-    padding: 1.25rem;
     z-index: var(--uni-zIndex-modal-content);
   }
 

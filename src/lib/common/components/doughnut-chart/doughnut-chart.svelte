@@ -13,6 +13,8 @@
 
   export let hoveredSlice: UniqueIdentifier | null | SVGPathElement = null;
 
+  export let direction: "column" | "row" = "row";
+
   export let formatValue: (value: number) => string = (value) =>
     value.toString();
 
@@ -21,7 +23,11 @@
   $: slices = calculatePieSlices(data, total);
 </script>
 
-<div class="doughnut-chart-root">
+<div
+  class="doughnut-chart-root"
+  class:doughnut-chart-root--column={direction === "column"}
+  class:doughnut-chart-root--row={direction === "row"}
+>
   <div class="doughnut-chart-root__legend-container">
     {#each data as { color, label, value, id }}
       <div
@@ -74,6 +80,14 @@
     align-items: center;
     gap: 8px;
     overflow: hidden;
+
+    &--column {
+      flex-direction: column;
+    }
+
+    &--row {
+      flex-direction: row;
+    }
 
     &__legend-container {
       display: flex;

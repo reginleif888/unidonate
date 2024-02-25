@@ -61,13 +61,13 @@
 </script>
 
 <header class:hidden-header={!showHeader}>
-  <div class="logo-wrapper">
+  <a href={AppRoute.Home} class="logo-wrapper">
     <LogoFull />
-  </div>
+  </a>
 
   {#if !hiddenNavigation}
     <div class="inner">
-      <Only from="tablet">
+      <Only from="desktop">
         <div class="tabs-wrapper">
           <Tabs
             options={tabRoutes.map(({ route, label, Icon }) => ({
@@ -82,7 +82,7 @@
         </div>
       </Only>
 
-      <Only to="tablet">
+      <Only to="desktop">
         <BurgerButton
           onlyBurger
           on:click={openBurger}
@@ -92,7 +92,7 @@
     </div>
   {/if}
 
-  <Only from="tablet">
+  <Only from="desktop">
     <div class="modes-wrapper">
       <Tabs
         options={MODES}
@@ -122,7 +122,7 @@
     justify-content: flex-end;
     height: 62px;
 
-    @include respond-to("tablet") {
+    @include respond-to("desktop") {
       justify-content: center;
       height: 80px;
     }
@@ -139,9 +139,14 @@
     height: 50px;
     width: 200px;
     position: absolute;
-    left: 0px;
+    left: -18px;
     top: 50%;
     transform: translateY(-50%);
+    color: var(--uni-on-primary);
+
+    @include respond-to("desktop") {
+      left: 0px;
+    }
   }
 
   .tabs-wrapper {

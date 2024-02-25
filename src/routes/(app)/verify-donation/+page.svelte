@@ -63,33 +63,37 @@
 
 <Page>
   <div class="outer" bind:this={outerEl} in:fade>
-    {#if !success}
-      <ConfirmDonateForm
-        bind:donationId
-        bind:transactionId
-        onConfirm={handleConfirm}
-        bind:serverErrorMessage={error}
-        loading={$verifyDonation.isLoading}
-      />
-    {/if}
+    <div class="inner">
+      <div class="form-wrapper">
+        {#if !success}
+          <ConfirmDonateForm
+            bind:donationId
+            bind:transactionId
+            onConfirm={handleConfirm}
+            bind:serverErrorMessage={error}
+            loading={$verifyDonation.isLoading}
+          />
+        {/if}
 
-    {#if success}
-      <ConfirmDonateSuccess
-        dti={donationId}
-        txid={transactionId}
-        onView={onViewDonation}
-      />
-    {/if}
+        {#if success}
+          <ConfirmDonateSuccess
+            dti={donationId}
+            txid={transactionId}
+            onView={onViewDonation}
+          />
+        {/if}
 
-    {#if outerEl && fireworks}
-      <FireworksBg
-        width={outerEl.getBoundingClientRect().width}
-        height={outerEl.getBoundingClientRect().height}
-        numberOfParticles={50}
-        maxFireworks={15}
-        onFinish={handleFireworksFinish}
-      />
-    {/if}
+        {#if outerEl && fireworks}
+          <FireworksBg
+            width={outerEl.getBoundingClientRect().width}
+            height={outerEl.getBoundingClientRect().height}
+            numberOfParticles={50}
+            maxFireworks={15}
+            onFinish={handleFireworksFinish}
+          />
+        {/if}
+      </div>
+    </div>
   </div>
 </Page>
 
@@ -101,6 +105,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
+  }
+
+  .inner {
+    overflow: auto;
+    padding: 8px;
+    width: 100%;
+  }
+
+  .form-wrapper {
+    width: fit-content;
+    margin: 0 auto;
   }
 </style>

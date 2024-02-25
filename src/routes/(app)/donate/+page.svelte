@@ -5,7 +5,7 @@
     type FormStudent,
     type PaginationFilter,
   } from "$lib/donate/types";
-  import { Page, UniIcon, DesktopStepper } from "$lib/common/components";
+  import { Page, UniIcon, DesktopStepper, Only } from "$lib/common/components";
   import type { StepItem } from "$lib/common/types";
   import { DonationStep } from "$lib/donate/types";
   import * as Icons from "phosphor-svelte";
@@ -151,9 +151,11 @@
 
 <Page>
   <div class="inner">
-    <div class="stepper-wrapper">
-      <DesktopStepper {steps} bind:current={currentStep} />
-    </div>
+    <Only from="desktop">
+      <div class="stepper-wrapper">
+        <DesktopStepper {steps} bind:current={currentStep} />
+      </div>
+    </Only>
 
     {#if currentStep === DonationStep.School}
       <EntityPage

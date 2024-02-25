@@ -9,6 +9,8 @@
     Divider,
     CopyButton,
   } from "$lib/common/components";
+  import { SCREEN } from "$lib/common/constant";
+  import { screenWidthStore } from "$lib/common/stores";
   import { CurrencyBtc } from "phosphor-svelte";
 
   export let open: boolean = false;
@@ -34,7 +36,12 @@
   }
 </script>
 
-<Modal bind:open closeOnEscape={false} closeOnOutsideClick={false}>
+<Modal
+  bind:open
+  closeOnEscape={false}
+  closeOnOutsideClick={false}
+  className="donation-modal__modal-root"
+>
   <div class="donation-modal">
     <div class="donation-modal__header">
       <h4 class="h4">Donation information</h4>
@@ -54,7 +61,7 @@
         <div class="donation-modal__qr-code-wrapper">
           <QrCode
             id="donation"
-            squareSize={315}
+            squareSize={$screenWidthStore < SCREEN.desktop ? 200 : 300}
             codeValue="https://www.google.de/"
           />
         </div>
@@ -68,11 +75,7 @@
                   <CurrencyBtc weight="bold" />
                 </span>
               </Input>
-              <CopyButton
-                tooltipSide="right"
-                value={textToCopy}
-                withoutTooltip
-              />
+              <CopyButton tooltipSide="right" value={total} withoutTooltip />
             </div>
           </InputWithLabel>
           <InputWithLabel label="BTC address">
@@ -80,7 +83,7 @@
               <Input readonly value={btcAddress} />
               <CopyButton
                 tooltipSide="right"
-                value={textToCopy}
+                value={btcAddress}
                 withoutTooltip
               />
             </div>
@@ -90,7 +93,7 @@
               <Input readonly value={transactionId} />
               <CopyButton
                 tooltipSide="right"
-                value={textToCopy}
+                value={transactionId}
                 withoutTooltip
               />
             </div>
@@ -122,6 +125,13 @@
 </Modal>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+  :global(.donation-modal__modal-root) {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+  }
+
   .hidden-input {
     height: 0;
     opacity: 0;
@@ -136,6 +146,13 @@
     max-width: 800px;
     width: auto;
     color: var(--uni-on-bg);
+    max-height: 98vh;
+    overflow: auto;
+
+    &__qr-code-wrapper {
+      display: flex;
+      justify-content: center;
+    }
 
     &__header {
       display: flex;
@@ -157,6 +174,11 @@
     &__second-section {
       display: flex;
       gap: 16px;
+      flex-direction: column;
+
+      @include respond-to("desktop") {
+        flex-direction: row;
+      }
     }
 
     &__footer {

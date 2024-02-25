@@ -9,7 +9,7 @@
   import { type FactoryArg } from "imask";
 
   type $$Props = Omit<HTMLInputAttributes, "size"> & {
-    side?: "small" | "medium";
+    size?: "small" | "medium";
     error?: boolean;
     value?: string;
     inputMask?: any | null;

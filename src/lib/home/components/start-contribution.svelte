@@ -13,7 +13,7 @@
   </div>
 
   <Button
-    label="Support schools and students directly"
+    label="Support schools and students"
     contained
     on:click={() => {
       goto(AppRoute.Donate);
