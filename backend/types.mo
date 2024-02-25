@@ -9,19 +9,13 @@ import BitcoinIntegration "bitcoin-integration";
 module {
   type Satoshi = BitcoinIntegration.Satoshi;
 
-  public type EntityImage = {
-    name : Text;
-    mimeType : Text;
-    id : Text;
-  };
-
   public type School = {
     id : Text;
     name : Text;
     location : Text;
     website : Text;
     students : [Text];
-    images : ?[EntityImage];
+    images : ?[ClientImageObject];
     active : Bool;
   };
 
@@ -31,30 +25,45 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
-    images : ?[EntityImage];
+    images : ?[ClientImageObject];
     schoolId : Text;
     active : Bool;
   };
 
   public type ImageObject = {
+    id : Text;
+    offset : Nat64;
+    size : Nat;
+    name : Text;
+    mimeType : Text;
+    isDeleted : Bool;
+  };
+
+  public type UploadImagePayload = {
     id : ?Text;
     name : Text;
     mimeType : Text;
     data : Blob;
   };
 
+  public type ClientImageObject = {
+    name : Text;
+    mimeType : Text;
+    id : Text;
+  };
+
   public type AddSchoolPayload = {
     name : Text;
     location : Text;
     website : Text;
-    images : ?[ImageObject];
+    images : ?[UploadImagePayload];
   };
 
   public type UpdateSchoolPayload = {
     name : ?Text;
     location : ?Text;
     website : ?Text;
-    images : ?[ImageObject and { id : ?Text }];
+    images : ?[UploadImagePayload];
     active : ?Bool;
   };
 
@@ -63,7 +72,7 @@ module {
     lastName : Text;
     grade : Text;
     dateOfBirth : Text;
-    images : ?[ImageObject];
+    images : ?[UploadImagePayload];
   };
 
   public type UpdateStudentPayload = {
@@ -71,7 +80,7 @@ module {
     lastName : ?Text;
     grade : ?Text;
     dateOfBirth : ?Text;
-    images : ?[ImageObject and { id : ?Text }];
+    images : ?[UploadImagePayload];
     active : ?Bool;
   };
 

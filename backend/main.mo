@@ -4,7 +4,6 @@ import Nat "mo:base/Nat";
 import List "mo:base/List";
 import Vector "mo:vector/Class";
 import Iter "mo:base/Iter";
-import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Text "mo:base/Text";
 import Nat64 "mo:base/Nat64";
@@ -13,75 +12,22 @@ import Int "mo:base/Int";
 import UUID "mo:uuid/UUID";
 import Source "mo:uuid/async/SourceV4";
 import Uuid "mo:uuid/UUID";
-import HashMap "mo:base/HashMap";
-import StableMemory "mo:base/ExperimentalStableMemory";
 import Nat32 "mo:base/Nat32";
 import Option "mo:base/Option";
-import Int64 "mo:base/Int64";
 import Blob "mo:base/Blob";
-import Random "mo:base/Random";
-import Nat8 "mo:base/Nat8";
 import Error "mo:base/Error";
 import Principal "mo:base/Principal";
-import ExperimentalStableMemory "mo:base/ExperimentalStableMemory";
 import Timer "mo:base/Timer";
 import Base58Check "mo:motoko-bitcoin/Base58Check";
-import Bip32 "mo:motoko-bitcoin/Bip32";
-import Jacobi "mo:motoko-bitcoin/ec/Jacobi";
-import Curves "mo:motoko-bitcoin/ec/Curves";
-import Hmac "mo:motoko-bitcoin/Hmac";
-import Hash "mo:motoko-bitcoin/Hash";
-import Bech32 "mo:motoko-bitcoin/Bech32";
-import Common "mo:motoko-bitcoin/Common";
 
 import BitcoinIntegration "bitcoin-integration";
 import BitcointIntegrationTypes "bitcoin-integration/types";
-import BitcoinIntegrationUtils "bitcoin-integration/utils";
-
+import Utils "utils";
 import ImageStorage "image-storage";
 
 import Types "./types";
-import Utils "utils";
-import Payments "bitcoin-integration/payments";
-import Network "bitcoin-integration/network";
-import BIP32 "bitcoin-integration/bip32";
-import BitcoinApi "bitcoin-integration/bitcoin-api";
 
 actor class Main(initialOwner : ?Principal) {
-  type Student = Types.Student;
-  type School = Types.School;
-  type Donation = Types.Donation;
-
-  type ImageObject = Types.ImageObject;
-  type EntityImage = Types.EntityImage;
-  type DonationStatus = Types.DonationStatus;
-
-  type GetSchoolsPayload = Types.GetSchoolsPayload;
-  type GetSchoolsResponse = Types.GetSchoolsResponse;
-  type AddSchoolPayload = Types.AddSchoolPayload;
-  type UpdateSchoolPayload = Types.UpdateSchoolPayload;
-
-  type GetStudentsPayload = Types.GetStudentsPayload;
-  type GetStudentsResponse = Types.GetStudentsResponse;
-  type AddStudentPayload = Types.AddStudentPayload;
-  type UpdateStudentPayload = Types.UpdateStudentPayload;
-
-  type CreateDonationPayload = Types.CreateDonationPayload;
-  type CreateDonationResponse = Types.CreateDonationResponse;
-  type VerifyDonationPayload = Types.VerifyDonationPayload;
-  type GetDonationsPayload = Types.GetDonationsPayload;
-  type GetDonationsResponse = Types.GetDonationsResponse;
-
-  type HttpRequest = Types.HttpRequest;
-  type HttpResponse = Types.HttpResponse;
-
-  type ImageData = {
-    offset : Nat64;
-    size : Nat;
-    name : Text;
-    mimeType : Text;
-    isDeleted : Bool;
-  };
 
   let g = Source.Source();
 
@@ -98,19 +44,19 @@ actor class Main(initialOwner : ?Principal) {
   private let usedTxMap = RBTree.RBTree<Text, ()>(Text.compare);
   stable var stableUsedTxMap = usedTxMap.share();
 
-  let schools : Vector.Vector<School> = Vector.Vector<School>();
+  let schools : Vector.Vector<Types.School> = Vector.Vector<Types.School>();
   stable var stableSchools = schools.share();
 
   let schoolsMap : RBTree.RBTree<Text, Nat> = RBTree.RBTree<Text, Nat>(Text.compare);
   stable var stableSchoolsMap = schoolsMap.share();
 
-  let students : Vector.Vector<Student> = Vector.Vector<Student>();
+  let students : Vector.Vector<Types.Student> = Vector.Vector<Types.Student>();
   stable var stableStudents = students.share();
 
   let studentsMap : RBTree.RBTree<Text, Nat> = RBTree.RBTree<Text, Nat>(Text.compare);
   stable var stableStudentsMap = studentsMap.share();
 
-  let donations : Vector.Vector<Donation> = Vector.Vector<Donation>();
+  let donations : Vector.Vector<Types.Donation> = Vector.Vector<Types.Donation>();
   stable var stableDonations = donations.share();
 
   let donationsAmountMap : RBTree.RBTree<BitcointIntegrationTypes.Satoshi, List.List<Nat>> = RBTree.RBTree<BitcointIntegrationTypes.Satoshi, List.List<Nat>>(Nat64.compare);
@@ -129,7 +75,7 @@ actor class Main(initialOwner : ?Principal) {
   private stable var currentMemoryOffset : Nat64 = 2;
   private stable var currentTimer : Timer.TimerId = 0;
 
-  var imgData : RBTree.RBTree<Text, ImageData> = RBTree.RBTree<Text, ImageData>(Text.compare);
+  var imgData : RBTree.RBTree<Text, Types.ImageObject> = RBTree.RBTree<Text, Types.ImageObject>(Text.compare);
   stable var stableImgData = imgData.share();
 
   // --------------------------------------
@@ -163,7 +109,7 @@ actor class Main(initialOwner : ?Principal) {
 
   // --------------------------------------
 
-  public query func getDonations({ sorting; page; perPage } : GetDonationsPayload) : async GetDonationsResponse {
+  public query func getDonations({ sorting; page; perPage } : Types.GetDonationsPayload) : async Types.GetDonationsResponse {
     let { field; order } = Option.get(sorting, { field = #verifiedAt; order = #descending });
 
     let sortedDonations = switch (field) {
@@ -187,13 +133,13 @@ actor class Main(initialOwner : ?Principal) {
     let startIndex = Nat.min(size - 1, page * perPage);
     let endIndex = Nat.min(size, (page + 1) * perPage);
 
-    let paginatedDonations = Vector.Vector<Donation>();
+    let paginatedDonations = Vector.Vector<Types.Donation>();
 
     for (index in Iter.range(startIndex, endIndex - 1)) {
       paginatedDonations.add(sortedDonations.get(index));
     };
 
-    let response : GetDonationsResponse = {
+    let response : Types.GetDonationsResponse = {
       donations = Vector.toArray(paginatedDonations);
       total = size;
     };
@@ -201,20 +147,20 @@ actor class Main(initialOwner : ?Principal) {
     return response;
   };
 
-  public query func getDonationById(donationId : Text) : async Donation {
+  public query func getDonationById(donationId : Text) : async Types.Donation {
     let ?donationIndex = donationsMap.get(donationId) else throw Error.reject("Donation is not found by provided ID.");
     let donation = donations.get(donationIndex);
 
     return donation;
   };
 
-  public query func getSchools({ filters; page; perPage } : GetSchoolsPayload) : async GetSchoolsResponse {
+  public query func getSchools({ filters; page; perPage } : Types.GetSchoolsPayload) : async Types.GetSchoolsResponse {
     let total = schools.size();
 
     var filteredSchoolsList = schools;
 
     if (Text.size(filters.schoolName) > 0 or filters.active) {
-      filteredSchoolsList := Vector.Vector<School>();
+      filteredSchoolsList := Vector.Vector<Types.School>();
 
       for (index in Iter.range(0, total - 1)) {
         let school = schools.get(index);
@@ -237,13 +183,13 @@ actor class Main(initialOwner : ?Principal) {
     let startIndex = Nat.min(filteredSize - 1, page * perPage);
     let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
 
-    let paginatedSchools = Vector.Vector<School>();
+    let paginatedSchools = Vector.Vector<Types.School>();
 
     for (index in Iter.range(startIndex, endIndex - 1)) {
       paginatedSchools.add(filteredSchoolsList.get(index));
     };
 
-    let response : GetSchoolsResponse = {
+    let response : Types.GetSchoolsResponse = {
       schools = Vector.toArray(paginatedSchools);
       total = filteredSize;
     };
@@ -251,24 +197,24 @@ actor class Main(initialOwner : ?Principal) {
     return response;
   };
 
-  public query func getSchoolById(schoolId : Text) : async School {
+  public query func getSchoolById(schoolId : Text) : async Types.School {
     let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
     let school = schools.get(schoolIndex);
 
     return school;
   };
 
-  public query func getStudents(schoolId : Text, { filters; page; perPage } : GetStudentsPayload) : async GetStudentsResponse {
+  public query func getStudents(schoolId : Text, { filters; page; perPage } : Types.GetStudentsPayload) : async Types.GetStudentsResponse {
     let studentsBySchool = students
     |> Vector.toArray(_)
-    |> Array.filter<Student>(_, func(student) { student.schoolId == schoolId });
+    |> Array.filter<Types.Student>(_, func(student) { student.schoolId == schoolId });
 
     let total = Array.size(studentsBySchool);
 
-    var filteredStudentsList : Vector.Vector<Student> = Vector.fromArray(studentsBySchool);
+    var filteredStudentsList : Vector.Vector<Types.Student> = Vector.fromArray(studentsBySchool);
 
     if (Text.size(filters.studentName) > 0 or filters.active) {
-      filteredStudentsList := Vector.Vector<Student>();
+      filteredStudentsList := Vector.Vector<Types.Student>();
 
       for (index in Iter.range(0, total - 1)) {
         let student = studentsBySchool.get(index);
@@ -291,13 +237,13 @@ actor class Main(initialOwner : ?Principal) {
     let startIndex = Nat.min(filteredSize - 1, page * perPage);
     let endIndex = Nat.min(filteredSize, (page + 1) * perPage);
 
-    let paginatedStudents = Vector.Vector<Student>();
+    let paginatedStudents = Vector.Vector<Types.Student>();
 
     for (index in Iter.range(startIndex, endIndex - 1)) {
       paginatedStudents.add(filteredStudentsList.get(index));
     };
 
-    let response : GetStudentsResponse = {
+    let response : Types.GetStudentsResponse = {
       students = Vector.toArray(paginatedStudents);
       total = filteredSize;
     };
@@ -305,7 +251,7 @@ actor class Main(initialOwner : ?Principal) {
     return response;
   };
 
-  public query func getStudentById(schoolId : Text) : async Student {
+  public query func getStudentById(schoolId : Text) : async Types.Student {
     let ?studentIndex = studentsMap.get(schoolId) else throw Error.reject("Student is not found by provided ID.");
     let student = students.get(studentIndex);
 
@@ -314,12 +260,12 @@ actor class Main(initialOwner : ?Principal) {
 
   // --------------------------------------
 
-  public shared ({ caller }) func addSchool(payload : AddSchoolPayload) : async () {
+  public shared ({ caller }) func addSchool(payload : Types.AddSchoolPayload) : async () {
     await* assertOwnerAccess(caller);
 
     let schoolId = UUID.toText(await g.new());
 
-    let newSchool : School = {
+    let newSchool : Types.School = {
       id = schoolId;
       name = payload.name;
       location = payload.location;
@@ -333,17 +279,17 @@ actor class Main(initialOwner : ?Principal) {
     schools.add(newSchool);
   };
 
-  public shared ({ caller }) func updateSchool(schoolId : Text, payload : UpdateSchoolPayload) : async () {
+  public shared ({ caller }) func updateSchool(schoolId : Text, payload : Types.UpdateSchoolPayload) : async () {
     await* assertOwnerAccess(caller);
 
     let ?schoolIndex = schoolsMap.get(schoolId) else throw Error.reject("School is not found by provided ID.");
     let school = schools.get(schoolIndex);
 
-    let images : ?[EntityImage] = await* generateImages(payload.images);
+    let images : ?[Types.ClientImageObject] = await* generateImages(payload.images);
     var hasImagesToDelete = false;
 
     for (image in Iter.fromArray(Option.get(school.images, []))) {
-      if (Array.find<ImageObject>(Option.get(payload.images, []), func(newImage) { newImage.id != null and newImage.id == ?image.id }) == null) {
+      if (Array.find<Types.UploadImagePayload>(Option.get(payload.images, []), func(newImage) { newImage.id != null and newImage.id == ?image.id }) == null) {
         ignore do ? {
           imgData.put(
             image.id,
@@ -362,19 +308,19 @@ actor class Main(initialOwner : ?Principal) {
       ignore scheduleImageDeletion();
     };
 
-    let updatedSchool : School = {
+    let updatedSchool : Types.School = {
       school with
       name = Option.get(payload.name, school.name);
       location = Option.get(payload.location, school.location);
       website = Option.get(payload.website, school.website);
-      images = Option.get<?[EntityImage]>(?images, school.images);
+      images = Option.get<?[Types.ClientImageObject]>(?images, school.images);
       active = Option.get(payload.active, school.active);
     };
 
     schools.put(schoolIndex, updatedSchool);
   };
 
-  public shared ({ caller }) func addStudent(schoolId : Text, payload : AddStudentPayload) : async () {
+  public shared ({ caller }) func addStudent(schoolId : Text, payload : Types.AddStudentPayload) : async () {
     await* assertOwnerAccess(caller);
 
     if (schoolsMap.get(schoolId) == null) {
@@ -383,7 +329,7 @@ actor class Main(initialOwner : ?Principal) {
 
     let studentId = UUID.toText(await g.new());
 
-    let newStudent : Student = {
+    let newStudent : Types.Student = {
       id = studentId;
       firstName = payload.firstName;
       lastName = payload.lastName;
@@ -412,17 +358,17 @@ actor class Main(initialOwner : ?Principal) {
     );
   };
 
-  public shared ({ caller }) func updateStudent(studentId : Text, payload : UpdateStudentPayload) : async () {
+  public shared ({ caller }) func updateStudent(studentId : Text, payload : Types.UpdateStudentPayload) : async () {
     await* assertOwnerAccess(caller);
 
     let ?studentIndex = studentsMap.get(studentId) else throw Error.reject("Student is not found by provided ID.");
     let student = students.get(studentIndex);
 
-    let images : ?[EntityImage] = await* generateImages(payload.images);
+    let images : ?[Types.ClientImageObject] = await* generateImages(payload.images);
     var hasImagesToDelete = false;
 
     for (image in Iter.fromArray(Option.get(student.images, []))) {
-      if (Array.find<ImageObject>(Option.get(payload.images, []), func(newImage) { newImage.id != null and newImage.id == ?image.id }) == null) {
+      if (Array.find<Types.UploadImagePayload>(Option.get(payload.images, []), func(newImage) { newImage.id != null and newImage.id == ?image.id }) == null) {
         ignore do ? {
           imgData.put(
             image.id,
@@ -443,13 +389,13 @@ actor class Main(initialOwner : ?Principal) {
 
     let active = Option.get(payload.active, student.active);
 
-    let updatedStudent : Student = {
+    let updatedStudent : Types.Student = {
       student with
       firstName = Option.get(payload.firstName, student.firstName);
       lastName = Option.get(payload.lastName, student.lastName);
       grade = Option.get(payload.grade, student.grade);
       dateOfBirth = Option.get(payload.dateOfBirth, student.dateOfBirth);
-      images = Option.get<?[EntityImage]>(?images, student.images);
+      images = Option.get<?[Types.ClientImageObject]>(?images, student.images);
       active;
     };
 
@@ -473,7 +419,7 @@ actor class Main(initialOwner : ?Principal) {
     );
   };
 
-  public func createDonation(payload : CreateDonationPayload) : async CreateDonationResponse {
+  public func createDonation(payload : Types.CreateDonationPayload) : async Types.CreateDonationResponse {
     if (Nat64.less(payload.amount, 1) == true) throw Error.reject("Amount must be more than 0 satoshi.");
 
     let paymentAddress = BitcoinIntegration.generateNextPaymentAddress(ownerExtendedPublicKeyBase58Check, currentChildKeyIndex);
@@ -486,7 +432,7 @@ actor class Main(initialOwner : ?Principal) {
         currentChildKeyIndex := currentChildKeyIndex + 1;
         let donationId = UUID.toText(await g.new());
 
-        let newDonation : Donation = {
+        let newDonation : Types.Donation = {
           donationId;
           paymentAddress = address;
           schoolId = payload.schoolId;
@@ -506,7 +452,7 @@ actor class Main(initialOwner : ?Principal) {
     };
   };
 
-  public func verifyDonation(payload : VerifyDonationPayload) : async () {
+  public func verifyDonation(payload : Types.VerifyDonationPayload) : async () {
     let ?donationIndex = donationsMap.get(payload.donationId) else throw Error.reject("Donation is not found by provided ID.");
 
     let currentDonation = donations.get(donationIndex);
@@ -549,9 +495,13 @@ actor class Main(initialOwner : ?Principal) {
     );
   };
 
-  // --------------------------------------
+  private func assertOwnerAccess(principal : Principal) : async* () {
+    if (ownersMap.get(principal) == null) {
+      throw Error.reject("No Access for this principal " # Principal.toText(principal));
+    };
+  };
 
-  public query func http_request(request : HttpRequest) : async HttpResponse {
+  public query func http_request(request : Types.HttpRequest) : async Types.HttpResponse {
     if (request.method != "GET") {
       return Utils.http404(?"Path not found");
     };
@@ -573,19 +523,11 @@ actor class Main(initialOwner : ?Principal) {
     return Utils.http404(?"Path not found");
   };
 
-  // --------------------------------------
-
-  private func assertOwnerAccess(principal : Principal) : async* () {
-    if (ownersMap.get(principal) == null) {
-      throw Error.reject("No Access for this principal " # Principal.toText(principal));
-    };
-  };
-
-  private func generateImages(imageObjects : ?[ImageObject]) : async* ?[EntityImage] {
+  private func generateImages(imageObjects : ?[Types.UploadImagePayload]) : async* ?[Types.ClientImageObject] {
     switch (imageObjects) {
       case (null) { null };
       case (?images) {
-        let ids : Vector.Vector<EntityImage> = Vector.Vector<EntityImage>();
+        let ids : Vector.Vector<Types.ClientImageObject> = Vector.Vector<Types.ClientImageObject>();
 
         for (image in Iter.fromArray(images)) {
           if (image.id != null) {
@@ -622,13 +564,12 @@ actor class Main(initialOwner : ?Principal) {
   };
 
   private func deleteBlobImgs() : async () {
-    let (imageIdsToDelete, imagesDataToProcess) = imgData.entries()
-    |> Iter.map<(Text, ImageData), (Text, ImageStorage.ImageData)>(_, func((imageId, imageData)) { (imageId, { id = imageId; offset = imageData.offset; size = imageData.size; isDeleted = imageData.isDeleted }) })
-    |> Iter.toArray(_)
-    |> Array.foldLeft<(Text, ImageStorage.ImageData), (List.List<Text>, List.List<ImageStorage.ImageData>)>(_, (null, null), func((imageIdsToDelete, imagesDataToProcess), (imageId, imageData)) { (if (imageData.isDeleted) List.push(imageId, imageIdsToDelete) else imageIdsToDelete, List.push(imageData, imagesDataToProcess)) });
+    let imageDataToProcess = imgData.entries()
+    |> Iter.map<(Text, Types.ImageObject), Types.ImageObject>(_, func(entry) { entry.1 })
+    |> Iter.toArray(_);
 
-    let newCurrentMemoryOffset = ImageStorage.processAndShiftForDeletedImagesInMemory(
-      List.toArray(imagesDataToProcess),
+    let newCurrentMemoryOffset = ImageStorage.processImageDeletion(
+      imageDataToProcess,
       func({ id; newOffset }) {
         ignore do ? {
           imgData.put(
@@ -642,7 +583,10 @@ actor class Main(initialOwner : ?Principal) {
       },
     );
 
-    for (imageId in Iter.fromList(imageIdsToDelete)) {
+    let imageIdsToDelete = imageDataToProcess
+    |> Array.mapFilter<Types.ImageObject, Text>(_, func(imageData) { if (imageData.isDeleted != true) { null } else { ?imageData.id } });
+
+    for (imageId in Iter.fromArray(imageIdsToDelete)) {
       imgData.delete(imageId);
     };
 
@@ -652,12 +596,12 @@ actor class Main(initialOwner : ?Principal) {
   private func storeBlobImg(imgId : Text, imageBlob : Blob, name : Text, mimeType : Text) {
     let { imageSize; shift } = ImageStorage.storeBlobImageInMemory(imageBlob, currentMemoryOffset);
 
-    imgData.put(imgId, { offset = currentMemoryOffset; size = imageSize; name; mimeType; isDeleted = false });
+    imgData.put(imgId, { id = imgId; offset = currentMemoryOffset; size = imageSize; name; mimeType; isDeleted = false });
     currentMemoryOffset += Nat64.fromNat(imageSize) + shift;
   };
 
   private func loadBlobImg(imgId : Text) : ?Blob {
-    let (imageOffset, imageSize) = Option.getMapped<ImageData, (Nat64, Nat)>(imgData.get(imgId), func(data) { (data.offset, data.size) }, (0, 0));
+    let (imageOffset, imageSize) = Option.getMapped<Types.ImageObject, (Nat64, Nat)>(imgData.get(imgId), func(data) { (data.offset, data.size) }, (0, 0));
     return ImageStorage.getBlobImageFromMemory(imageOffset, imageSize);
   };
 
