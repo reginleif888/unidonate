@@ -578,7 +578,7 @@ actor class Main(initialOwner : ?Principal) {
 
   private func assertOwnerAccess(principal : Principal) : async* () {
     if (ownersMap.get(principal) == null) {
-      // throw Error.reject("No Access for this principal " # Principal.toText(principal));
+      throw Error.reject("No Access for this principal " # Principal.toText(principal));
     };
   };
 
