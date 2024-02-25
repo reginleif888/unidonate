@@ -178,6 +178,13 @@ actor class Main(initialOwner : ?Principal) {
 
     let size = sortedDonations.size();
 
+    if (size == 0) {
+      return {
+        donations = [];
+        total = size;
+      };
+    };
+
     let startIndex = Nat.min(size - 1, page * perPage);
     let endIndex = Nat.min(size, (page + 1) * perPage);
 
