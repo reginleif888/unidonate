@@ -88,14 +88,17 @@ actor class Main(initialOwner : ?Principal) {
   // --------------------------------------
 
   private let ownersMap = RBTree.RBTree<Principal, ()>(Principal.compare);
+  
+   ignore do ? {
+    ownersMap.put(initialOwner!, ());
+  };
+
   stable var stableOwnersMap = ownersMap.share();
 
   private let usedTxMap = RBTree.RBTree<Text, ()>(Text.compare);
   stable var stableUsedTxMap = usedTxMap.share();
 
-  ignore do ? {
-    ownersMap.put(initialOwner!, ());
-  };
+ 
 
   let schools : Vector.Vector<School> = Vector.Vector<School>();
   stable var stableSchools = schools.share();
