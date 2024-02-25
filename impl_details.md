@@ -22,3 +22,14 @@ The solution represents a decentralized system designed for public donations thr
 - Mobile-first responsive layout
 - Light/dark themes
 - Assets optimization
+- Import from CSV/XLSX
+
+## Some notes
+
+### Bitcoin integration
+
+We have written an algorithm that allows us to create Hierarchical Deterministic (HD) wallets based on both an extended public and an extended private keys. For each transaction we generate a new HD wallet (maximum 20). This approach allows to make the mechanism of interaction with Bitcoin more convenient and secure. Verification is carried out using the capabilities of Bitcoin integration of the Internet Computer.
+
+### Image on-chain storage
+
+We have implemented a mechanism that allows us to store and modify images entirely on the blockchain using [Stable Memory](https://internetcomputer.org/docs/current/motoko/main/stablememory). Offsets inside the Stable Memory for each image are saved, and then when the images are deleted, they move. To make the process of deleting images invisible to the user, we schedule the deletion, and then simply delete unnecessary images in the background and move the remaining images to free up memory for new images.
