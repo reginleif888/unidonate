@@ -53,6 +53,10 @@
     <p class="body1 heading-description">
       Manage your schools and students with unparalleled ease and efficiency.
     </p>
+
+    <p class="body1 heading-description">
+      Your principal: {$authClientStore?.getIdentity().getPrincipal().toText()}
+    </p>
   </div>
 
   {#await Promise.all( [$authClientStore?.isAuthenticated(), $isAdminStore] ) then [isAuth, isAdmin]}

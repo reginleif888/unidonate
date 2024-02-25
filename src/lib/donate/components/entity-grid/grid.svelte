@@ -34,7 +34,7 @@
 
 <div>
   {#if !loading}
-    <div class="grid" in:fade={{ duration: 150 }}>
+    <div class="grid">
       {#each data as item (entityType + item.id)}
         <svelte:component
           this={Entity}

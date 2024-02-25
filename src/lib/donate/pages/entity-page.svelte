@@ -109,6 +109,8 @@
       scrollRoot.scrollTop = 0;
     }
 
+    selected = null;
+
     filter = {
       search,
       page,

@@ -55,7 +55,7 @@
   }
 </script>
 
-<Modal bind:open align="start">
+<Modal bind:open align="start" className="search-donation-modal-root">
   <div class="search-donation-modal">
     <div class="search-donation-modal__input-wrapper">
       <Input
@@ -117,8 +117,13 @@
 </Modal>
 
 <style lang="scss">
+  :global(.search-donation-modal-root) {
+    max-width: 900px;
+    width: 100%;
+    padding: 0 8px;
+  }
+
   .search-donation-modal {
-    width: 900px;
     border-radius: var(--uni-radius-input);
     color: var(--uni-on-bg);
     position: relative;

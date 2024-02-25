@@ -35,16 +35,11 @@
         class:step-icon--current={current === value}
       >
         {#if useImgInsteadOfIcon}
-          <img
-            src={img}
-            alt={label}
-            class="step-image"
-            transition:fade|local={{ duration: 250 }}
-          />
+          <img src={img} alt={label} class="step-image" />
         {/if}
 
         {#if !useImgInsteadOfIcon}
-          <span transition:fade|local={{ duration: 250 }}>
+          <span>
             <Icon size={40} />
           </span>
         {/if}

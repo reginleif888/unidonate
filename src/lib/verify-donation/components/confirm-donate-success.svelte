@@ -14,7 +14,7 @@
   }
 </script>
 
-<div class="root" bind:this={rootElement} in:fade>
+<div class="root" bind:this={rootElement}>
   <AnimatedCheckmark />
 
   <h1 class="h4">Donation Successful</h1>

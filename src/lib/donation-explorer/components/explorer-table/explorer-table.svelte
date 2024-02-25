@@ -1,12 +1,22 @@
 <script lang="ts">
-  import { Table, Pagination, Select, Button } from "$lib/common/components";
+  import {
+    Table,
+    Pagination,
+    Select,
+    Button,
+    Only,
+  } from "$lib/common/components";
   import InputWithLabel from "$lib/common/components/input-with-label.svelte";
   import {
     MAP_ALLOCATION_CATEGORY,
     PAGE_SIZES_SELECT_ITEMS,
   } from "$lib/donate/constant";
   import { MagnifyingGlass } from "phosphor-svelte";
-  import { columns, orderByOptions } from "./explorer-table.constant";
+  import {
+    columns,
+    donationMockData,
+    orderByOptions,
+  } from "./explorer-table.constant";
   import { useDonations } from "$lib/donation-explorer/queries";
   import type {
     DonationsSorting,
@@ -121,30 +131,36 @@
           <Select items={orderByOptions} bind:selected={orderBy} />
         </InputWithLabel>
       </div>
-      <Button label="Search for donation" on:click={onSearchDonation}>
+      <Button
+        contained
+        label={$screenWidthStore < SCREEN.desktop ? "" : "Search for donation"}
+        on:click={onSearchDonation}
+      >
         <div slot="start-icon" class="explorer-table__magnify-glass">
           <MagnifyingGlass size={20} />
         </div>
       </Button>
     </div>
 
-    <div class="explorer-table__top-controls-right">
-      <div class="explorer-table__allocation-legends body2">
-        {#each Object.keys(MAP_ALLOCATION_CATEGORY) as categoryKey (categoryKey)}
-          <div>
-            {MAP_ALLOCATION_CATEGORY[categoryKey].text} - {MAP_ALLOCATION_CATEGORY[
-              categoryKey
-            ].emoji}
-          </div>
-        {/each}
+    <Only from="desktop">
+      <div class="explorer-table__top-controls-right">
+        <div class="explorer-table__allocation-legends body2">
+          {#each Object.keys(MAP_ALLOCATION_CATEGORY) as categoryKey (categoryKey)}
+            <div>
+              {MAP_ALLOCATION_CATEGORY[categoryKey].text} - {MAP_ALLOCATION_CATEGORY[
+                categoryKey
+              ].emoji}
+            </div>
+          {/each}
+        </div>
       </div>
-    </div>
+    </Only>
   </div>
 
   <div class="explorer-table__table-wrapper">
     <Table
       {columns}
-      rows={donations}
+      rows={donationMockData}
       stickyHead
       mobile={$screenWidthStore < SCREEN.desktop}
     />
@@ -161,16 +177,25 @@
     </InputWithLabel>
   </div>
 
-  {#if Number($donationsQuery.data?.total) > Number(perPage.value)}
+  <Pagination
+    count={Number(donationMockData.length)}
+    bind:currentPage
+    perPage={Number(perPage.value)}
+    mobile={$screenWidthStore < SCREEN.desktop}
+  />
+
+  <!-- {#if Number($donationsQuery.data?.total) > Number(perPage.value)}
     <Pagination
       count={Number($donationsQuery.data?.total)}
       bind:currentPage
       perPage={Number(perPage.value)}
     />
-  {/if}
+  {/if} -->
 </div>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
   .explorer-table {
     width: 100%;
     display: flex;
@@ -182,28 +207,44 @@
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto;
       text-align: center;
-      gap: 8px;
+      gap: 4px;
       width: 400px;
       border: 1px solid var(--uni-divider-color);
-      padding: 8px;
+      padding: 4px;
       border-radius: 16px;
       box-shadow: var(--uni-shadow-paper);
+
+      @include respond-to("desktop") {
+        gap: 8px;
+        padding: 8px;
+      }
     }
 
     &__header {
-      padding: 16px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 8px;
+      }
     }
 
     &__top-controls-left {
       display: flex;
-      gap: 16px;
+      gap: 8px;
       width: 100%;
       align-items: flex-end;
+      justify-content: space-between;
+
+      @include respond-to("desktop") {
+        gap: 16px;
+        justify-content: flex-start;
+      }
     }
 
     &__order-by-select {
@@ -214,24 +255,36 @@
     &__top-controls {
       position: sticky;
       top: 0;
-      padding: 16px;
+      padding: 8px;
+      gap: 8px;
       background-color: var(--uni-bg);
       border-bottom: 1px solid var(--uni-divider-color);
       z-index: 2;
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
-      gap: 16px;
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+      }
     }
 
     &__bottom-controls {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: flex-end;
-      padding: 16px;
-      gap: 16px;
+      padding: 8px;
+      gap: 8px;
       background-color: var(--uni-bg);
       border-top: 1px solid var(--uni-divider-color);
+      align-items: flex-end;
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+        justify-content: flex-start;
+      }
     }
 
     &__bottom-controls-select {

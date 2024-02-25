@@ -11,7 +11,9 @@ export default function mapDonationToForm(donation: Donation): FormDonation {
     amount: satsToBtcString(donation.amount.toString())
       .replace(/(\.\d*?[1-9])0+$/, "$1")
       .replace(/\.0+$/, ""),
-    verifiedAt: "2001-01-01 00:00:00",
+    verifiedAt: donation.verifiedAt[0]
+      ? new Date(Number(donation.verifiedAt[0]) / 1000000).toLocaleString()
+      : "N/A",
     allocations: donation.allocations.reduce(
       (acc, allocation) => ({ ...acc, ...allocation }),
       {}

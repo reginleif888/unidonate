@@ -62,7 +62,7 @@
 </script>
 
 <Page>
-  <div class="outer" bind:this={outerEl} in:fade>
+  <div class="outer" bind:this={outerEl}>
     <div class="inner">
       <div class="form-wrapper">
         {#if !success}

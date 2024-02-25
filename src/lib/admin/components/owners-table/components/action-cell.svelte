@@ -39,7 +39,7 @@
 
   $: {
     if ($authClientStore) {
-      ownersQuery = useOwners($authClientStore?.getIdentity().getPrincipal());
+      ownersQuery = useOwners();
     }
   }
 

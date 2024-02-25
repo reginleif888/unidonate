@@ -42,49 +42,56 @@
 </script>
 
 <Page>
-  <div class="outer" in:fade>
-    {#if loading}
-      <Spinner size={120} />
-    {/if}
-
-    {#if error}
-      <div class="error-wrapper">
-        <button class="error-wrapper__go-back body1" on:click={goToExplorer}>
-          <ArrowLeft />Explore all donations
-        </button>
-
-        {#if $donationQuery.isError}
-          <InlineNotification
-            title="Oops..."
-            message={`Donation with ${$page.params.donationId} was not found.`}
-          />
+  <div class="outer">
+    <div class="inner">
+      <div class="form-wrapper">
+        {#if loading}
+          <Spinner size={120} />
         {/if}
 
-        {#if $studentQuery.isError}
-          <InlineNotification
-            title="Oops..."
-            message={`Student with ${$donationQuery.data?.studentId[0]} was not found.`}
-          />
+        {#if error}
+          <div class="error-wrapper">
+            <button
+              class="error-wrapper__go-back body1"
+              on:click={goToExplorer}
+            >
+              <ArrowLeft />Explore all donations
+            </button>
+
+            {#if $donationQuery.isError}
+              <InlineNotification
+                title="Oops..."
+                message={`Donation with ${$page.params.donationId} was not found.`}
+              />
+            {/if}
+
+            {#if $studentQuery.isError}
+              <InlineNotification
+                title="Oops..."
+                message={`Student with ${$donationQuery.data?.studentId[0]} was not found.`}
+              />
+            {/if}
+
+            {#if $schoolQuery.isError}
+              <InlineNotification
+                title="Oops..."
+                message={`School with ${$donationQuery.data?.schoolId} was not found.`}
+              />
+            {/if}
+          </div>
         {/if}
 
-        {#if $schoolQuery.isError}
-          <InlineNotification
-            title="Oops..."
-            message={`School with ${$donationQuery.data?.schoolId} was not found.`}
+        {#if $donationQuery.data && $schoolQuery.data}
+          <DonationInfo
+            donation={mapDonationToForm($donationQuery.data)}
+            school={mapSchoolToForm($schoolQuery.data)}
+            student={$studentQuery.data
+              ? mapStudentToForm($studentQuery.data)
+              : null}
           />
         {/if}
       </div>
-    {/if}
-
-    {#if $donationQuery.data && $schoolQuery.data}
-      <DonationInfo
-        donation={mapDonationToForm($donationQuery.data)}
-        school={mapSchoolToForm($schoolQuery.data)}
-        student={$studentQuery.data
-          ? mapStudentToForm($studentQuery.data)
-          : null}
-      />
-    {/if}
+    </div>
   </div>
 </Page>
 
@@ -97,6 +104,17 @@
     align-items: center;
     justify-content: center;
     position: relative;
+  }
+
+  .inner {
+    overflow: auto;
+    padding: 8px;
+    width: 100%;
+  }
+
+  .form-wrapper {
+    width: fit-content;
+    margin: 0 auto;
   }
 
   .error-wrapper {

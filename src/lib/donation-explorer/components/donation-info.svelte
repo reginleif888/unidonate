@@ -79,6 +79,14 @@
     </tr>
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key"
+        >Verified At:</td
+      >
+      <td class="donation-info-root__info-cell donation-info-root__info-value">
+        {donation.verifiedAt}
+      </td>
+    </tr>
+    <tr class="donation-info-root__row">
+      <td class="donation-info-root__info-cell donation-info-root__info-key"
         >Allocation:
       </td>
       <td class="donation-info-root__info-cell">

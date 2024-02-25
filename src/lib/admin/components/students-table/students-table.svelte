@@ -373,11 +373,6 @@
       }
     }
 
-    &__search-select {
-      max-width: 240px;
-      width: 100%;
-    }
-
     &__add-button-wrapper {
       color: var(--uni-on-primary);
       display: flex;
