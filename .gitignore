@@ -6,4 +6,3 @@ src/declarations
 deps
 build
 .env
-canister_ids.json

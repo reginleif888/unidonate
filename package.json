@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "setup": "dfx canister create --all && dfx build && dfx generate && dfx deploy",
+    "setup": "dfx canister create --all && dfx build internet_identity && dfx generate && dfx deploy",
     "start": "run-p frontend backend internet_identity",
     "internet_identity": "dfx deploy internet_identity",
     "frontend": "vite --port 3000",
