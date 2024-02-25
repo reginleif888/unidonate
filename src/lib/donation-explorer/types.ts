@@ -6,4 +6,12 @@ export interface FormDonation {
   paymentAddress: string;
   allocations: Record<AllocationCategory, string>;
   amount: string;
+  verifiedAt: string;
+}
+
+export enum OrderByOption {
+  VerifiedAtAsc = "VerifiedAtAsc",
+  VerifiedAtDesc = "VerifiedAtDesc",
+  AmountAsc = "AmountAsc",
+  AmountDesc = "AmountDesc",
 }

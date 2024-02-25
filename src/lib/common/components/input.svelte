@@ -1,20 +1,32 @@
 <script lang="ts">
+  import { imask } from "@imask/svelte";
   import { getContext } from "svelte";
   import {
     INPUT_WITH_LABEL_CONTEXT_KEY,
     type InputWithLabelContextType,
   } from "../context";
+  import type { HTMLInputAttributes } from "svelte/elements";
+  import { type FactoryArg } from "imask";
+
+  type $$Props = Omit<HTMLInputAttributes, "size"> & {
+    size?: "small" | "medium";
+    error?: boolean;
+    value?: string;
+    inputMask?: any | null;
+    imaskOpts?: FactoryArg;
+    readonly?: boolean;
+  };
 
   export let size: "small" | "medium" = "medium";
   export let error: boolean = false;
   export let value: string = "";
+  export let imaskOpts: FactoryArg = null as unknown as FactoryArg;
 
   let focused: boolean = false;
 
   function handleFocus() {
     focused = true;
   }
-
   function handleBlur() {
     focused = false;
   }
@@ -41,7 +53,9 @@
     class:input-text-small={size === "small"}
     class:medium={size === "medium"}
     class:small={size === "small"}
+    use:imask={imaskOpts}
     bind:value
+    on:input
     class:error
     on:focus={handleFocus}
     on:blur={handleBlur}
@@ -54,6 +68,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
     background-color: var(--uni-input-bg);
     border-radius: var(--uni-radius-input);
     border: 1px solid;
@@ -136,5 +151,11 @@
       outline: unset;
       border-color: unset;
     }
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 </style>

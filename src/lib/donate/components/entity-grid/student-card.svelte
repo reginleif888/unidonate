@@ -1,25 +1,24 @@
 <script lang="ts">
-  import { Button } from "$lib/common/components";
+  import { Button, Swiper } from "$lib/common/components";
+  import { formatDateValueToLocale } from "$lib/common/utils";
   import type { FormStudent } from "$lib/donate/types";
-  import { fade } from "svelte/transition";
+  import { parseDate } from "@internationalized/date";
 
   export let selected: boolean = false;
   export let item: FormStudent;
   export let onSelect: (item: FormStudent) => void = () => null;
 
-  let imgSrc = item.img;
-
-  const handleImgError = () => {
-    imgSrc = "images/no-image.jpg";
-  };
-
-  const handleSelect = () => {
+  function handleSelect() {
     onSelect(item);
-  };
+  }
 </script>
 
-<div class="card-root" transition:fade|local>
-  <img src={imgSrc} alt="student" on:error={handleImgError} />
+<div class="card-root">
+  <div class="swiper-wrapper">
+    <Swiper items={item.imgs} let:item={img}>
+      <img src={img || "/images/no-image.webp"} alt="school" />
+    </Swiper>
+  </div>
   <div class="description body2">
     <div>
       <b class="attribute-label">First name:</b>
@@ -31,7 +30,7 @@
     </div>
     <div>
       <b class="attribute-label">Date of birth:</b>
-      <span>{item.dateOfBirth}</span>
+      <span>{formatDateValueToLocale(parseDate(item.dateOfBirth))}</span>
     </div>
     <div>
       <b class="attribute-label">Grade:</b>
@@ -75,5 +74,10 @@
     object-fit: cover;
     border-radius: 16px;
     background-color: var(--uni-secondary);
+  }
+
+  .swiper-wrapper {
+    width: 100%;
+    height: 200px;
   }
 </style>

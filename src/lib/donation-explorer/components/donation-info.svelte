@@ -2,12 +2,17 @@
   import { MAP_ALLOCATION_CATEGORY } from "$lib/donate/constant";
   import { ArrowLeft } from "phosphor-svelte";
   import type { FormDonation } from "../types";
-  import { donationsMock } from "../mocks";
-  import { AllocationCategory } from "$lib/donate/types";
+  import {
+    AllocationCategory,
+    type FormSchool,
+    type FormStudent,
+  } from "$lib/donate/types";
   import { goto } from "$app/navigation";
   import { AppRoute } from "$lib/common/routes";
 
-  const donation: FormDonation = donationsMock[0];
+  export let donation: FormDonation;
+  export let school: FormSchool;
+  export let student: FormStudent | null = null;
 
   function goToExplorer() {
     goto(AppRoute.Explorer);
@@ -25,43 +30,39 @@
         >Donation transaction Id:</td
       >
       <td class="donation-info-root__info-cell donation-info-root__info-value">
-        1d01a1a8-c7b8-4d46-9dd3-b9876549916f
+        {donation.id}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key"
         >Bitcoin transaction Id:</td
       >
       <td class="donation-info-root__info-cell donation-info-root__info-value">
-        2c5445d0d61365082e78d69203db75307a4493e35986fe1f8120257701151527
+        {donation.transactionId ? donation.transactionId : "N/A"}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key">
         School:
       </td>
       <td class="donation-info-root__info-cell donation-info-root__info-value">
-        Harvard
+        {school.name}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key">
         Student:
       </td>
       <td class="donation-info-root__info-cell donation-info-root__info-value">
-        Mikki Mouse
+        {student ? `${student.firstName} ${student.lastName}` : "N/A"}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key"
         >Payment address:</td
       >
       <td class="donation-info-root__info-cell donation-info-root__info-value">
-        1d01vv8-c7b28-4dd6-9dd3-b98165499ax16f
+        {donation.paymentAddress}
       </td>
     </tr>
     <tr class="donation-info-root__row">
@@ -69,12 +70,12 @@
         >Amount:</td
       >
       <td class="donation-info-root__info-cell donation-info-root__info-value">
-        0.000021 BTC
+        {donation.amount} BTC
       </td>
     </tr>
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key"
-        >Allocations:
+        >Allocation:
       </td>
       <td class="donation-info-root__info-cell">
         <div class="donation-info-root__allocations">
@@ -100,6 +101,14 @@
             {donation.allocations[AllocationCategory.LunchAndSnacks]}%
           </div>
         </div>
+      </td>
+    </tr>
+    <tr class="donation-info-root__row">
+      <td class="donation-info-root__info-cell donation-info-root__info-key"
+        >Verified At:</td
+      >
+      <td class="donation-info-root__info-cell donation-info-root__info-value">
+        {donation.verifiedAt}
       </td>
     </tr>
   </table>

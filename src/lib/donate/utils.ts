@@ -1,40 +1,54 @@
 import type { School, Student } from "../../declarations/backend/backend.did";
-import type { DonationFormError, DonationFormValues, GridItem } from "./types";
+import { MAP_ALLOCATION_CATEGORY } from "./constant";
+import type {
+  AllocationCategory,
+  DonationError,
+  DonationFormValues,
+  GridItem,
+} from "./types";
 
-export function mapSchoolsToGridItems(schools: School[]): GridItem[] {
-  return schools.map((school) => {
+export function validateDonation(
+  values: DonationFormValues
+): DonationError | null {
+  let errors = null;
+
+  if (!values.satoshi || values.satoshi <= 0) {
     return {
-      id: school.id,
-      name: school.name,
-      image: "",
-      description: school.website,
+      satoshi: true,
+      message: "Please enter a valid amount.",
+      client: true,
     };
-  });
-}
+  }
 
-export function mapStudentsToGridItems(students: Student[]): GridItem[] {
-  return students.map((student) => {
-    return {
-      id: student.id,
-      name: student.firstName + " " + student.lastName,
-      image: "",
-      description: `Grade: ${student.grade}, ${student.dateOfBirth}`,
-    };
-  });
-}
-
-export function validateDonationForm(values: DonationFormValues) {
-  const errors = {} as DonationFormError;
-
-  errors.budgetError = Number(values.totalAmount) <= 0 ? true : undefined;
-
-  const totalPercentage = values.categories.reduce(
-    (acc, category) => acc + Number(category.percent),
+  const categoriesSum = Object.values(values.categories).reduce(
+    (acc, curr) => acc + curr,
     0
   );
 
-  if (totalPercentage !== 100) {
-    errors.categoryAllocation = true;
+  if (categoriesSum < 100) {
+    return {
+      satoshi: false,
+      message: "Please allocate 100% of the donation.",
+      client: true,
+    };
+  }
+
+  if (categoriesSum > 100) {
+    const biggestCategory = Object.keys(values.categories).reduce((a, b) =>
+      values.categories[a] > values.categories[b] ? a : b
+    ) as AllocationCategory;
+
+    return {
+      satoshi: false,
+      message:
+        "Percentage sum of categories is greater than 100%. The biggest category is " +
+        MAP_ALLOCATION_CATEGORY[biggestCategory].label +
+        ". Please reduce the percentage of some categories.",
+      biggestCategory: Object.keys(values.categories).reduce((a, b) =>
+        values.categories[a] > values.categories[b] ? a : b
+      ) as AllocationCategory,
+      client: true,
+    };
   }
 
   return errors;

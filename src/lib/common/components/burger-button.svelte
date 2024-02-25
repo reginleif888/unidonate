@@ -1,10 +1,9 @@
 <script lang="ts">
   export let open: boolean = false;
   export let onlyBurger: boolean = false;
-  export let onClick: () => void = () => null;
 </script>
 
-<button on:click={onClick} class="burger-menu-button">
+<button on:click class="burger-menu-button">
   <div class={`burger-menu-line ${open && !onlyBurger ? "open" : ""}`}></div>
   <div class={`burger-menu-line ${open && !onlyBurger ? "open" : ""}`}></div>
   <div class={`burger-menu-line ${open && !onlyBurger ? "open" : ""}`}></div>

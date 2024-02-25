@@ -1,4 +1,5 @@
 import type { UploadedFile } from "$lib/common/types";
+import { Principal } from "@dfinity/principal";
 import { type DateValue } from "@internationalized/date";
 
 export interface FormAdminSchool {
@@ -17,6 +18,11 @@ export interface FormAdminStudent {
   lastName: string;
   dateOfBirth: DateValue | null;
   grade: string;
-  images: Array<File & UploadedFile>;
   active: boolean;
+  images: Array<File & UploadedFile>;
+}
+
+export interface FormAdminPrincipal {
+  id: string;
+  principal: Principal;
 }

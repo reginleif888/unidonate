@@ -4,13 +4,10 @@
   import { fade } from "svelte/transition";
 
   export let open: boolean = false;
-
   export let align: "center" | "start" = "center";
-
   export let closeOnEscape: boolean = true;
-
   export let closeOnOutsideClick: boolean = true;
-
+  export let className: string = "";
   export let onClose = () => {
     open = false;
   };
@@ -33,7 +30,7 @@
     />
     <Dialog.Content
       transition={flyAndScale}
-      class={`modal__content ${align === "start" ? "modal__content--start" : ""}`}
+      class={`modal__content ${align === "start" ? "modal__content--start" : ""} ${className}`}
     >
       <slot />
     </Dialog.Content>
@@ -58,7 +55,6 @@
     max-width: 94%;
     transform: translate(-50%, -50%);
     background-color: var(--secondary-bg);
-    padding: 1.25rem;
     z-index: var(--uni-zIndex-modal-content);
   }
 

@@ -6,7 +6,6 @@
   } from "$lib/donate/types";
   import type { UniqueIdentifier } from "$lib/common/types";
   import SkeletonCard from "./skeleton-card.svelte";
-  import { fade } from "svelte/transition";
   import type { SvelteComponent } from "svelte";
 
   export let selected: UniqueIdentifier | null = null;
@@ -34,9 +33,10 @@
 
 <div>
   {#if !loading}
-    <div class="grid" in:fade={{ duration: 150 }}>
+    <div class="grid">
       {#each data as item (entityType + item.id)}
-        <Entity
+        <svelte:component
+          this={Entity}
           {item}
           onSelect={onSelectLocal}
           selected={selected === item.id}
@@ -56,10 +56,16 @@
   {/if}
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
+
+    @include respond-to("smallTablet") {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
   }
 </style>

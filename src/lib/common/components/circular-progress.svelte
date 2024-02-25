@@ -2,15 +2,11 @@
   import { onDestroy, onMount } from "svelte";
 
   export let duration: number = 60;
-
   export let width: number = 30;
-
   export let height: number = 30;
-
   export let onFinished: () => void = () => null;
 
   let countdown: number = duration;
-
   let interval: NodeJS.Timeout;
 
   onMount(() => {

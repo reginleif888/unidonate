@@ -43,6 +43,7 @@
         <TruncatedText
           text={column.format(value, row)}
           withCopy={column.rowTooltipWithCopyOption}
+          align={column.align}
         />
       {/if}
       {#if renderMethod === "component" && column.Cell}
@@ -52,6 +53,7 @@
         <TruncatedText
           text={value}
           withCopy={column.rowTooltipWithCopyOption}
+          align={column.align}
         />
       {/if}
     {/if}

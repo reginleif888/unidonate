@@ -10,9 +10,9 @@
 
 <style>
   .spinner {
-    border: 2px solid var(--uni-divider-color);
+    border: 2px solid var(--uni-primary);
     border-radius: 50%;
-    border-top: 2px solid var(--uni-primary);
+    border-top: 2px solid currentColor;
     width: 80px;
     height: 80px;
     animation: spin 0.5s linear infinite;

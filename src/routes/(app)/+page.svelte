@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import { Divider } from "$lib/common/components";
   import {
     AdvantagesSection,
@@ -10,7 +9,7 @@
   } from "$lib/home/components";
 </script>
 
-<div class="main-wrapper" in:fade>
+<div class="main-wrapper">
   <section>
     <MainSection />
   </section>
@@ -18,7 +17,7 @@
 
 <Divider />
 
-<div class="primary-bg" in:fade>
+<div class="primary-bg">
   <section>
     <AdvantagesSection />
   </section>
@@ -26,7 +25,7 @@
 
 <Divider />
 
-<div in:fade>
+<div>
   <section>
     <AboutSection />
   </section>
@@ -34,7 +33,7 @@
 
 <Divider />
 
-<div class="primary-bg" in:fade>
+<div class="primary-bg">
   <section>
     <PoweredBy />
   </section>
@@ -42,7 +41,7 @@
 
 <Divider />
 
-<div in:fade>
+<div>
   <section>
     <StartContribution />
   </section>
@@ -72,7 +71,7 @@
       z-index: -1;
       opacity: 0.5;
       object-fit: scale-down;
-      background-image: url("/images/digital-bg.jpg");
+      background-image: url("/images/digital-bg.webp");
     }
   }
 

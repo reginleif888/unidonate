@@ -3,6 +3,7 @@
   import { Tooltip } from "$lib/common/components";
   import { Pencil } from "phosphor-svelte";
   import StudentModal from "../../student-modal";
+  import { page } from "$app/stores";
 
   export let origin: FormAdminStudent;
 
@@ -26,7 +27,12 @@
   </Tooltip>
 </div>
 
-<StudentModal bind:open={modalOpen} student={origin} on:close={handleClose} />
+<StudentModal
+  bind:open={modalOpen}
+  student={origin}
+  on:close={handleClose}
+  schoolId={$page.params.schoolId}
+/>
 
 <style lang="scss">
   .root {

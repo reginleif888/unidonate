@@ -9,23 +9,15 @@
     Divider,
     CopyButton,
   } from "$lib/common/components";
+  import { SCREEN } from "$lib/common/constant";
+  import { screenWidthStore } from "$lib/common/stores";
   import { CurrencyBtc } from "phosphor-svelte";
 
   export let open: boolean = false;
-
   export let total: string = "";
-
   export let btcAddress: string = "";
-
   export let transactionId: string = "";
-
   export let onConfirm: () => void = () => null;
-
-  let isCopied: boolean = false;
-
-  function handleCopy() {
-    isCopied = true;
-  }
 
   function handleConfirm() {
     open = false;
@@ -35,18 +27,19 @@
 
   let textToCopy = "";
 
-  $: {
-    textToCopy = `Total (BTC): ${total} \n\n BTC address: ${btcAddress} \n\n  Transaction Id: ${transactionId}`;
-  }
+  $: btcUrl = `bitcoin:${btcAddress}?amount=${total}`;
 
   $: {
-    if (!open) {
-      isCopied = false;
-    }
+    textToCopy = `Total (BTC): ${total} \n\nBTC address: ${btcAddress} \nDonation Transaction Id: ${transactionId}`;
   }
 </script>
 
-<Modal bind:open closeOnEscape={false} closeOnOutsideClick={false}>
+<Modal
+  bind:open
+  closeOnEscape={false}
+  closeOnOutsideClick={false}
+  className="donation-modal__modal-root"
+>
   <div class="donation-modal">
     <div class="donation-modal__header">
       <h4 class="h4">Donation information</h4>
@@ -66,31 +59,48 @@
         <div class="donation-modal__qr-code-wrapper">
           <QrCode
             id="donation"
-            squareSize={315}
-            codeValue="https://www.google.de/"
+            squareSize={$screenWidthStore < SCREEN.desktop ? 200 : 300}
+            codeValue={btcUrl}
           />
         </div>
 
         <div class="donation-modal__inputs-wrapper">
           <input class="hidden-input" />
           <InputWithLabel label="Total (BTC)">
-            <Input readOnly value={total}>
-              <span slot="start-icon" class="btc-icon">
-                <CurrencyBtc weight="bold" />
-              </span>
-            </Input>
+            <div class="donation-modal__input-wrapper">
+              <Input readonly value={total}>
+                <span slot="start-icon" class="btc-icon">
+                  <CurrencyBtc weight="bold" />
+                </span>
+              </Input>
+              <CopyButton tooltipSide="right" value={total} withoutTooltip />
+            </div>
           </InputWithLabel>
           <InputWithLabel label="BTC address">
-            <Input readOnly value={btcAddress} />
+            <div class="donation-modal__input-wrapper">
+              <Input readonly value={btcAddress} />
+              <CopyButton
+                tooltipSide="right"
+                value={btcAddress}
+                withoutTooltip
+              />
+            </div>
           </InputWithLabel>
           <InputWithLabel label="Donation transaction Id (DTI)">
-            <Input readOnly value={transactionId} />
+            <div class="donation-modal__input-wrapper">
+              <Input readonly value={transactionId} />
+              <CopyButton
+                tooltipSide="right"
+                value={transactionId}
+                withoutTooltip
+              />
+            </div>
           </InputWithLabel>
           <CopyButton
-            onCopyFailure={handleCopy}
-            onCopySuccess={handleCopy}
             tooltipSide="right"
             value={textToCopy}
+            label="Copy all info"
+            withoutTooltip
           />
         </div>
       </div>
@@ -101,11 +111,10 @@
     <div class="donation-modal__footer">
       <div class="donation-modal__confirm-button_wrapper">
         <Button
-          label="Confirm"
+          label="I save it, verify! 🎉"
           contained
           fullWidth
           justify="center"
-          disabled={!isCopied}
           on:click={handleConfirm}
         />
       </div>
@@ -114,6 +123,13 @@
 </Modal>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+  :global(.donation-modal__modal-root) {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+  }
+
   .hidden-input {
     height: 0;
     opacity: 0;
@@ -128,6 +144,13 @@
     max-width: 800px;
     width: auto;
     color: var(--uni-on-bg);
+    max-height: 98vh;
+    overflow: auto;
+
+    &__qr-code-wrapper {
+      display: flex;
+      justify-content: center;
+    }
 
     &__header {
       display: flex;
@@ -149,6 +172,11 @@
     &__second-section {
       display: flex;
       gap: 16px;
+      flex-direction: column;
+
+      @include respond-to("desktop") {
+        flex-direction: row;
+      }
     }
 
     &__footer {
@@ -158,15 +186,21 @@
     }
 
     &__confirm-button_wrapper {
-      max-width: 160px;
+      max-width: fit-content;
       width: 100%;
     }
 
     &__inputs-wrapper {
-      width: 400px;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 16px;
+    }
+
+    &__input-wrapper {
+      width: 100%;
+      display: flex;
+      gap: 8px;
     }
   }
 

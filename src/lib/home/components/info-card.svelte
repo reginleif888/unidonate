@@ -47,16 +47,22 @@
     min-width: 200px;
 
     @include respond-to("desktop") {
+      width: 70%;
       text-align: left;
       justify-content: flex-start;
       align-items: flex-start;
+      margin-right: auto;
+      margin-left: 0;
+
+      &__description {
+        width: 90%;
+      }
     }
 
     &.desktop-reverse {
       @include respond-to("desktop") {
-        text-align: end;
-        justify-content: flex-end;
-        align-items: flex-end;
+        margin-right: 0;
+        margin-left: auto;
       }
     }
   }
@@ -68,6 +74,14 @@
     padding: 16px;
     border-radius: 16px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    @include respond-to("desktop") {
+      margin: 0;
+    }
 
     @include respond-to("largeDesktop") {
       min-width: 160px;

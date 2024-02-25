@@ -42,7 +42,7 @@
     flex-grow: 1;
     z-index: 3;
     position: relative;
-    overflow: scroll;
+    overflow: auto;
     display: block;
     margin-bottom: 0;
     &::before {

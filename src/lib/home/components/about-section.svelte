@@ -14,7 +14,7 @@
   </div>
 
   <div class="body2 description">
-    The Uni Donate is dedicated to transforming the way we support education. By
+    The UniDonate is dedicated to transforming the way we support education. By
     leveraging blockchain technology, we enable direct donations in Bitcoin,
     provide transparency in fund allocation, and allow donors to track their
     contributions in real time. With specific categories for donations, such as
@@ -36,7 +36,9 @@
   </Button>
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
   .root {
     display: flex;
     flex-direction: column;
@@ -67,6 +69,10 @@
   .description {
     text-align: center;
     margin-bottom: 40px;
+
+    @include respond-to("tablet") {
+      width: 90%;
+    }
   }
 
   .explore-donations-icon {

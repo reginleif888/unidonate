@@ -3,7 +3,7 @@
   import { page } from "$app/stores";
   import { BurgerButton, Only, Tabs } from "$lib/common/components";
   import { MODES, SCREEN } from "$lib/common/constant";
-  import { AdminRoute, AppRoute } from "$lib/common/routes";
+  import { AdminRoute } from "$lib/common/routes";
   import {
     burgerMenuStore,
     screenWidthStore,
@@ -13,10 +13,11 @@
   import { resolveAppRoute } from "$lib/common/utils";
   import { onMount, onDestroy } from "svelte";
 
-  let lastScrollY: number = 0;
-  let showHeader: boolean = true;
   export let tabRoutes: Array<TabRoute> = [];
   export let hiddenNavigation: boolean = false;
+
+  let lastScrollY: number = 0;
+  let showHeader: boolean = true;
 
   function handleScroll() {
     const scrollY = typeof window !== "undefined" ? window?.scrollY : 0;
@@ -35,16 +36,15 @@
       window?.addEventListener("scroll", handleScroll);
     }
   });
-
   onDestroy(() => {
     if (typeof window !== "undefined") {
       window?.removeEventListener("scroll", handleScroll);
     }
   });
 
-  const openBurger = () => {
+  function openBurger() {
     burgerMenuStore.set(true);
-  };
+  }
 
   let selectedRoute = resolveAppRoute($page.route.id);
 
@@ -58,7 +58,7 @@
 </script>
 
 <header class:hidden-header={!showHeader}>
-  <div class="logo-wrapper h6"><a href={AdminRoute.Connect}>Uni Admin</a></div>
+  <div class="logo-wrapper h6"><a href={AdminRoute.Connect}>UniDonate Admin</a></div>
 
   {#if !hiddenNavigation}
     <div class="inner">
@@ -131,7 +131,6 @@
   }
 
   .logo-wrapper {
-    height: 50px;
     width: 200px;
     position: absolute;
     left: 0px;
@@ -139,7 +138,7 @@
     transform: translateY(-50%);
     display: flex;
     align-items: center;
-    font-size: 20px;
+    font-size: 18px;
     padding-left: 16px;
     cursor: pointer;
 

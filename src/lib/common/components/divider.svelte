@@ -11,7 +11,6 @@
 <style>
   .divider {
     background-color: var(--uni-divider-color);
-    transition: background-color var(--uni-transition-default);
   }
 
   .divider.vertical {

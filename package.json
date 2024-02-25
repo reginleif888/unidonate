@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "setup": "npm i && dfx generate backend && dfx deploy backend && dfx deps deploy",
-    "start": "run-p frontend backend",
+    "setup": "dfx canister create --all && dfx build internet_identity && dfx generate && dfx deploy",
+    "start": "run-p frontend backend internet_identity",
+    "internet_identity": "dfx deploy internet_identity",
     "frontend": "vite --port 3000",
     "backend": "mo-dev --generate --deploy -y",
-    "build": "vite build",
+    "build": "svelte-check --tsconfig ./tsconfig.json && vite build",
     "format": "prettier --write .",
     "sources": "mops sources",
     "postinstall": "mops install",
@@ -18,9 +19,10 @@
     "lint": "prettier --check . && eslint ."
   },
   "devDependencies": {
-    "@dfinity/agent": "^0.21.4",
-    "@dfinity/candid": "^0.21.4",
-    "@dfinity/principal": "^0.21.4",
+    "@dfinity/agent": "^1.0.1",
+    "@dfinity/auth-client": "^1.0.1",
+    "@dfinity/candid": "^1.0.1",
+    "@dfinity/principal": "^1.0.1",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-static": "^3.0.1",
     "@sveltejs/kit": "^2.0.0",
@@ -51,6 +53,7 @@
     "vitest": "^1.2.0"
   },
   "dependencies": {
+    "@imask/svelte": "^7.4.0",
     "@internationalized/date": "^3.5.2",
     "@sveltestack/svelte-query": "^1.6.0",
     "animejs": "^3.2.2",
@@ -58,8 +61,7 @@
     "felte": "^1.2.14",
     "phosphor-svelte": "^1.4.2",
     "uuid": "^9.0.1",
-    "xlsx": "^0.18.5",
-    "yup": "^1.3.3"
+    "xlsx": "^0.18.5"
   },
   "type": "module"
 }

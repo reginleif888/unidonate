@@ -20,14 +20,11 @@
 </script>
 
 <svelte:head>
-  <title>Uni Admin</title>
+  <title>UniDonate Admin</title>
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
   <main>
-    <!-- <Header tabRoutes={ADMIN_TABS_ROUTES} /> -->
-    <!-- <BurgerMenu /> -->
-    <!-- <Snackbar /> -->
     <div class="content">
       <Page>
         <Connect />
@@ -35,9 +32,6 @@
     </div>
 
     <footer>
-      <span class="copy-right-line caption"
-        >© uni-donate.com - All rights reserved.</span
-      >
       <ul>
         <li>
           <a
@@ -48,6 +42,7 @@
           >
         </li>
       </ul>
+      <span class="caption">Powered by Internet Computer</span>
     </footer>
   </main>
 </QueryClientProvider>
@@ -74,10 +69,6 @@
     background: var(--uni-page-gradient);
   }
 
-  .copy-right-line {
-    margin-bottom: 16px;
-  }
-
   .github {
     color: var(--uni-primary);
   }
@@ -86,10 +77,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    padding: 8px;
-    padding-top: 16px;
+    padding: 16px;
+    gap: 4px;
     border-top: 1px solid var(--uni-divider-color);
     background-color: var(--uni-bg-400);
+
+    @include respond-to("desktop") {
+      padding: 24px;
+    }
   }
 </style>

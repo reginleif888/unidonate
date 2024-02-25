@@ -3,19 +3,27 @@
   import { flyAndScale } from "$lib/common/transitions";
   import { Check, CaretUpDown } from "phosphor-svelte";
   import { type SelectItem } from "$lib/common/types";
+  import { createEventDispatcher } from "svelte";
 
   export let items: Array<SelectItem> = [];
-
   export let multiple: boolean = false;
-
-  export let selected: Array<SelectItem> = [];
-
+  export let selected: Array<SelectItem> | SelectItem = [];
   export let placeholder: string = "Select";
+  export let size: "small" | "medium" = "medium";
+
+  const dispatch = createEventDispatcher();
+
+  function handleChange(value: Array<SelectItem> | SelectItem | undefined) {
+    dispatch("change", { value });
+  }
 </script>
 
-<Select.Root {items} bind:selected {multiple}>
+<Select.Root {items} bind:selected {multiple} onSelectedChange={handleChange}>
   <Select.Trigger
-    class="uni-custom-select__trigger body2"
+    class={`uni-custom-select__trigger 
+    ${size === "medium" ? "uni-custom-select__trigger--medium" : ""} 
+    ${size === "small" ? "uni-custom-select__trigger--small" : ""}
+    body2`}
     aria-label="Select a theme"
   >
     <slot name="start-icon" />
@@ -50,8 +58,6 @@
   :global(.uni-custom-select__trigger) {
     display: inline-flex;
     align-items: center;
-    height: var(--uni-height-input-medium);
-    padding: var(--uni-padding-input-medium);
     background-color: var(--uni-input-bg);
     border-radius: var(--uni-radius-input);
     border: 1px solid;
@@ -62,11 +68,22 @@
     width: 100%;
   }
 
-  :global(.uni-custom-select__select-trigger:focus) {
-    outline: none;
-    box-shadow:
-      0 0 0 2px var(__ring-foreground),
-      0 0 0 4px var(__ring-offset-background);
+  :global(.uni-custom-select__trigger--medium) {
+    height: var(--uni-height-input-medium);
+    padding: var(--uni-padding-input-medium);
+  }
+
+  :global(.uni-custom-select__trigger--small) {
+    height: var(--uni-height-input-small);
+    padding: var(--uni-padding-input-small);
+  }
+
+  :global(.uni-custom-select__trigger:focus-within) {
+    outline: 2px solid var(--uni-focus-outline);
+  }
+
+  :global(.uni-custom-select__trigger:focus-visible) {
+    outline: 2px solid var(--uni-focus-outline);
   }
 
   :global(.uni-custom-select__palette-icon) {

@@ -51,5 +51,9 @@
   .description {
     text-align: center;
     margin-bottom: 40px;
+
+    @include respond-to("tablet") {
+      width: 90%;
+    }
   }
 </style>

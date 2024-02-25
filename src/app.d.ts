@@ -19,6 +19,8 @@ declare module "svelte/elements" {
     "on:clickoutside"?: (event: CustomEvent<T>) => void;
     "on:copysuccess"?: (event: CustomEvent<T>) => void;
     "on:copyerror"?: (event: CustomEvent<T>) => void;
+    "on:accept"?: (event: CustomEvent<T>) => void;
+    "on:complete"?: (event: CustomEvent<T>) => void;
   }
 }
 

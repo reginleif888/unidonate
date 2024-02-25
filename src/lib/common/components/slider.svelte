@@ -2,8 +2,18 @@
   import { Slider } from "bits-ui";
 
   export let value: Array<number> = [25];
-
   export let label: string = "";
+  export let onChange: (value: Array<number>) => void;
+
+  function handleChange(value: Array<number>) {
+    if (onChange) {
+      onChange(value);
+
+      return;
+    }
+
+    value = value;
+  }
 </script>
 
 <div class="slider-container">
@@ -11,7 +21,13 @@
     <div class="slider-label subtitle1">{label}</div>
   {/if}
   <div class="inner">
-    <Slider.Root step={1} {value} let:thumbs class="slider-root">
+    <Slider.Root
+      step={1}
+      {value}
+      onValueChange={handleChange}
+      let:thumbs
+      class="slider-root"
+    >
       <span class="slider-track">
         <Slider.Range class="slider-range" />
       </span>

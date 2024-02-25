@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { Button } from "$lib/common/components";
+  import { Button, Swiper } from "$lib/common/components";
   import type { FormSchool } from "$lib/donate/types";
-  import { fade } from "svelte/transition";
 
   export let selected: boolean = false;
   export let item: FormSchool;
@@ -12,11 +11,17 @@
   };
 </script>
 
-<div class="card-root" transition:fade|local>
-  <img src="images/harvard.webp" alt="school" />
-  <a href={item.website} target="_blank" class="website-badge overline"
-    >Website</a
-  >
+<div class="card-root">
+  <div class="swiper-wrapper">
+    <Swiper items={item.imgs} let:item={img}>
+      <img src={img || "/images/no-image.webp"} alt="school" />
+    </Swiper>
+  </div>
+
+  <a href={item.website} target="_blank" class="website-badge overline">
+    Website
+  </a>
+
   <div class="description body2">
     <div class="school-name">
       <b class="attribute-label">Name:</b>
@@ -31,6 +36,7 @@
       <span>{item.numberOfStudents}</span>
     </div>
   </div>
+
   <Button
     label={selected ? "Unselect" : "Select"}
     contained={selected}
@@ -85,5 +91,10 @@
     object-fit: cover;
     border-radius: 16px;
     background-color: var(--uni-secondary);
+  }
+
+  .swiper-wrapper {
+    width: 100%;
+    height: 200px;
   }
 </style>

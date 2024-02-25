@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { wait } from "$lib/common/utils";
+  import { getImageLink, reduceImageSize } from "$lib/common/utils";
   import {
     Button,
     Divider,
@@ -17,40 +17,111 @@
   import { snackbarStore } from "$lib/common/stores";
   import { createForm } from "felte";
   import { validation } from "./school-modal.validation";
+  import { useCreateSchool, useUpdateShool } from "$lib/admin/queries";
+  import {
+    mapFormSchoolToAddSchoolPayload,
+    mapFormSchoolToUpdateSchoolPayload,
+  } from "$lib/admin/mappers";
+  import type { UploadedFile } from "$lib/common/types";
 
   export let open: boolean = false;
-
   export let school: FormAdminSchool | null = null;
 
   const dispatch = createEventDispatcher();
 
-  const { form, isSubmitting, handleSubmit, reset, data, errors } =
-    createForm<FormAdminSchool>({
-      initialValues: INITIAL_VALUES,
-      validate: validation,
-      onSubmit: async (values) => {
-        alert(JSON.stringify(values, null, 2));
+  const createSchool = useCreateSchool({ withoutSuccessSnackbar: false });
+  const updateSchool = useUpdateShool();
 
-        await wait(2000);
+  const {
+    form,
+    isSubmitting,
+    setInitialValues,
+    setData,
+    handleSubmit,
+    reset,
+    data,
+    errors,
+  } = createForm<FormAdminSchool>({
+    initialValues: school ? school : INITIAL_VALUES,
+    validate: validation,
+    onSubmit: async (values) => {
+      if (!school) {
+        const mapped = await mapFormSchoolToAddSchoolPayload(values);
 
-        dispatch("close");
-      },
-    });
+        await $createSchool.mutateAsync(mapped);
+      } else {
+        const mapped = await mapFormSchoolToUpdateSchoolPayload(values);
 
-  const handleClose = () => {
-    reset();
+        await $updateSchool.mutateAsync({
+          id: school.id,
+          payload: mapped,
+        });
+      }
 
+      dispatch("close");
+    },
+  });
+
+  function handleClose() {
     dispatch("close");
-  };
+  }
+  async function handleFileChange({
+    detail,
+  }: CustomEvent<Array<File & UploadedFile>>) {
+    try {
+      const files = await Promise.all(
+        detail.map(async (file) => {
+          try {
+            if ((file as UploadedFile).id) {
+              return file;
+            }
+
+            const reduced = await reduceImageSize(file as File);
+
+            const image = new File([reduced], file.name, {
+              type: reduced.type,
+            });
+
+            return image;
+          } catch (error) {
+            snackbarStore.addMessage({
+              message: "Error while reducing image size",
+              type: "error",
+            });
+
+            return file;
+          }
+        })
+      );
+
+      const filtered = files.filter(
+        (file, index, array) =>
+          array.findIndex((f) => f.name === file.name) === index
+      ) as Array<File & UploadedFile>;
+
+      setData("images", filtered);
+    } catch (error) {
+      snackbarStore.addMessage({
+        message: "Error while trying to upload images",
+        type: "error",
+      });
+    }
+  }
 
   $: {
     if (!open) {
       reset();
+    } else {
+      if (school) {
+        setInitialValues(school);
+      }
     }
   }
+
+  $: totalSizeToUpload = $data.images.reduce((acc, file) => acc + file.size, 0);
 </script>
 
-<Modal bind:open onClose={handleClose}>
+<Modal bind:open onClose={handleClose} className="school-modal-root">
   <form class="school-modal" use:form on:submit={handleSubmit}>
     <div class="school-modal__header">
       {#if school}
@@ -64,6 +135,7 @@
       <button
         class="school-modal__close-button"
         tabindex="-1"
+        type="button"
         on:click={handleClose}><X size={32} /></button
       >
     </div>
@@ -132,14 +204,15 @@
 
       <div class="school-modal__images">
         <FileUploader
-          bind:files={$data.images}
+          files={$data.images}
+          on:change={handleFileChange}
           labelTitle={"Upload images"}
-          labelSubtitle={"Max image size: 2MB"}
+          labelSubtitle={"Max total size to upload: 2MB"}
           accept={IMAGE_EXTENSIONS}
-          maxSize={2 * 1024 * 1024}
-          on:size-error={(event) => {
+          {totalSizeToUpload}
+          on:total-size-error={(event) => {
             snackbarStore.addMessage({
-              message: `Max file size is ${event.detail.maxSize / 1024 / 1024}MB`,
+              message: `Max total size of files to upload is ${event.detail.maxTotalSize / 1024 / 1024}MB`,
               type: "error",
             });
           }}
@@ -147,7 +220,7 @@
       </div>
 
       <div class="school-modal__blobs">
-        {#each $data.images.map( (file) => (file.id ? "" : URL.createObjectURL(file)) ) as blob}
+        {#each $data.images.map( (file) => (file.id ? getImageLink(file.id) : URL.createObjectURL(file)) ) as blob}
           <img src={blob} alt="uploaded-img" class="school-modal__blob" />
         {/each}
       </div>
@@ -161,6 +234,7 @@
         label="Cancel"
         contained
         variant="secondary"
+        type="button"
         on:click={handleClose}
       />
       <Button
@@ -176,12 +250,24 @@
 </Modal>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
+  :global(.school-modal-root) {
+    max-height: 100%;
+    overflow: auto;
+    padding: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .school-modal {
     background-color: var(--uni-bg);
     box-shadow: var(--uni-shadow-paper);
     border-radius: 24px;
     max-width: 600px;
     width: 100%;
+    height: 100%;
     color: var(--uni-on-bg);
 
     &__header {
@@ -208,7 +294,12 @@
 
     &__content-row {
       display: flex;
+      flex-direction: column;
       gap: 16px;
+
+      @include respond-to("desktop") {
+        flex-direction: row;
+      }
     }
 
     &__input-with-label-wrapper {

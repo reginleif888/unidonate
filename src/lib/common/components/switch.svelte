@@ -1,10 +1,22 @@
 <script lang="ts">
   import { Switch } from "bits-ui";
+  import { createEventDispatcher } from "svelte";
 
   export let checked: boolean = false;
+
+  const dispatch = createEventDispatcher();
+
+  function handleChange() {
+    dispatch("change");
+  }
 </script>
 
-<Switch.Root id="marketing" class="custom-switch-root" bind:checked>
+<Switch.Root
+  id="marketing"
+  class="custom-switch-root"
+  bind:checked
+  onCheckedChange={handleChange}
+>
   <Switch.Thumb class="custom-switch-thumb" />
 </Switch.Root>
 

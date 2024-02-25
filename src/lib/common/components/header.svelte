@@ -5,7 +5,6 @@
     screenWidthStore,
     themeStore,
   } from "$lib/common/stores";
-  import LogoFull from "./logo-full.svelte";
   import Tabs from "./tabs.svelte";
   import { AppRoute } from "../routes";
   import Only from "./only.svelte";
@@ -16,10 +15,11 @@
   import { resolveAppRoute } from "../utils";
   import type { TabRoute } from "../types";
 
-  let lastScrollY: number = 0;
-  let showHeader: boolean = true;
   export let tabRoutes: Array<TabRoute> = [];
   export let hiddenNavigation: boolean = false;
+
+  let lastScrollY: number = 0;
+  let showHeader: boolean = true;
 
   function handleScroll() {
     const scrollY = typeof window !== "undefined" ? window?.scrollY : 0;
@@ -45,9 +45,9 @@
     }
   });
 
-  const openBurger = () => {
+  function openBurger() {
     burgerMenuStore.set(true);
-  };
+  }
 
   let selectedRoute = resolveAppRoute($page.route.id);
 
@@ -61,13 +61,13 @@
 </script>
 
 <header class:hidden-header={!showHeader}>
-  <div class="logo-wrapper">
-    <LogoFull />
-  </div>
+  <a href={AppRoute.Home} class="logo-wrapper">
+    <img src="/images/logo.png" alt="space-guy" />
+  </a>
 
   {#if !hiddenNavigation}
     <div class="inner">
-      <Only from="tablet">
+      <Only from="desktop">
         <div class="tabs-wrapper">
           <Tabs
             options={tabRoutes.map(({ route, label, Icon }) => ({
@@ -82,7 +82,7 @@
         </div>
       </Only>
 
-      <Only to="tablet">
+      <Only to="desktop">
         <BurgerButton
           onlyBurger
           on:click={openBurger}
@@ -92,7 +92,7 @@
     </div>
   {/if}
 
-  <Only from="tablet">
+  <Only from="desktop">
     <div class="modes-wrapper">
       <Tabs
         options={MODES}
@@ -122,7 +122,7 @@
     justify-content: flex-end;
     height: 62px;
 
-    @include respond-to("tablet") {
+    @include respond-to("desktop") {
       justify-content: center;
       height: 80px;
     }
@@ -136,12 +136,23 @@
   }
 
   .logo-wrapper {
-    height: 50px;
     width: 200px;
     position: absolute;
-    left: 0px;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
+    color: var(--uni-on-primary);
+    font-size: 0;
+    line-height: 0;
+
+    & img {
+      width: 80%;
+      height: auto;
+    }
+
+    @include respond-to("desktop") {
+      left: 20px;
+    }
   }
 
   .tabs-wrapper {

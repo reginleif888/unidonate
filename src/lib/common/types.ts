@@ -41,15 +41,14 @@ export interface TabRoute {
   Icon: typeof SvelteComponent<any>;
 }
 
-export interface Image {
-  id: string;
+export interface FileToUpload {
   name: string;
-  type: string;
-  data: Array<Uint8Array>;
+  mimeType: string;
+  data: Uint8Array;
 }
 
 export interface UploadedFile {
   id: string;
-  type: string;
+  mimeType: string;
   name: string;
 }

@@ -59,6 +59,7 @@
     justify-content: space-between;
     gap: 8px;
     box-shadow: var(--uni-shadow-button);
+    pointer-events: all;
   }
 
   .only-icon.only-icon {
@@ -101,6 +102,8 @@
 
   button:disabled {
     cursor: default;
+    box-shadow: unset;
+    pointer-events: none;
   }
 
   .primary {

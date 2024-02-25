@@ -1,0 +1,9 @@
+export { default as useCreateSchool } from "./use-create-school";
+export { default as useSchools } from "./use-schools";
+export { default as useUpdateShool } from "./use-update-school";
+export { default as useCreateStudent } from "./use-create-student";
+export { default as useUpdateStudent } from "./use-update-student";
+export { default as useStudents } from "./use-students";
+export { default as useOwners } from "./use-owners";
+export { default as useCreateOwner } from "./use-create-owner";
+export { default as useRemoveOwner } from "./use-remove-owner";
