@@ -6,7 +6,9 @@
 </script>
 
 <div class="root">
-  <h1 class="h1 header">Start Contributing to Education on the Blockchain</h1>
+  <h1 class="title h1 header">
+    Start Contributing to Education with UniDonate
+  </h1>
 
   <div class="body2 description">
     Make a difference today with Bitcoin donations
@@ -25,11 +27,18 @@
   </Button>
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/common/styles/media.scss";
   .root {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .title {
+    @include respond-to("desktop") {
+      width: 80%;
+    }
   }
 
   .header {

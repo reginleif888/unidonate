@@ -479,22 +479,6 @@
     }
 
     &__your-principal {
-      flex-grow: 1;
-      margin-left: auto;
-    }
-
-    &__empty-placeholder {
-      width: 100%;
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 500;
-      color: var(--uni-text-color-400);
-    }
-
-    &__your-principal {
-      flex-grow: 1;
       margin-left: auto;
     }
   }

@@ -50,7 +50,7 @@
       <LockAnimatedIcon color="var(--uni-on-primary)" unlocked={isAdmin} />
     {/await}
 
-    <h1 class="h1">Uni Admin</h1>
+    <h1 class="h1">UniDonate</h1>
     <p class="body1 heading-description">
       Manage your schools and students with unparalleled ease and efficiency.
     </p>

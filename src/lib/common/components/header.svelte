@@ -5,7 +5,6 @@
     screenWidthStore,
     themeStore,
   } from "$lib/common/stores";
-  import LogoFull from "./logo-full.svelte";
   import Tabs from "./tabs.svelte";
   import { AppRoute } from "../routes";
   import Only from "./only.svelte";
@@ -63,7 +62,7 @@
 
 <header class:hidden-header={!showHeader}>
   <a href={AppRoute.Home} class="logo-wrapper">
-    <LogoFull />
+    <img src="/images/logo.png" alt="space-guy" />
   </a>
 
   {#if !hiddenNavigation}
@@ -137,16 +136,22 @@
   }
 
   .logo-wrapper {
-    height: 50px;
     width: 200px;
     position: absolute;
-    left: -18px;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
     color: var(--uni-on-primary);
+    font-size: 0;
+    line-height: 0;
+
+    & img {
+      width: 80%;
+      height: auto;
+    }
 
     @include respond-to("desktop") {
-      left: 0px;
+      left: 20px;
     }
   }
 

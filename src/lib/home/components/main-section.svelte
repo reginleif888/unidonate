@@ -12,8 +12,8 @@
       <h1 class="h1 second-main-label">Donation Platform</h1>
     </div>
     <p class="body1 home-description">
-      Make you donation for education 100% on-chain on the world’s fastest and
-      most powerful open‑source blockchain network: the Internet Computer
+      Unlock the potential of educational public donations with 100% on-chain
+      donation platform powered by the Internet Computer
     </p>
     <div class="donate-button-wrapper">
       <Button

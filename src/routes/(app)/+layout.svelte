@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-  <title>Uni Donate</title>
+  <title>UniDonate</title>
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
@@ -42,9 +42,7 @@
           >
         </li>
       </ul>
-      <span class="caption">
-        uni-donate.com - powered by internet computer.
-      </span>
+      <span class="caption">Powered by Internet Computer</span>
     </footer>
   </main>
 </QueryClientProvider>

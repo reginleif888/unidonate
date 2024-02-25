@@ -4,8 +4,6 @@ export { default as Header } from "./header.svelte";
 export { default as BurgerMenu } from "./burger-menu.svelte";
 export { default as Divider } from "./divider.svelte";
 export { default as Tabs } from "./tabs.svelte";
-export { default as LogoFull } from "./logo-full.svelte";
-export { default as LogoShort } from "./logo-short.svelte";
 export { default as Only } from "./only.svelte";
 export { default as Tooltip } from "./tooltip.svelte";
 export { default as Stars } from "./starts-bg.svelte";

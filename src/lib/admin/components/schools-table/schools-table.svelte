@@ -433,7 +433,6 @@
     }
 
     &__your-principal {
-      flex-grow: 1;
       margin-left: auto;
     }
   }
