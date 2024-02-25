@@ -3,7 +3,7 @@ import checkIsProductionBuild from "./check-is-production-build";
 type BuildType = "production" | "development";
 
 const mapBuildTypeToDomain: Record<BuildType, string> = {
-  production: ".icp0.io",
+  production: "raw.icp0.io",
   development: "localhost:4943",
 };
 

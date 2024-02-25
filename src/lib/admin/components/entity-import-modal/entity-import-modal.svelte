@@ -12,9 +12,9 @@
   import { snackbarStore } from "$lib/common/stores";
   import { xlsxToJson, type ColumnMapping } from "$lib/admin/utils";
   import { reduceImageSize, fromBlobToUint8Array } from "$lib/common/utils";
-  import type { ImageObject } from "../../../../declarations/backend/backend.did";
+  import type { UploadImagePayload } from "../../../../declarations/backend/backend.did";
 
-  type Row = Record<string, string> & { image?: ImageObject };
+  type Row = Record<string, string> & { image?: UploadImagePayload };
 
   type $$Props = {
     title: string;
@@ -118,7 +118,7 @@
           const reducedBlob = await reduceImageSize(blob);
           let encodedImg = await fromBlobToUint8Array({ files: [reducedBlob] });
 
-          const image: ImageObject = {
+          const image: UploadImagePayload = {
             id: [],
             mimeType,
             name: row.img.split("/").pop(),

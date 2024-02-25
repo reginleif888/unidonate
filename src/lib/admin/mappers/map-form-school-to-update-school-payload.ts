@@ -1,6 +1,6 @@
 import filesToUint8Arrays from "$lib/common/utils/from-blob-to-uint-8-array";
 import type {
-  ImageObject,
+  UploadImagePayload,
   UpdateSchoolPayload,
 } from "../../../declarations/backend/backend.did";
 import type { FormAdminSchool } from "../types";
@@ -9,7 +9,7 @@ import changeImageExtension from "../utils/change-image-extenstion";
 export default async function mapFormSchoolToUpdateSchoolPayload(
   formSchool: FormAdminSchool
 ): Promise<UpdateSchoolPayload> {
-  const mappedImages: Array<ImageObject> = [];
+  const mappedImages: Array<UploadImagePayload> = [];
 
   for (const image of formSchool.images) {
     if (!image.id) {

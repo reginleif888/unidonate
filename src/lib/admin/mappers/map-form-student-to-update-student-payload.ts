@@ -1,7 +1,7 @@
 import { formatToISODateString } from "$lib/common/utils";
 import filesToUint8Arrays from "$lib/common/utils/from-blob-to-uint-8-array";
 import type {
-  ImageObject,
+  UploadImagePayload,
   UpdateStudentPayload,
 } from "../../../declarations/backend/backend.did";
 import type { FormAdminStudent } from "../types";
@@ -10,7 +10,7 @@ import changeImageExtension from "../utils/change-image-extenstion";
 export default async function mapFormSchoolToUpdateSchoolPayload(
   formStudent: FormAdminStudent
 ): Promise<UpdateStudentPayload> {
-  const mappedImages: Array<ImageObject> = [];
+  const mappedImages: Array<UploadImagePayload> = [];
 
   for (const image of formStudent.images) {
     if (!image.id) {
