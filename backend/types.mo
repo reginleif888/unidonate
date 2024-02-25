@@ -154,6 +154,7 @@ module {
     amount : Satoshi;
     status : DonationStatus;
     allocations : [AllocationCategory];
+    verifiedAt : ?Int;
   };
 
   public type CreateDonationPayload = {

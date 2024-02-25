@@ -23,12 +23,12 @@ module {
   } {
     let size = Nat32.toNat(Nat32.fromIntWrap(imageBlob.size()));
 
-    let currentMemoryPage = ExperimentalStableMemory.size();
+    let currentPages = ExperimentalStableMemory.size();
 
-    let newPageAfterGrow = (Nat64.toNat(memoryOffset + Nat64.fromNat(size)) / 65536) + 1;
+    let pagesAfterGrow = (Nat64.toNat(memoryOffset + Nat64.fromNat(size)) / 65536) + 1;
 
-    if (Nat64.toNat(currentMemoryPage) < newPageAfterGrow) {
-      ignore ExperimentalStableMemory.grow(Nat64.fromNat(newPageAfterGrow) - currentMemoryPage);
+    if (Nat64.toNat(currentPages) < pagesAfterGrow) {
+      ignore ExperimentalStableMemory.grow(Nat64.fromNat(pagesAfterGrow) - currentPages);
     };
 
     ExperimentalStableMemory.storeBlob(memoryOffset, imageBlob);

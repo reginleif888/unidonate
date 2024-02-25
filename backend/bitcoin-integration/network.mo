@@ -8,6 +8,6 @@ module {
   };
 
   public let config : Config = {
-    network = #Regtest;
+    network = #Testnet;
   };
 };

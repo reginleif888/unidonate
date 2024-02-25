@@ -496,6 +496,7 @@ actor class Main(initialOwner : ?Principal) {
           status = #Pending;
           allocations = payload.allocations;
           transactionId = null;
+          verifiedAt = null;
         };
 
         donationsMap.put(donationId, donations.size());
@@ -544,6 +545,7 @@ actor class Main(initialOwner : ?Principal) {
         amount = currentDonation.amount;
         status = #Verified;
         allocations = currentDonation.allocations;
+        verifiedAt = ?verifiedAt;
       },
     );
   };
