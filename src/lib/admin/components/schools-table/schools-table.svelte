@@ -25,7 +25,7 @@
     AddSchoolPayload,
     GetSchoolsPayload,
   } from "../../../../declarations/backend/backend.did";
-  import { debounce, wait } from "$lib/common/utils";
+  import { debounce, toBigInt, wait } from "$lib/common/utils";
   import { EntityImportModal } from "../entity-import-modal";
   import type { ColumnMapping } from "$lib/admin/utils";
   import { screenWidthStore, snackbarStore } from "$lib/common/stores";
@@ -73,8 +73,8 @@
       schoolName: search,
       active: active,
     },
-    page: (Number(page) - 1) as unknown as bigint,
-    perPage: Number(perPage.value) as unknown as bigint,
+    page: toBigInt(Number(page) - 1),
+    perPage: toBigInt(Number(perPage.value)),
   };
 
   const [debounced] = debounce(() => {
@@ -83,8 +83,8 @@
         schoolName: search,
         active: active,
       },
-      page: (Number(page) - 1) as unknown as bigint,
-      perPage: Number(perPage.value) as unknown as bigint,
+      page: toBigInt(Number(page) - 1),
+      perPage: toBigInt(Number(perPage.value)),
     };
   }, 300);
 

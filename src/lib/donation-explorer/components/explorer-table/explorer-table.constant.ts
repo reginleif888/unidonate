@@ -3,7 +3,7 @@ import type { SelectItem } from "$lib/common/types";
 import { MAP_ALLOCATION_CATEGORY } from "$lib/donate/constant";
 import { AllocationCategory } from "$lib/donate/types";
 import { OrderByOption, type FormDonation } from "$lib/donation-explorer/types";
-import { ActionCell } from "./components";
+import { ActionCell, BitcoinTransactionCell } from "./components";
 
 export const orderByOptions: Array<SelectItem> = [
   {
@@ -34,6 +34,7 @@ export const columns: Array<IColumn<FormDonation>> = [
     key: "transactionId",
     label: "Bitcoin transaction Id",
     rowTooltipWithCopyOption: true,
+    Cell: BitcoinTransactionCell,
   },
   {
     key: "amount",
@@ -94,7 +95,7 @@ export const donationMockData: Array<FormDonation> = [
   },
   {
     id: "2",
-    transactionId: "1asdfaadsfdafsadfsadfadfdafsdfa",
+    transactionId: "",
     paymentAddress: "1sadfsdfsadafsafdsadfsfasdfasdfasdfasdf",
     amount: "10",
     verifiedAt: "01/01/2021",

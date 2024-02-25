@@ -124,7 +124,7 @@
   $: totalSizeToUpload = $data.images.reduce((acc, file) => acc + file.size, 0);
 </script>
 
-<Modal bind:open onClose={handleClose}>
+<Modal bind:open onClose={handleClose} className="school-modal-root">
   <form class="school-modal" use:form on:submit={handleSubmit}>
     <div class="school-modal__header">
       {#if school}
@@ -253,12 +253,24 @@
 </Modal>
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
+  :global(.school-modal-root) {
+    max-height: 100%;
+    overflow: scroll;
+    padding: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .school-modal {
     background-color: var(--uni-bg);
     box-shadow: var(--uni-shadow-paper);
     border-radius: 24px;
     max-width: 600px;
     width: 100%;
+    height: 100%;
     color: var(--uni-on-bg);
 
     &__header {
@@ -285,7 +297,12 @@
 
     &__content-row {
       display: flex;
+      flex-direction: column;
       gap: 16px;
+
+      @include respond-to("desktop") {
+        flex-direction: row;
+      }
     }
 
     &__input-with-label-wrapper {

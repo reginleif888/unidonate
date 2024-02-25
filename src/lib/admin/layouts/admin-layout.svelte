@@ -75,10 +75,6 @@
     background: var(--uni-page-gradient);
   }
 
-  .copy-right-line {
-    margin-bottom: 16px;
-  }
-
   .github {
     color: var(--uni-primary);
   }

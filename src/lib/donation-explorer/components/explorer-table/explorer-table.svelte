@@ -12,17 +12,13 @@
     PAGE_SIZES_SELECT_ITEMS,
   } from "$lib/donate/constant";
   import { MagnifyingGlass } from "phosphor-svelte";
-  import {
-    columns,
-    donationMockData,
-    orderByOptions,
-  } from "./explorer-table.constant";
+  import { columns, orderByOptions } from "./explorer-table.constant";
   import { useDonations } from "$lib/donation-explorer/queries";
   import type {
     DonationsSorting,
     GetDonationsPayload,
   } from "../../../../declarations/backend/backend.did";
-  import { debounce } from "$lib/common/utils";
+  import { debounce, toBigInt } from "$lib/common/utils";
   import { mapDonationToForm } from "$lib/donation-explorer/mappers";
   import { OrderByOption } from "$lib/donation-explorer/types";
   import type { SelectItem } from "$lib/common/types";
@@ -96,15 +92,15 @@
 
   let query: GetDonationsPayload = {
     sorting: [],
-    page: (Number(currentPage) - 1) as unknown as bigint,
-    perPage: Number(perPage.value) as unknown as bigint,
+    page: toBigInt(Number(currentPage) - 1),
+    perPage: toBigInt(Number(perPage.value)),
   };
 
   const [debounced] = debounce(() => {
     query = {
       sorting: [sorting],
-      page: (Number(currentPage) - 1) as unknown as bigint,
-      perPage: Number(perPage.value) as unknown as bigint,
+      page: toBigInt(Number(currentPage) - 1),
+      perPage: toBigInt(Number(perPage.value)),
     };
   }, 300);
 
@@ -160,7 +156,7 @@
   <div class="explorer-table__table-wrapper">
     <Table
       {columns}
-      rows={donationMockData}
+      rows={donations}
       stickyHead
       mobile={$screenWidthStore < SCREEN.desktop}
     />
@@ -177,20 +173,14 @@
     </InputWithLabel>
   </div>
 
-  <Pagination
-    count={Number(donationMockData.length)}
-    bind:currentPage
-    perPage={Number(perPage.value)}
-    mobile={$screenWidthStore < SCREEN.desktop}
-  />
-
-  <!-- {#if Number($donationsQuery.data?.total) > Number(perPage.value)}
+  {#if Number($donationsQuery.data?.total) > Number(perPage.value)}
     <Pagination
       count={Number($donationsQuery.data?.total)}
       bind:currentPage
       perPage={Number(perPage.value)}
+      mobile={$screenWidthStore < SCREEN.desktop}
     />
-  {/if} -->
+  {/if}
 </div>
 
 <style lang="scss">

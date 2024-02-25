@@ -4,10 +4,11 @@ import type {
   GetDonationsPayload,
   GetDonationsResponse,
 } from "../../../declarations/backend/backend.did";
+import { serializeWithBigInt } from "$lib/common/utils";
 
 export default function useDonations(payload: GetDonationsPayload) {
   const donationsQuery = useQuery<GetDonationsResponse>(
-    ["donations", payload],
+    ["donations", serializeWithBigInt(payload)],
     () => {
       return backend.getDonations(payload);
     }

@@ -14,6 +14,7 @@
   import { AppRoute } from "$lib/common/routes";
   import { useSchools, useStudents } from "$lib/donate/queries";
   import { mapSchoolToForm, mapStudentToForm } from "$lib/donate/mappers";
+  import { toBigInt } from "$lib/common/utils";
 
   let steps: Array<StepItem> = [
     {
@@ -112,8 +113,8 @@
   };
 
   $: schoolsQuery = useSchools({
-    page: (getSchoolsPayload.page - 1) as unknown as bigint,
-    perPage: getSchoolsPayload.perPage as unknown as bigint,
+    page: toBigInt(Number(getSchoolsPayload.page - 1)),
+    perPage: toBigInt(Number(getSchoolsPayload.perPage)),
     filters: {
       schoolName: getSchoolsPayload.search,
       active: true,
@@ -133,8 +134,8 @@
 
   $: studentsQuery = useStudents({
     schoolId: selectedSchoolId!,
-    page: (getStudentsPayload.page - 1) as unknown as bigint,
-    perPage: getStudentsPayload.perPage as unknown as bigint,
+    page: toBigInt(getStudentsPayload.page - 1),
+    perPage: toBigInt(Number(getStudentsPayload.perPage)),
     filters: {
       studentName: getStudentsPayload.search,
       active: true,

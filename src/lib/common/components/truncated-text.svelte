@@ -7,6 +7,8 @@
   export let text = "";
   export let withCopy: boolean = false;
   export let align: "left" | "center" | "right" = "center";
+  export let showTooltip: boolean = false;
+  export let customTooltip: boolean = false;
 
   let textElement: HTMLDivElement | null = null;
   let isEllipsized = false;
@@ -45,12 +47,17 @@
   });
 </script>
 
-<Tooltip disabled={!isEllipsized} fullWidth {align}>
+<Tooltip disabled={!isEllipsized && !showTooltip} fullWidth {align}>
   <div slot="trigger" class="text-container" bind:this={textElement}>
     {text}
   </div>
   <div slot="content" class="content">
-    {text}
+    <slot name="custom-content" />
+
+    {#if !customTooltip}
+      {text}
+    {/if}
+
     {#if withCopy}
       {#if isCopied}
         <span class="copy-button"><Check /></span>

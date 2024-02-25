@@ -6,7 +6,6 @@
   } from "$lib/donate/types";
   import type { UniqueIdentifier } from "$lib/common/types";
   import SkeletonCard from "./skeleton-card.svelte";
-  import { fade } from "svelte/transition";
   import type { SvelteComponent } from "svelte";
 
   export let selected: UniqueIdentifier | null = null;

@@ -26,7 +26,7 @@
     AddStudentPayload,
     GetStudentsPayload,
   } from "../../../../declarations/backend/backend.did";
-  import { debounce, wait } from "$lib/common/utils";
+  import { debounce, toBigInt, wait } from "$lib/common/utils";
   import { useCreateStudent, useStudents } from "$lib/admin/queries";
   import { mapStudentToForm } from "$lib/admin/mappers";
   import { EntityImportModal } from "../entity-import-modal";
@@ -79,8 +79,8 @@
       studentName: search,
       active: active,
     },
-    page: (Number(currentPage) - 1) as unknown as bigint,
-    perPage: Number(perPage.value) as unknown as bigint,
+    page: toBigInt(Number(currentPage) - 1),
+    perPage: toBigInt(Number(perPage.value)),
     schoolId: $page.params.schoolId,
   };
 
@@ -95,8 +95,8 @@
         studentName: search,
         active: active,
       },
-      page: (Number(currentPage) - 1) as unknown as bigint,
-      perPage: Number(perPage.value) as unknown as bigint,
+      page: toBigInt(Number(currentPage) - 1),
+      perPage: toBigInt(Number(perPage.value)),
     };
   }, 300);
 

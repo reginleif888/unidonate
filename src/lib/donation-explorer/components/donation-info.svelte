@@ -33,7 +33,6 @@
         {donation.id}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key"
         >Bitcoin transaction Id:</td
@@ -42,7 +41,6 @@
         {donation.transactionId ? donation.transactionId : "N/A"}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key">
         School:
@@ -51,7 +49,6 @@
         {school.name}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key">
         Student:
@@ -60,7 +57,6 @@
         {student ? `${student.firstName} ${student.lastName}` : "N/A"}
       </td>
     </tr>
-
     <tr class="donation-info-root__row">
       <td class="donation-info-root__info-cell donation-info-root__info-key"
         >Payment address:</td
@@ -75,14 +71,6 @@
       >
       <td class="donation-info-root__info-cell donation-info-root__info-value">
         {donation.amount} BTC
-      </td>
-    </tr>
-    <tr class="donation-info-root__row">
-      <td class="donation-info-root__info-cell donation-info-root__info-key"
-        >Verified At:</td
-      >
-      <td class="donation-info-root__info-cell donation-info-root__info-value">
-        {donation.verifiedAt}
       </td>
     </tr>
     <tr class="donation-info-root__row">
@@ -113,6 +101,14 @@
             {donation.allocations[AllocationCategory.LunchAndSnacks]}%
           </div>
         </div>
+      </td>
+    </tr>
+    <tr class="donation-info-root__row">
+      <td class="donation-info-root__info-cell donation-info-root__info-key"
+        >Verified At:</td
+      >
+      <td class="donation-info-root__info-cell donation-info-root__info-value">
+        {donation.verifiedAt}
       </td>
     </tr>
   </table>

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import { Divider } from "$lib/common/components";
   import {
     AdvantagesSection,

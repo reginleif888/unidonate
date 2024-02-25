@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import { InlineNotification, Page, Spinner } from "$lib/common/components";
   import {
     useGetDonationByIdQuery,

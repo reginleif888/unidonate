@@ -4,6 +4,7 @@ import type {
   GetStudentsPayload,
   GetStudentsResponse,
 } from "../../../declarations/backend/backend.did";
+import { serializeWithBigInt } from "$lib/common/utils";
 
 interface Payload extends GetStudentsPayload {
   enabled: boolean;
@@ -16,7 +17,7 @@ export default function useStudents({
   ...payload
 }: Payload) {
   const queryResult = useQuery<GetStudentsResponse>(
-    ["unis", payload],
+    ["students", serializeWithBigInt(payload)],
     () => {
       return backend.getStudents(schoolId, payload);
     },

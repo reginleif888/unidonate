@@ -4,6 +4,7 @@ import type {
   GetSchoolsPayload,
   GetSchoolsResponse,
 } from "../../../declarations/backend/backend.did";
+import { serializeWithBigInt } from "$lib/common/utils";
 
 interface Payload extends GetSchoolsPayload {
   enabled: boolean;
@@ -11,7 +12,7 @@ interface Payload extends GetSchoolsPayload {
 
 export default function useSchools({ enabled = true, ...payload }: Payload) {
   const queryResult = useQuery<GetSchoolsResponse>(
-    ["unis", payload],
+    ["schools", serializeWithBigInt(payload)],
     () => {
       return backend.getSchools(payload);
     },

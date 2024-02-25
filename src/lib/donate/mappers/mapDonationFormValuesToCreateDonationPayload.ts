@@ -1,3 +1,4 @@
+import { toBigInt } from "$lib/common/utils";
 import type {
   AllocationCategory,
   CreateDonationPayload,
@@ -16,7 +17,7 @@ export default function mapDonationFormValuesToCreateDonationPayload({
   categories,
 }: Params): CreateDonationPayload {
   return {
-    amount: satoshi as unknown as bigint,
+    amount: toBigInt(Number(satoshi)),
     schoolId: schoolId,
     studentId: studentId ? [studentId] : [],
     allocations: Object.entries(categories).map(([categoryId, percent]) => ({
