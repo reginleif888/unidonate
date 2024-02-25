@@ -28,8 +28,9 @@
   import { debounce, wait } from "$lib/common/utils";
   import { EntityImportModal } from "../entity-import-modal";
   import type { ColumnMapping } from "$lib/admin/utils";
-  import { snackbarStore } from "$lib/common/stores";
+  import { screenWidthStore, snackbarStore } from "$lib/common/stores";
   import YourPrincipal from "../your-principal.svelte";
+  import { SCREEN } from "$lib/common/constant";
 
   let search = "";
 
@@ -254,6 +255,7 @@
       rows={$schoolsQuery.data?.schools.map(mapSchoolToForm) ?? []}
       stickyHead
       loadingRowsCount={Number(perPage.label)}
+      mobile={$screenWidthStore < SCREEN.desktop}
     />
     {#if !$schoolsQuery.data?.schools.length && !$schoolsQuery.isLoading}
       <div class="schools-table__empty-placeholder h5">
@@ -269,6 +271,7 @@
         items={PAGE_SIZES_SELECT_ITEMS}
         bind:selected={perPage}
         on:change={handleResetPage}
+        size={$screenWidthStore < SCREEN.desktop ? "small" : "medium"}
       />
     </InputWithLabel>
   </div>
@@ -278,6 +281,7 @@
       count={Number($schoolsQuery.data?.total)}
       bind:currentPage={page}
       perPage={Number(perPage.value)}
+      mobile={$screenWidthStore < SCREEN.desktop}
     />
   {/if}
 </div>
@@ -297,6 +301,8 @@
 />
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
+
   .schools-table {
     width: 100%;
     display: flex;
@@ -304,19 +310,28 @@
     flex-grow: 1;
 
     &__header {
-      padding: 16px;
       display: flex;
-      gap: 16px;
+      padding: 8px;
+      gap: 8px;
       align-items: center;
       padding-bottom: 0px;
       background-color: var(--uni-bg);
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+      }
     }
 
     &__top-controls-left {
       display: flex;
-      gap: 16px;
+      gap: 8px;
       width: 100%;
       align-items: flex-end;
+
+      @include respond-to("desktop") {
+        gap: 16px;
+      }
     }
 
     &__search-select {
@@ -344,24 +359,37 @@
     &__top-controls {
       position: sticky;
       top: 0;
-      padding: 16px;
+      padding: 8px;
+      gap: 8px;
       background-color: var(--uni-bg);
       border-bottom: 1px solid var(--uni-divider-color);
       z-index: 2;
       display: flex;
+      flex-direction: column;
       justify-content: flex-start;
       align-items: flex-end;
-      gap: 16px;
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+        flex-direction: row;
+      }
     }
 
     &__bottom-controls {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: flex-end;
-      padding: 16px;
-      gap: 16px;
+      padding: 8px;
+      gap: 8px;
       background-color: var(--uni-bg);
       border-top: 1px solid var(--uni-divider-color);
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+        justify-content: flex-start;
+      }
     }
 
     &__bottom-controls-select {
@@ -370,7 +398,11 @@
     }
 
     &__toggle-active-wrapper {
-      margin-bottom: 6px;
+      margin-bottom: 3px;
+
+      @include respond-to("desktop") {
+        margin-bottom: 6px;
+      }
     }
 
     &__magnify-glass {
@@ -389,8 +421,13 @@
 
     &__import-wrapper {
       display: flex;
-      gap: 8px;
-      justify-content: flex-end;
+      gap: 4px;
+      justify-content: space-between;
+
+      @include respond-to("desktop") {
+        gap: 8px;
+        justify-content: flex-end;
+      }
     }
 
     &__top-controls-right {

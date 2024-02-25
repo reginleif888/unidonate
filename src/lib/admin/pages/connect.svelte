@@ -1,23 +1,27 @@
 <script lang="ts">
-  import { Button, LockAnimatedIcon } from "$lib/common/components";
+  import { Button, LockAnimatedIcon, Spinner } from "$lib/common/components";
   import { ConnectedNavCards } from "$lib/admin/components";
-  import { onMount } from "svelte";
-  import { authClientStore } from "$lib/common/stores";
-
-  let connected = false;
+  import { authClientStore, isAdminStore } from "$lib/common/stores";
+  import { AuthClient } from "@dfinity/auth-client";
 
   async function connect() {
     if ($authClientStore) {
-      if (connected) {
+      const isAuth = await $authClientStore?.isAuthenticated();
+
+      if (isAuth) {
         $authClientStore.logout();
 
-        connected = false;
+        /**
+         *
+         * recreate the authClientStore to force rerender on the top level
+         */
+        $authClientStore = await AuthClient.create();
 
         return;
       }
 
       $authClientStore.login({
-        maxTimeToLive: BigInt(6 * 60 * 60 * 1000 * 1000 * 1000), // 6h
+        maxTimeToLive: BigInt(24 * 60 * 60 * 1000 * 1000 * 1000),
         identityProvider:
           process.env.DFX_NETWORK === "ic"
             ? "https://identity.ic0.app/#authorize"
@@ -35,47 +39,59 @@
       });
     }
   }
-
-  async function checkAuth() {
-    if ($authClientStore && (await $authClientStore.isAuthenticated())) {
-      connected = true;
-    }
-  }
-
-  $: {
-    if ($authClientStore) {
-      checkAuth();
-    }
-  }
 </script>
 
 <div class="root">
-  <div class="heading" class:heading-connected={connected}>
-    <LockAnimatedIcon color="var(--uni-on-primary)" unlocked={connected} />
+  <div class="heading" class:heading-connected={true}>
+    {#await $isAdminStore}
+      <Spinner size={150} />
+    {:then isAdmin}
+      <LockAnimatedIcon color="var(--uni-on-primary)" unlocked={isAdmin} />
+    {/await}
+
     <h1 class="h1">Uni Admin</h1>
     <p class="body1 heading-description">
       Manage your schools and students with unparalleled ease and efficiency.
     </p>
   </div>
 
-  <div class="fake-buttons">
-    {#if connected}
-      <div class="connected-buttons-wrapper">
-        <ConnectedNavCards />
-      </div>
+  {#await Promise.all( [$authClientStore?.isAuthenticated(), $isAdminStore] ) then [isAuth, isAdmin]}
+    {#if isAuth && !isAdmin}
+      <p class="body1">You are not admin</p>
     {/if}
+  {/await}
+
+  <div class="fake-buttons">
+    {#await Promise.all( [$authClientStore?.isAuthenticated(), $isAdminStore] ) then [_, isAdmin]}
+      {#if isAdmin}
+        <div class="connected-buttons-wrapper">
+          <ConnectedNavCards />
+        </div>
+      {/if}
+    {/await}
   </div>
 
   <div class="inner">
     <div class="connect-button">
-      <Button
-        label={connected ? "Disconnect" : "Connect"}
-        variant="secondary"
-        justify="center"
-        contained
-        fullWidth
-        on:click={connect}
-      />
+      {#await $authClientStore?.isAuthenticated()}
+        <Button
+          label={"Loading..."}
+          variant="secondary"
+          justify="center"
+          contained
+          fullWidth
+          notClickable
+        />
+      {:then isAuth}
+        <Button
+          label={isAuth ? "Disconnect" : "Connect"}
+          variant="secondary"
+          justify="center"
+          contained
+          fullWidth
+          on:click={connect}
+        />
+      {/await}
     </div>
   </div>
 </div>
@@ -100,18 +116,16 @@
     align-items: center;
     gap: 4px;
     margin-bottom: 8px;
-  }
-
-  .heading-description {
-    text-align: center;
-  }
-
-  .heading-connected {
     top: 24%;
+    padding: 0 8px;
 
     @include respond-to("smallTablet") {
       top: 26%;
     }
+  }
+
+  .heading-description {
+    text-align: center;
   }
 
   .inner {

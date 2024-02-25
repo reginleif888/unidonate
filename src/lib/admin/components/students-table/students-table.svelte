@@ -30,10 +30,11 @@
   import { useCreateStudent, useStudents } from "$lib/admin/queries";
   import { mapStudentToForm } from "$lib/admin/mappers";
   import { EntityImportModal } from "../entity-import-modal";
-  import { snackbarStore } from "$lib/common/stores";
+  import { screenWidthStore, snackbarStore } from "$lib/common/stores";
   import { csvSerialDateToIso, type ColumnMapping } from "$lib/admin/utils";
   import { useQueryClient } from "@sveltestack/svelte-query";
   import YourPrincipal from "../your-principal.svelte";
+  import { SCREEN } from "$lib/common/constant";
 
   let createModalOpen: boolean = false;
 
@@ -278,6 +279,7 @@
       {columns}
       rows={$studentsQuery.data?.students.map(mapStudentToForm) ?? []}
       stickyHead
+      mobile={$screenWidthStore < SCREEN.desktop}
     />
 
     {#if !$studentsQuery.data?.students.length && !$studentsQuery.isLoading}
@@ -327,20 +329,12 @@
 />
 
 <style lang="scss">
+  @import "$lib/common/styles/media.scss";
   .students-table {
     width: 100%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-
-    &__header {
-      padding: 16px;
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      padding-bottom: 0px;
-      background-color: var(--uni-bg);
-    }
 
     &__back-button {
       color: var(--uni-on-bg);
@@ -354,14 +348,32 @@
       }
     }
 
-    &__top-controls-left {
+    &__header {
       display: flex;
-      gap: 16px;
-      width: 100%;
-      align-items: flex-end;
+      padding: 8px;
+      gap: 8px;
+      align-items: center;
+      padding-bottom: 0px;
+      background-color: var(--uni-bg);
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+      }
     }
 
-    &__search {
+    &__top-controls-left {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      align-items: flex-end;
+
+      @include respond-to("desktop") {
+        gap: 16px;
+      }
+    }
+
+    &__search-select {
       max-width: 240px;
       width: 100%;
     }
@@ -383,38 +395,53 @@
       top: 2px;
     }
 
-    &__toggle-active-wrapper {
-      margin-bottom: 6px;
-    }
-
     &__top-controls {
       position: sticky;
       top: 0;
-      padding: 16px;
+      padding: 8px;
+      gap: 8px;
       background-color: var(--uni-bg);
       border-bottom: 1px solid var(--uni-divider-color);
       z-index: 2;
       display: flex;
+      flex-direction: column;
       justify-content: flex-start;
       align-items: flex-end;
-      gap: 16px;
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+        flex-direction: row;
+      }
     }
 
     &__bottom-controls {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: flex-end;
-      padding: 16px;
-      gap: 16px;
-      position: sticky;
-      bottom: 0;
+      padding: 8px;
+      gap: 8px;
       background-color: var(--uni-bg);
       border-top: 1px solid var(--uni-divider-color);
+
+      @include respond-to("desktop") {
+        padding: 16px;
+        gap: 16px;
+        justify-content: flex-start;
+      }
     }
 
     &__bottom-controls-select {
       max-width: 120px;
       width: 100%;
+    }
+
+    &__toggle-active-wrapper {
+      margin-bottom: 3px;
+
+      @include respond-to("desktop") {
+        margin-bottom: 6px;
+      }
     }
 
     &__magnify-glass {
@@ -431,14 +458,34 @@
       background-color: var(--uni-bg-transparent-700);
     }
 
+    &__import-wrapper {
+      display: flex;
+      gap: 4px;
+      justify-content: space-between;
+
+      @include respond-to("desktop") {
+        gap: 8px;
+        justify-content: flex-end;
+      }
+    }
+
     &__top-controls-right {
       width: 100%;
     }
 
-    &__import-wrapper {
+    &__empty-placeholder {
+      width: 100%;
+      flex-grow: 1;
       display: flex;
-      gap: 8px;
-      justify-content: flex-end;
+      justify-content: center;
+      align-items: center;
+      font-weight: 500;
+      color: var(--uni-text-color-400);
+    }
+
+    &__your-principal {
+      flex-grow: 1;
+      margin-left: auto;
     }
 
     &__empty-placeholder {

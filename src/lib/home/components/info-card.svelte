@@ -68,6 +68,9 @@
     padding: 16px;
     border-radius: 16px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     @include respond-to("largeDesktop") {
       min-width: 160px;

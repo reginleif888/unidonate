@@ -188,7 +188,7 @@
         <FileUploader
           bind:files
           labelTitle={"Upload file"}
-          labelSubtitle={"XLSX or CSV files"}
+          labelSubtitle={"CSV files only"}
           accept={SHEET_EXTENSIONS}
           maxFiles={1}
           hiddenCurrentSizeToUpload
@@ -237,6 +237,7 @@
   :global(.entity-import-modal__modal-root) {
     max-width: 600px;
     width: 100%;
+    padding: 8px;
   }
 
   .entity-import-modal {

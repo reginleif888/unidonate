@@ -16,6 +16,8 @@
   import { mapDonationToForm } from "$lib/donation-explorer/mappers";
   import { OrderByOption } from "$lib/donation-explorer/types";
   import type { SelectItem } from "$lib/common/types";
+  import { screenWidthStore } from "$lib/common/stores";
+  import { SCREEN } from "$lib/common/constant";
 
   export let onSearchDonation: () => void = () => null;
 
@@ -140,7 +142,12 @@
   </div>
 
   <div class="explorer-table__table-wrapper">
-    <Table {columns} rows={donations} stickyHead />
+    <Table
+      {columns}
+      rows={donations}
+      stickyHead
+      mobile={$screenWidthStore < SCREEN.desktop}
+    />
   </div>
 </div>
 <div class="explorer-table__bottom-controls">

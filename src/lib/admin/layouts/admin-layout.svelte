@@ -2,7 +2,7 @@
   import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
   import { GithubLogo } from "phosphor-svelte";
   import { onMount } from "svelte";
-  import { Page, Snackbar } from "$lib/common/components";
+  import { BurgerMenu, Page, Snackbar } from "$lib/common/components";
   import { themeStore } from "$lib/common/stores";
   import { AdminHeader } from "../components";
   import { ADMIN_TABS_ROUTES } from "$lib/common/routes";
@@ -27,6 +27,7 @@
 <QueryClientProvider client={queryClient}>
   <main>
     <AdminHeader tabRoutes={ADMIN_TABS_ROUTES} />
+    <BurgerMenu tabRoutes={ADMIN_TABS_ROUTES} />
     <Snackbar />
     <div class="content">
       <Page>
@@ -35,9 +36,6 @@
     </div>
 
     <footer>
-      <span class="copy-right-line caption"
-        >© uni-donate.com - All rights reserved.</span
-      >
       <ul>
         <li>
           <a
@@ -48,6 +46,9 @@
           >
         </li>
       </ul>
+      <span class="caption">
+        uni-donate.com - powered by internet computer.
+      </span>
     </footer>
   </main>
 </QueryClientProvider>
@@ -86,10 +87,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    padding: 8px;
-    padding-top: 16px;
+    padding: 16px;
+    gap: 4px;
     border-top: 1px solid var(--uni-divider-color);
     background-color: var(--uni-bg-400);
+
+    @include respond-to("desktop") {
+      padding: 24px;
+    }
   }
 </style>
