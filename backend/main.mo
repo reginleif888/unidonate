@@ -142,9 +142,7 @@ actor class Main(initialOwner : ?Principal) {
     };
   };
 
-  public shared ({ caller }) func getOwners(principal : Principal) : async [Principal] {
-    await* assertOwnerAccess(caller);
-
+  public shared ({ caller }) func getOwners() : async [Principal] {
     let ownerPrincipals = ownersMap.entries()
     |> Iter.map<(Principal, ()), Principal>(_, func((principal, _)) { principal })
     |> Iter.toArray(_);
