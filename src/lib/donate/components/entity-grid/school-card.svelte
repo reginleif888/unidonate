@@ -1,16 +1,10 @@
 <script lang="ts">
-  import { Button } from "$lib/common/components";
+  import { Button, Swiper } from "$lib/common/components";
   import type { FormSchool } from "$lib/donate/types";
 
   export let selected: boolean = false;
   export let item: FormSchool;
   export let onSelect: (uni: FormSchool) => void = () => null;
-
-  let imgSrc = item.imgs[0] ?? "";
-
-  const handleImgError = () => {
-    imgSrc = "images/no-image.jpg";
-  };
 
   const handleSelect = () => {
     onSelect(item);
@@ -18,14 +12,16 @@
 </script>
 
 <div class="card-root">
-  <img
-    src={item.imgs[0] ?? "images/no-image.jpg"}
-    alt="school"
-    on:error={handleImgError}
-  />
-  <a href={item.website} target="_blank" class="website-badge overline"
-    >Website</a
-  >
+  <div class="swiper-wrapper">
+    <Swiper items={item.imgs} let:item={img}>
+      <img src={img || "/images/no-image.jpg"} alt="school" />
+    </Swiper>
+  </div>
+
+  <a href={item.website} target="_blank" class="website-badge overline">
+    Website
+  </a>
+
   <div class="description body2">
     <div class="school-name">
       <b class="attribute-label">Name:</b>
@@ -40,6 +36,7 @@
       <span>{item.numberOfStudents}</span>
     </div>
   </div>
+
   <Button
     label={selected ? "Unselect" : "Select"}
     contained={selected}
@@ -94,5 +91,10 @@
     object-fit: cover;
     border-radius: 16px;
     background-color: var(--uni-secondary);
+  }
+
+  .swiper-wrapper {
+    width: 100%;
+    height: 200px;
   }
 </style>

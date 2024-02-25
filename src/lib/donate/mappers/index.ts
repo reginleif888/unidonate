@@ -1,3 +1,3 @@
-export { default as schoolToForm } from "./schoolToForm";
-export { default as studentToForm } from "./studentToForm";
+export { default as mapSchoolToForm } from "./mapSchoolToForm";
+export { default as mapStudentToForm } from "./mapStudentToForm";
 export { default as mapDonationFormValuesToCreateDonationPayload } from "./mapDonationFormValuesToCreateDonationPayload";

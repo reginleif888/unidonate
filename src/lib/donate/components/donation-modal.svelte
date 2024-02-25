@@ -110,7 +110,7 @@
     <div class="donation-modal__footer">
       <div class="donation-modal__confirm-button_wrapper">
         <Button
-          label="I save it, confirm! 🎉"
+          label="I save it, verify! 🎉"
           contained
           fullWidth
           justify="center"

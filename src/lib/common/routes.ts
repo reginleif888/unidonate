@@ -4,7 +4,7 @@ import type { TabRoute } from "./types";
 export enum AppRoute {
   Home = "/",
   Donate = "/donate",
-  ConfirmDonate = "/confirm-donate",
+  ConfirmDonate = "/verify-donation",
   Explorer = "/explorer",
   Donation = "/explorer/[donationId]",
 }
@@ -29,7 +29,7 @@ export const APP_TABS_ROUTES: Array<TabRoute> = [
   },
   {
     route: AppRoute.ConfirmDonate,
-    label: "Confirm donate",
+    label: "Verify donation",
     Icon: Icons.ListChecks,
   },
   {

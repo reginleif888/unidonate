@@ -11,8 +11,11 @@ export default function useUpdateStudent({ schoolId }: UseUpdateStudentParams) {
   const queryClient = useQueryClient();
 
   const updatedStudent = useMutation(
-    (payload: UpdateStudentPayload) => {
-      return get(backendStore).updateStudent(schoolId, payload);
+    ({
+      studentId,
+      ...payload
+    }: UpdateStudentPayload & { studentId: string }) => {
+      return get(backendStore).updateStudent(studentId, payload);
     },
     {
       onSuccess: () => {

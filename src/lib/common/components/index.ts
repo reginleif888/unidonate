@@ -36,3 +36,4 @@ export { default as Spinner } from "./spinner.svelte";
 export { default as Redirect } from "./redirect.svelte";
 export { default as Progress } from "./progress.svelte";
 export { default as ConfirmModal } from "./confirm-modal.svelte";
+export { default as Swiper } from "./swiper.svelte";

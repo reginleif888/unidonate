@@ -1,16 +1,25 @@
 import type { IColumn } from "$lib/common/components";
+import type { SelectItem } from "$lib/common/types";
 import { MAP_ALLOCATION_CATEGORY } from "$lib/donate/constant";
-import type { FormDonation } from "$lib/donation-explorer/types";
+import { OrderByOption, type FormDonation } from "$lib/donation-explorer/types";
 import { ActionCell } from "./components";
 
-export const orderByOptions = [
+export const orderByOptions: Array<SelectItem> = [
   {
-    label: "By latest",
-    value: "byLatest",
+    label: "Newest first",
+    value: OrderByOption.VerifiedAtDesc,
   },
   {
-    label: "By newest",
-    value: "byNewest",
+    label: "Oldest first",
+    value: OrderByOption.VerifiedAtAsc,
+  },
+  {
+    label: "Highest amount first",
+    value: OrderByOption.AmountDesc,
+  },
+  {
+    label: "Lowest amount first",
+    value: OrderByOption.AmountAsc,
   },
 ];
 
@@ -26,15 +35,11 @@ export const columns: Array<IColumn<FormDonation>> = [
     rowTooltipWithCopyOption: true,
   },
   {
-    key: "paymentAddress",
-    label: "Payment address",
-    rowTooltipWithCopyOption: true,
-  },
-  {
     key: "amount",
     label: "Amount",
     format: (value): string => `${value} BTC`,
   },
+
   {
     key: "allocations",
     label: "Allocations",
@@ -48,6 +53,12 @@ export const columns: Array<IColumn<FormDonation>> = [
         .join(", ");
     },
   },
+
+  {
+    key: "verifiedAt",
+    label: "Verified at",
+  },
+
   {
     key: "actions",
     noResize: true,

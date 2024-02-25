@@ -13,7 +13,7 @@
   import { goto } from "$app/navigation";
   import { AppRoute } from "$lib/common/routes";
   import { useSchools, useStudents } from "$lib/donate/queries";
-  import { schoolToForm, studentToForm } from "$lib/donate/mappers";
+  import { mapSchoolToForm, mapStudentToForm } from "$lib/donate/mappers";
 
   let steps: Array<StepItem> = [
     {
@@ -123,7 +123,7 @@
 
   let formSchools: Array<FormSchool> = [];
 
-  $: formSchools = ($schoolsQuery?.data?.schools || []).map(schoolToForm);
+  $: formSchools = ($schoolsQuery?.data?.schools || []).map(mapSchoolToForm);
 
   let getStudentsPayload: PaginationFilter = {
     search: "",
@@ -144,7 +144,9 @@
 
   let formStudents: Array<FormStudent> = [];
 
-  $: formStudents = ($studentsQuery?.data?.students || []).map(studentToForm);
+  $: formStudents = ($studentsQuery?.data?.students || []).map(
+    mapStudentToForm
+  );
 </script>
 
 <Page>

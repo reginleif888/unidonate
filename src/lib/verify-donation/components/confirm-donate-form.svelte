@@ -36,16 +36,16 @@
 </script>
 
 <form class="root" on:submit={formPreventDefault}>
-  <h1 class="h4">Confirm donation</h1>
+  <h1 class="h4">Verify donation</h1>
 
   <p class="body1">
-    To confirm the donation, the transaction must be processed. Sometimes this
+    To verify the donation, the transaction must be processed. Sometimes this
     can take some time, and if you receive an error, please try again later.
   </p>
 
   {#if serverErrorMessage}
     <InlineNotification
-      title="Ooops..."
+      title="Oops..."
       message={serverErrorMessage}
       type="error"
     />
@@ -80,7 +80,7 @@
     />
   </InputWithLabel>
   <Button
-    label="Confirm"
+    label="Verify"
     contained
     on:click={handleConfirm}
     {loading}

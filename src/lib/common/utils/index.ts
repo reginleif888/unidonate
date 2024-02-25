@@ -10,3 +10,6 @@ export * as validation from "./validation";
 export { default as formatDateValueToLocale } from "./formatDateValueToLocale";
 export { default as formatToISODateString } from "./formatToISODateString";
 export { default as getImageLink } from "./getImageLink";
+export { default as getDecimalSeparator } from "./getDecimalSeparator";
+export { default as satsToBtcString } from "./satsToBtcString";
+export { default as btcToSatsString } from "./btcToSatsString";

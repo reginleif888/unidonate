@@ -18,13 +18,13 @@
   import { createForm } from "felte";
   import { INITIAL_VALUES } from "./student-modal.constant";
   import { validation } from "./student-modal.validation";
-  import { getImageLink, wait } from "$lib/common/utils";
+  import { getImageLink, reduceImageSize } from "$lib/common/utils";
   import { useCreateStudent, useUpdateStudent } from "$lib/admin/queries";
   import {
     mapFormStudentToAddStudentPayload,
     mapFormStudentToUpdateStudentPayload,
   } from "$lib/admin/mappers";
-  import type { FormSchool } from "$lib/donate/types";
+  import type { UploadedFile } from "$lib/common/types";
 
   export let open: boolean = false;
 
@@ -47,6 +47,7 @@
     reset,
     data,
     errors,
+    setData,
   } = createForm<FormAdminStudent>({
     initialValues: INITIAL_VALUES,
     validate: validation,
@@ -58,7 +59,7 @@
       } else {
         const mapped = await mapFormStudentToUpdateStudentPayload(values);
 
-        await $updateStudent.mutateAsync(mapped);
+        await $updateStudent.mutateAsync({ ...mapped, studentId: student.id });
       }
 
       dispatch("close");
@@ -69,6 +70,49 @@
     dispatch("close");
   };
 
+  async function handleFileChange({
+    detail,
+  }: CustomEvent<Array<File & UploadedFile>>) {
+    try {
+      const files = await Promise.all(
+        detail.map(async (file) => {
+          try {
+            if ((file as UploadedFile).id) {
+              return file;
+            }
+
+            const reduced = await reduceImageSize(file as File);
+
+            const image = new File([reduced], file.name, {
+              type: reduced.type,
+            });
+
+            return image;
+          } catch (error) {
+            snackbarStore.addMessage({
+              message: "Error while reducing image size",
+              type: "error",
+            });
+
+            return file;
+          }
+        })
+      );
+
+      const filtered = files.filter(
+        (file, index, array) =>
+          array.findIndex((f) => f.name === file.name) === index
+      ) as Array<File & UploadedFile>;
+
+      setData("images", filtered);
+    } catch (error) {
+      snackbarStore.addMessage({
+        message: "Error while trying to upload images",
+        type: "error",
+      });
+    }
+  }
+
   $: {
     if (!open) {
       reset();
@@ -78,6 +122,8 @@
       }
     }
   }
+
+  $: totalSizeToUpload = $data.images.reduce((acc, file) => acc + file.size, 0);
 </script>
 
 <Modal bind:open onClose={handleClose}>
@@ -186,11 +232,12 @@
 
       <div class="student-modal__images">
         <FileUploader
-          bind:files={$data.images}
+          files={$data.images}
           labelTitle={"Upload images"}
           labelSubtitle={"Max total images size to upload: 2MB"}
           accept={IMAGE_EXTENSIONS}
-          maxSize={2 * 1024 * 1024}
+          on:change={handleFileChange}
+          {totalSizeToUpload}
           on:size-error={(event) => {
             snackbarStore.addMessage({
               message: `Max total files size is ${event.detail.maxSize / 1024 / 1024}MB`,

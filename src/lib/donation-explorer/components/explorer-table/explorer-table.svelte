@@ -7,11 +7,104 @@
   } from "$lib/donate/constant";
   import { MagnifyingGlass } from "phosphor-svelte";
   import { columns, orderByOptions } from "./explorer-table.constant";
-  import { donationsMock } from "$lib/donation-explorer/mocks";
+  import { useDonations } from "$lib/donation-explorer/queries";
+  import type {
+    DonationsSorting,
+    GetDonationsPayload,
+  } from "../../../../declarations/backend/backend.did";
+  import { debounce } from "$lib/common/utils";
+  import { mapDonationToForm } from "$lib/donation-explorer/mappers";
+  import { OrderByOption } from "$lib/donation-explorer/types";
+  import type { SelectItem } from "$lib/common/types";
 
   export let onSearchDonation: () => void = () => null;
 
-  let topControlsElement: HTMLElement | null = null;
+  let currentPage: number = 1;
+
+  let perPage = PAGE_SIZES_SELECT_ITEMS[3];
+
+  let orderBy: SelectItem = orderByOptions[0];
+
+  function getSorting(orderByOption: OrderByOption): DonationsSorting {
+    if (orderByOption === OrderByOption.VerifiedAtDesc) {
+      return {
+        field: {
+          verifiedAt: null,
+        },
+        order: {
+          descending: null,
+        },
+      };
+    }
+
+    if (orderByOption === OrderByOption.VerifiedAtAsc) {
+      return {
+        field: {
+          verifiedAt: null,
+        },
+        order: {
+          ascending: null,
+        },
+      };
+    }
+
+    if (orderByOption === OrderByOption.AmountDesc) {
+      return {
+        field: {
+          amount: null,
+        },
+        order: {
+          descending: null,
+        },
+      };
+    }
+
+    if (orderByOption === OrderByOption.AmountAsc) {
+      return {
+        field: {
+          amount: null,
+        },
+        order: {
+          ascending: null,
+        },
+      };
+    }
+
+    return {
+      field: {
+        verifiedAt: null,
+      },
+      order: {
+        descending: null,
+      },
+    };
+  }
+
+  $: sorting = getSorting(orderBy.value as OrderByOption);
+
+  let query: GetDonationsPayload = {
+    sorting: [],
+    page: (Number(currentPage) - 1) as unknown as bigint,
+    perPage: Number(perPage.value) as unknown as bigint,
+  };
+
+  const [debounced] = debounce(() => {
+    query = {
+      sorting: [sorting],
+      page: (Number(currentPage) - 1) as unknown as bigint,
+      perPage: Number(perPage.value) as unknown as bigint,
+    };
+  }, 300);
+
+  function handleResetPage() {
+    currentPage = 1;
+  }
+
+  $: [currentPage, perPage, sorting], debounced();
+
+  $: donationsQuery = useDonations(query);
+
+  $: donations = ($donationsQuery.data?.donations ?? []).map(mapDonationToForm);
 </script>
 
 <div class="explorer-table">
@@ -19,11 +112,11 @@
     <h4 class="h4">Donation explorer</h4>
   </div>
 
-  <div class="explorer-table__top-controls" bind:this={topControlsElement}>
+  <div class="explorer-table__top-controls">
     <div class="explorer-table__top-controls-left">
       <div class="explorer-table__order-by-select">
         <InputWithLabel label="Order by">
-          <Select items={orderByOptions} />
+          <Select items={orderByOptions} bind:selected={orderBy} />
         </InputWithLabel>
       </div>
       <Button label="Search for donation" on:click={onSearchDonation}>
@@ -47,17 +140,27 @@
   </div>
 
   <div class="explorer-table__table-wrapper">
-    <Table {columns} rows={donationsMock} stickyHead />
+    <Table {columns} rows={donations} stickyHead />
   </div>
 </div>
 <div class="explorer-table__bottom-controls">
   <div class="explorer-table__bottom-controls-select">
     <InputWithLabel label="Per page">
-      <Select items={PAGE_SIZES_SELECT_ITEMS} />
+      <Select
+        items={PAGE_SIZES_SELECT_ITEMS}
+        bind:selected={perPage}
+        on:change={handleResetPage}
+      />
     </InputWithLabel>
   </div>
 
-  <Pagination count={50} />
+  {#if Number($donationsQuery.data?.total) > Number(perPage.value)}
+    <Pagination
+      count={Number($donationsQuery.data?.total)}
+      bind:currentPage
+      perPage={Number(perPage.value)}
+    />
+  {/if}
 </div>
 
 <style lang="scss">
@@ -97,7 +200,7 @@
     }
 
     &__order-by-select {
-      max-width: 240px;
+      max-width: 260px;
       width: 100%;
     }
 

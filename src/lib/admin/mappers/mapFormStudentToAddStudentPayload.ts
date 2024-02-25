@@ -5,6 +5,7 @@ import type {
   AddStudentPayload,
 } from "../../../declarations/backend/backend.did";
 import type { FormAdminStudent } from "../types";
+import changeImageExtension from "../utils/changeImageExtenstion";
 
 export default async function mapFormStudentToAddStudentPayload(
   formStudent: FormAdminStudent
@@ -17,7 +18,7 @@ export default async function mapFormStudentToAddStudentPayload(
     mappedImages.push({
       id: [],
       mimeType: image.type,
-      name: image.name,
+      name: changeImageExtension(image.name),
       data: mappedImage,
     });
   }

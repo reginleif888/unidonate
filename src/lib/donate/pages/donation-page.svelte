@@ -222,6 +222,7 @@
         data={donutData}
         bind:hoveredSlice
         formatValue={(percent) =>
+          "≈" +
           (
             (currentCurrency === "BTC" ? numberBtcValue : $data.satoshi ?? 0) *
             (percent / 100)
@@ -391,15 +392,6 @@
 
   .reset-button-wrapper {
     max-width: fit-content;
-  }
-
-  .btc-icon {
-    position: relative;
-    top: 2px;
-  }
-
-  .currency-select-wrapper {
-    width: 90px;
   }
 
   .card-error {

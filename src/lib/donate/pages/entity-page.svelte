@@ -69,6 +69,10 @@
 
   let stickyTopControls: boolean = false;
 
+  function handlePageReset() {
+    page = 1;
+  }
+
   function checkStickyTopControls() {
     if (scrollRoot) {
       const scrollTop = scrollRoot.scrollTop;
@@ -110,6 +114,7 @@
         <InputWithLabel label="Search">
           <Input
             placeholder={mapEntityType[entityType].searchPlaceholder}
+            on:input={handlePageReset}
             bind:value={search}
           >
             <span slot="end-icon">
@@ -135,7 +140,11 @@
     <div class="pagination-wrapper">
       <div class="select-wrapper">
         <InputWithLabel label="Per page">
-          <Select items={PAGE_SIZES_SELECT_ITEMS} bind:selected={perPage} />
+          <Select
+            items={PAGE_SIZES_SELECT_ITEMS}
+            bind:selected={perPage}
+            on:change={handlePageReset}
+          />
         </InputWithLabel>
       </div>
       <div>

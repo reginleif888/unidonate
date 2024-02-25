@@ -4,6 +4,7 @@ import type {
   AddSchoolPayload,
 } from "../../../declarations/backend/backend.did";
 import type { FormAdminSchool } from "../types";
+import changeImageExtension from "../utils/changeImageExtenstion";
 
 export default async function mapFormSchoolToAddSchoolPayload(
   formSchool: FormAdminSchool
@@ -16,7 +17,7 @@ export default async function mapFormSchoolToAddSchoolPayload(
     mappedImages.push({
       id: [],
       mimeType: image.type,
-      name: image.name,
+      name: changeImageExtension(image.name),
       data: mappedImage,
     });
   }

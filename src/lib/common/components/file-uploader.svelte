@@ -15,6 +15,7 @@
   export let files: Array<File | UploadedFile> = [];
   export let maxFiles: number = 0;
   export let hiddenCurrentSizeToUpload: boolean = false;
+  export let totalSizeToUpload: number = 0;
 
   const dispatch = createEventDispatcher();
 
@@ -28,9 +29,13 @@
     }
   }
 
-  $: sizeToUpload = (
-    [...files.filter((file) => (file as File).size)] as unknown as Array<File>
-  ).reduce((acc, file: File) => acc + file.size, 0);
+  $: sizeToUpload = totalSizeToUpload
+    ? totalSizeToUpload
+    : (
+        [
+          ...files.filter((file) => (file as File).size),
+        ] as unknown as Array<File>
+      ).reduce((acc, file: File) => acc + file.size, 0);
 
   function handleChange(event: Event) {
     const target = event.target as HTMLInputElement | null;

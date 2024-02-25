@@ -2,7 +2,7 @@ import { getImageLink } from "$lib/common/utils";
 import type { Student } from "../../../declarations/backend/backend.did";
 import type { FormStudent } from "../types";
 
-export default function studentToForm(student: Student): FormStudent {
+export default function mapStudentToForm(student: Student): FormStudent {
   return {
     id: student.id,
     firstName: student.firstName,

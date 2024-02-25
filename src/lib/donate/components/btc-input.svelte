@@ -1,5 +1,10 @@
 <script lang="ts">
   import { Input, InputWithLabel, Tooltip } from "$lib/common/components";
+  import {
+    btcToSatsString,
+    getDecimalSeparator,
+    satsToBtcString,
+  } from "$lib/common/utils";
   import { Swap } from "phosphor-svelte";
 
   export let currentCurrency = "BTC";
@@ -15,31 +20,6 @@
   export let error: boolean = false;
 
   let placeholder = "0.00000000 BTC";
-
-  function getDecimalSeparator() {
-    const numberWithDecimal = 1.1;
-    const formattedNumber = Intl.NumberFormat(window.navigator.language).format(
-      numberWithDecimal
-    );
-    const decimalSeparator = formattedNumber.charAt(1);
-    return decimalSeparator;
-  }
-
-  function satsToBtcString(sats: string) {
-    let satsString = sats.toString();
-    satsString = satsString.padStart(9, "0");
-    const btcString =
-      satsString.slice(0, -8) + getDecimalSeparator() + satsString.slice(-8);
-    return btcString;
-  }
-
-  function btcToSatsString(btc: string) {
-    let [whole, fractional] = btc.split(getDecimalSeparator());
-    fractional = fractional || "";
-    fractional = fractional.padEnd(8, "0");
-    const sats = whole + fractional;
-    return parseInt(sats, 10).toString();
-  }
 
   function handleSwap() {
     if (currentCurrency === "BTC") {

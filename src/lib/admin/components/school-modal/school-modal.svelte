@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getImageLink } from "$lib/common/utils";
+  import { getImageLink, reduceImageSize } from "$lib/common/utils";
   import {
     Button,
     Divider,
@@ -22,6 +22,7 @@
     mapFormSchoolToAddSchoolPayload,
     mapFormSchoolToUpdateSchoolPayload,
   } from "$lib/admin/mappers";
+  import type { UploadedFile } from "$lib/common/types";
 
   export let open: boolean = false;
 
@@ -37,6 +38,7 @@
     form,
     isSubmitting,
     setInitialValues,
+    setData,
     handleSubmit,
     reset,
     data,
@@ -62,9 +64,52 @@
     },
   });
 
-  const handleClose = () => {
+  function handleClose() {
     dispatch("close");
-  };
+  }
+
+  async function handleFileChange({
+    detail,
+  }: CustomEvent<Array<File & UploadedFile>>) {
+    try {
+      const files = await Promise.all(
+        detail.map(async (file) => {
+          try {
+            if ((file as UploadedFile).id) {
+              return file;
+            }
+
+            const reduced = await reduceImageSize(file as File);
+
+            const image = new File([reduced], file.name, {
+              type: reduced.type,
+            });
+
+            return image;
+          } catch (error) {
+            snackbarStore.addMessage({
+              message: "Error while reducing image size",
+              type: "error",
+            });
+
+            return file;
+          }
+        })
+      );
+
+      const filtered = files.filter(
+        (file, index, array) =>
+          array.findIndex((f) => f.name === file.name) === index
+      ) as Array<File & UploadedFile>;
+
+      setData("images", filtered);
+    } catch (error) {
+      snackbarStore.addMessage({
+        message: "Error while trying to upload images",
+        type: "error",
+      });
+    }
+  }
 
   $: {
     if (!open) {
@@ -75,6 +120,8 @@
       }
     }
   }
+
+  $: totalSizeToUpload = $data.images.reduce((acc, file) => acc + file.size, 0);
 </script>
 
 <Modal bind:open onClose={handleClose}>
@@ -160,11 +207,12 @@
 
       <div class="school-modal__images">
         <FileUploader
-          bind:files={$data.images}
+          files={$data.images}
+          on:change={handleFileChange}
           labelTitle={"Upload images"}
-          labelSubtitle={"Max image size: 2MB"}
+          labelSubtitle={"Max total size to upload: 2MB"}
           accept={IMAGE_EXTENSIONS}
-          maxTotalSize={2 * 1024 * 1024}
+          {totalSizeToUpload}
           on:total-size-error={(event) => {
             snackbarStore.addMessage({
               message: `Max total size of files to upload is ${event.detail.maxTotalSize / 1024 / 1024}MB`,

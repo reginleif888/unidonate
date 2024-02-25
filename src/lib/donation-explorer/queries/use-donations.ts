@@ -5,13 +5,13 @@ import type {
   GetDonationsResponse,
 } from "../../../declarations/backend/backend.did";
 
-export const useDonations = (payload: GetDonationsPayload) => {
-  const queryResult = useQuery<GetDonationsResponse>(
+export default function useDonations(payload: GetDonationsPayload) {
+  const donationsQuery = useQuery<GetDonationsResponse>(
     ["donations", payload],
     () => {
       return backend.getDonations(payload);
     }
   );
 
-  return queryResult;
-};
+  return donationsQuery;
+}

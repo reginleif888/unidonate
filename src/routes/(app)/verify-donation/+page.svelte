@@ -4,11 +4,11 @@
   import {
     ConfirmDonateForm,
     ConfirmDonateSuccess,
-  } from "$lib/confirm-donate/components";
+  } from "$lib/verify-donation/components";
   import { goto } from "$app/navigation";
   import { AppRoute } from "$lib/common/routes";
   import { onMount } from "svelte";
-  import { useVerifyDonation } from "$lib/confirm-donate/queries";
+  import { useVerifyDonation } from "$lib/verify-donation/queries";
 
   let outerEl: HTMLElement;
 
@@ -34,7 +34,7 @@
       fireworks = true;
       success = true;
     } catch (e) {
-      error = "Error confirming donation, please try again later.";
+      error = "Donation was not verified. Please try again later.";
 
       console.error(e);
     }

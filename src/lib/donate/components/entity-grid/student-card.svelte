@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "$lib/common/components";
+  import { Button, Swiper } from "$lib/common/components";
   import { formatDateValueToLocale } from "$lib/common/utils";
   import type { FormStudent } from "$lib/donate/types";
   import { parseDate } from "@internationalized/date";
@@ -8,19 +8,17 @@
   export let item: FormStudent;
   export let onSelect: (item: FormStudent) => void = () => null;
 
-  let imgSrc = item.imgs[0] ?? "images/no-image.jpg";
-
-  const handleImgError = () => {
-    imgSrc = "images/no-image.jpg";
-  };
-
   const handleSelect = () => {
     onSelect(item);
   };
 </script>
 
 <div class="card-root">
-  <img src={imgSrc} alt="student" on:error={handleImgError} />
+  <div class="swiper-wrapper">
+    <Swiper items={item.imgs} let:item={img}>
+      <img src={img || "/images/no-image.jpg"} alt="school" />
+    </Swiper>
+  </div>
   <div class="description body2">
     <div>
       <b class="attribute-label">First name:</b>
@@ -76,5 +74,10 @@
     object-fit: cover;
     border-radius: 16px;
     background-color: var(--uni-secondary);
+  }
+
+  .swiper-wrapper {
+    width: 100%;
+    height: 200px;
   }
 </style>

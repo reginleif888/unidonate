@@ -20,8 +20,8 @@
   <h1 class="h4">Donation Successful</h1>
 
   <p class="body1">
-    Your transaction has been successfully confirmed. Thank you for your
-    generous donation!
+    Your transaction has been successfully verified. Thank you for your generous
+    donation!
   </p>
 
   <Divider />
