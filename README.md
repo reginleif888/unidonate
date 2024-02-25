@@ -12,4 +12,4 @@ The solution represents a decentralized system designed for public donations thr
 
 🛠️ [Implementation details](impl_details.md)
 
-🌐 [Demo on IC mainnet](https://epvll-uaaaa-aaaap-qcbfa-cai.icp0.io/)
+🌐 [Demo on IC mainnet](https://etrr2-daaaa-aaaap-qcbha-cai.icp0.io/)
